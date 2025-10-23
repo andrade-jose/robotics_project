@@ -12,6 +12,7 @@ import logging
 
 from services.robot_service import RobotService, RobotPose, PickPlaceCommand,ValidationLevel,MovementStrategy
 from services.game_service import GameService
+from services.board_coordinate_system import BoardCoordinateSystem
 from config.config_completa import ConfigRobo
 from config.config_completa import ConfigJogo
 
@@ -36,31 +37,27 @@ class TipoJogada(Enum):
 class TapatanOrchestrator:
     """Orquestrador principal que coordena jogo e robô"""
     
-    def __init__(self, config_robo: Optional[ConfigRobo] = None, 
+    def __init__(self, config_robo: Optional[ConfigRobo] = None,
                  config_jogo: Optional[ConfigJogo] = None):
         self.config_robo = config_robo or ConfigRobo()
         self.config_jogo = config_jogo or ConfigJogo()
-
-        # NOVO: Configurações de distância e posicionamento do robô
-        self.offset_robo_x = 0.0  # Distância X do robô em relação ao centro do tabuleiro
-        self.offset_robo_y = 0.0  # Distância Y do robô em relação ao centro do tabuleiro
-        self.vision_system = None  # Sistema de visão integrado
 
         self.status = OrquestradorStatus.INICIALIZANDO
 
         self.robot_service: Optional[RobotService] = None  # Inicializa depois
         self.game_service = GameService()
 
+        # Sistema de coordenadas centralizado
+        self.setup_logging()
+        self.board_coords = BoardCoordinateSystem(logger=self.logger)
+
         # Estados
         self.jogo_ativo = False
         self.ultimo_erro: Optional[str] = None
         self.historico_partida: List[Dict] = []
 
-        # Coordenadas
-        self.coordenadas_tabuleiro: Dict[int, Tuple[float, float, float]] = {}
+        # Depósito de peças (mantido separado - não faz parte do tabuleiro)
         self.posicao_deposito_pecas: Dict[str, RobotPose] = {}
-
-        self.setup_logging()
         
     def setup_logging(self):
         """Configura sistema de logging"""
@@ -129,77 +126,41 @@ class TapatanOrchestrator:
 
     def _carregar_coordenadas_tabuleiro(self) -> bool:
         """
-        Carrega coordenadas físicas do tabuleiro - VERSÃO SIMPLIFICADA FINAL
-        
-        RESPONSABILIDADE ÚNICA:
-        - Apenas gerar coordenadas das 9 posições do tabuleiro
-        - Sistema 100% dinâmico baseado em ArUco
+        Carrega coordenadas físicas do tabuleiro usando BoardCoordinateSystem.
+
+        Returns:
+            True se coordenadas foram carregadas com sucesso
         """
         try:
-            # ============ VERIFICAR SISTEMA DE VISÃO ============
-            if not hasattr(self, 'vision_system') or self.vision_system is None:
-                self.logger.error("❌ Sistema de visão ArUco não disponível")
+            # Verificar se sistema de visão está disponível
+            if not hasattr(self, 'board_coords') or self.board_coords is None:
+                self.logger.error("❌ Sistema de coordenadas não inicializado")
                 return False
-            
-            if not self.vision_system.is_calibrated:
-                self.logger.warning("⚠️ Sistema de visão não calibrado")
-                self._criar_coordenadas_temporarias()
-                return True
-            
-            # ============ GERAR COORDENADAS DINÂMICAS ============
-            self.logger.info("🎯 Carregando coordenadas dinâmicas...")
-            
-            grid_positions = self.vision_system.calculate_grid_3x3_positions()
-            
-            if not grid_positions or len(grid_positions) != 9:
-                self.logger.error(f"❌ Grid incompleto: {len(grid_positions) if grid_positions else 0}/9")
-                self._criar_coordenadas_temporarias()
-                return False
-            
-            # ============ APLICAR COORDENADAS ============
-            self.coordenadas_tabuleiro = {}
-            
-            for pos in grid_positions:
-                # Converter mm → metros + aplicar offset do robô
-                x_final = (pos['x_mm'] / 1000.0) + getattr(self, 'offset_robo_x', 0.0)
-                y_final = (pos['y_mm'] / 1000.0) + getattr(self, 'offset_robo_y', 0.0)
-                z_final = (pos['z_mm'] / 1000.0) + 0.05  # Altura do tabuleiro
-                
-                self.coordenadas_tabuleiro[pos['index']] = (x_final, y_final, z_final)
-            
-            self.logger.info(f"✅ Tabuleiro pronto: {len(self.coordenadas_tabuleiro)}/9 posições")
+
+            # Tentar gerar coordenadas dinâmicas via visão
+            if self.board_coords.vision_system and self.board_coords.vision_system.is_calibrated:
+                self.logger.info("🎯 Carregando coordenadas dinâmicas...")
+                if self.board_coords.generate_from_vision(self.board_coords.vision_system):
+                    self.logger.info("✅ Coordenadas dinâmicas carregadas")
+                    return True
+
+            # Fallback: coordenadas temporárias
+            self.logger.warning("⚠️ Usando coordenadas temporárias")
+            self.board_coords.generate_temporary_grid()
             return True
-            
+
         except Exception as e:
             self.logger.error(f"❌ Erro ao carregar coordenadas: {e}")
-            self._criar_coordenadas_temporarias()
+            self.board_coords.generate_temporary_grid()
             return False
-
-    def _criar_coordenadas_temporarias(self):
-        """Coordenadas básicas temporárias (grid 3x3)"""
-        self.coordenadas_tabuleiro = {}
-        for i in range(9):
-            row, col = divmod(i, 3)
-            x = (col - 1) * 0.06  # 6cm entre posições
-            y = (row - 1) * 0.06
-            z = 0.05
-            self.coordenadas_tabuleiro[i] = (x, y, z)
-        
-        self.logger.info("⚠️ Coordenadas temporárias criadas (aguardando calibração)")
 
     def set_vision_system(self, vision_system):
         """Integra sistema de visão ArUco"""
-        self.vision_system = vision_system
-        if vision_system.is_calibrated:
-            self._carregar_coordenadas_tabuleiro()
+        self.board_coords.set_vision_system(vision_system)
 
     def set_robot_offset(self, offset_x: float, offset_y: float):
         """Define posicionamento do robô em relação ao tabuleiro"""
-        self.offset_robo_x = offset_x
-        self.offset_robo_y = offset_y
-        self.logger.info(f"🤖 Offset robô: X={offset_x:.3f}m, Y={offset_y:.3f}m")
-        if hasattr(self, 'vision_system') and self.vision_system and self.vision_system.is_calibrated:
-            self._carregar_coordenadas_tabuleiro()
+        self.board_coords.set_robot_offset(offset_x, offset_y)
 
     # ====================== CONTROLE DO JOGO ======================
     
@@ -308,7 +269,7 @@ class TapatanOrchestrator:
 
             if estado_jogo["fase"] == "colocacao":
                 posicao = jogada["posicao"]
-                destino = self.coordenadas_tabuleiro.get(posicao)
+                destino = self.board_coords.get_position(posicao)
 
                 if not destino:
                     self.logger.error(f"Posição física não encontrada para {posicao}")
@@ -339,11 +300,10 @@ class TapatanOrchestrator:
         """Executa colocação física de peça"""
         try:
             # Obter coordenadas da posição
-            if posicao not in self.coordenadas_tabuleiro:
+            coord_destino = self.board_coords.get_position(posicao)
+            if not coord_destino:
                 self.logger.error(f"Posição {posicao} não encontrada nas coordenadas")
                 return False
-                
-            coord_destino = self.coordenadas_tabuleiro[posicao]
             
             # Criar poses para pick and place
             origem = self.posicao_deposito_pecas["jogador1"]
@@ -376,12 +336,12 @@ class TapatanOrchestrator:
         """Executa movimento físico de peça no tabuleiro"""
         try:
             # Obter coordenadas
-            if origem not in self.coordenadas_tabuleiro or destino not in self.coordenadas_tabuleiro:
+            coord_origem = self.board_coords.get_position(origem)
+            coord_destino = self.board_coords.get_position(destino)
+
+            if not coord_origem or not coord_destino:
                 self.logger.error(f"Coordenadas não encontradas: origem={origem}, destino={destino}")
                 return False
-                
-            coord_origem = self.coordenadas_tabuleiro[origem]
-            coord_destino = self.coordenadas_tabuleiro[destino]
             
             # Criar poses
             pose_origem = RobotPose(coord_origem[0], coord_origem[1], coord_origem[2], 0.0, 3.14, 0.0)
@@ -478,8 +438,8 @@ class TapatanOrchestrator:
             # Testar algumas posições do tabuleiro
             posicoes_teste = [0, 4, 8]  # Cantos e centro
             for pos in posicoes_teste:
-                if pos in self.coordenadas_tabuleiro:
-                    coord = self.coordenadas_tabuleiro[pos]
+                coord = self.board_coords.get_position(pos)
+                if coord:
                     pose_teste = RobotPose(coord[0], coord[1], coord[2] + 0.1, 0.0, 3.14, 0.0)
                     
                     if not self.robot_service.move_to_pose(pose_teste, 0.05):

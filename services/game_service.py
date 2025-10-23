@@ -6,7 +6,8 @@ from typing import Dict,Tuple
 from config.config_completa import Jogador, FaseJogo
 from logic_control.tapatan_logic import TabuleiraTapatan
 from logic_control.tapatan_ai import TapatanAI
-from utils.tapatan_board import gerar_tabuleiro_tapatan
+# NOTA: gerar_tabuleiro_tapatan foi substituído por BoardCoordinateSystem
+# from utils.tapatan_board import gerar_tabuleiro_tapatan
 
 class GameService:
     """Serviço principal que gerencia toda a lógica do jogo Tapatan"""
@@ -217,7 +218,15 @@ class GameService:
     # ==================== MÉTODOS DE UTILIDADE ====================
     
     def definir_coordenadas_tabuleiro(self, coordenadas: dict):
-        """Define coordenadas físicas do tabuleiro para o robô"""
+        """
+        Define coordenadas físicas do tabuleiro para o robô.
+
+        NOTA: Este método mantém compatibilidade retroativa.
+        O orquestrador agora usa BoardCoordinateSystem diretamente.
+
+        Args:
+            coordenadas: Dict {posição: (x, y, z)} das 9 posições
+        """
         self.tabuleiro.coordenadas_tabuleiro = coordenadas
         
     def verificar_coordenadas(self) -> bool:
