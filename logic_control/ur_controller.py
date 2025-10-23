@@ -9,7 +9,7 @@ class URController:
         self.config = config
         self.rtde_c = RTDEControlInterface(self.config.ip)
         self.rtde_r = RTDEReceiveInterface(self.config.ip)
-        
+
         self.enable_safety_validation = True
         self.max_movement_distance = self.config.distancia_maxima_movimento
         self.workspace_limits = self.config.limites_workspace
@@ -18,8 +18,8 @@ class URController:
         self.pause_between_moves = self.config.pausa_entre_movimentos
         self.validation_retries = self.config.max_tentativas_correcao
         self.em_movimento = False
-    
-    print(f"✅ Conectado ao robô UR em {self.config.ip}")
+
+        print(f"✅ Conectado ao robô UR em {self.config.ip}")
 
     def is_connected(self):
         """Verifica se está conectado ao robô"""

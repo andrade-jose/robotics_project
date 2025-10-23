@@ -620,62 +620,6 @@ class RobotService:
         except Exception as e:
             self.logger.error(f" Erro ao obter pose atual: {e}")
             return None
-        
-    def _apply_drastic_corrections(self, pose, original_pose):
-        """NOVO: Correções drásticas para poses impossíveis"""
-        print("🚨 Aplicando correções DRÁSTICAS...")
-        
-        corrected = pose.copy()
-        
-        # 1. Mover para posição mais próxima do centro do workspace
-        center_workspace = [0.4, 0.0, 0.3, 0.0, 3.14, 0.0]
-        
-        # Interpolar 50% em direção ao centro
-        for i in range(3):  # Apenas posição, não orientação
-            corrected[i] = pose[i] * 0.5 + center_workspace[i] * 0.5
-            
-        # 2. Garantir altura mínima segura
-        min_safe_z = self.config.altura_base_ferro + self.config.margem_seguranca_base_ferro + 0.1
-        if corrected[2] < min_safe_z:
-            corrected[2] = min_safe_z
-            
-        print(f"🚨 Pose drasticamente corrigida: {[f'{p:.3f}' for p in corrected]}")
-        return corrected
-
-    def _apply_alternative_corrections(self, pose, attempt_number):
-        """NOVO: Estratégias alternativas baseadas no número da tentativa"""
-        print(f"🔧 Estratégia alternativa #{attempt_number + 1}")
-        
-        corrected = pose.copy()
-        
-        if attempt_number == 0:
-            # Tentativa 1: Elevar significativamente
-            corrected[2] += 0.05
-            print(f"🔧 Elevando Z em 5cm: {corrected[2]:.3f}")
-            
-        elif attempt_number == 1:
-            # Tentativa 2: Mover para posição mais central
-            corrected[0] = 0.4  # X central
-            corrected[1] = 0.0  # Y central
-            corrected[2] = max(corrected[2], 0.3)  # Z seguro
-            print(f"🔧 Movendo para posição central segura")
-            
-        elif attempt_number == 2:
-            # Tentativa 3: Orientação mais conservadora
-            corrected[3] = 0.0   # rx = 0
-            corrected[4] = 3.14  # ry = π (TCP para baixo)
-            corrected[5] = 0.0   # rz = 0
-            print(f"🔧 Orientação conservadora aplicada")
-            
-        else:
-            # Tentativa final: Pose home modificada
-            home_pose = self.config.pose_home.copy()
-            home_pose[0] = pose[0]  # Manter X desejado
-            home_pose[1] = pose[1]  # Manter Y desejado
-            corrected = home_pose
-            print(f"🔧 Usando pose home modificada")
-            
-        return corrected
 
     def fix_calibration_pose(self, position_index, target_pose):
         """
