@@ -1,8 +1,10 @@
 from rtde_control import RTDEControlInterface
 from rtde_receive import RTDEReceiveInterface
 from config.config_completa import ConfigRobo
+from services.pose_validation_service import PoseValidationService
 import time
 import math
+import logging
 
 class URController:
     def __init__(self, config: ConfigRobo):
@@ -18,6 +20,15 @@ class URController:
         self.pause_between_moves = self.config.pausa_entre_movimentos
         self.validation_retries = self.config.max_tentativas_correcao
         self.em_movimento = False
+
+        # Sistema de validação centralizado
+        self.logger = logging.getLogger('URController')
+        self.pose_validator = PoseValidationService(
+            workspace_limits=self.workspace_limits,
+            max_movement_distance=self.max_movement_distance,
+            logger=self.logger
+        )
+        self.pose_validator.set_ur_controller(self)
 
         print(f"✅ Conectado ao robô UR em {self.config.ip}")
 
@@ -146,8 +157,10 @@ class URController:
 
     def validate_pose_reachability(self, pose):
         """
-        🔥 NOVA FUNÇÃO: Validação adicional de alcançabilidade
-        Verifica cinemática inversa e distância de movimento
+        ⚠️ DEPRECATED: Use pose_validator.validate_reachability() diretamente.
+
+        Validação de alcançabilidade.
+        Mantido para compatibilidade retroativa.
         """
         try:
             # Verificar se a pose tem formato correto
@@ -188,32 +201,33 @@ class URController:
 
     def validate_pose_complete(self, pose):
         """
-        🔥 FUNÇÃO PRINCIPAL DE VALIDAÇÃO
-        Executa todas as validações de pose em sequência
+        Executa validação completa usando PoseValidationService.
+
+        Args:
+            pose: Lista [x, y, z, rx, ry, rz]
+
+        Returns:
+            bool: True se pose é válida
         """
-        print(f"🔍 Iniciando validação completa da pose: {[f'{p:.3f}' for p in pose]}")
-        
-        # 1. Validação básica de workspace (mantida da versão original)
-        if not self.validate_pose(pose):
-            return False
-            
-        # 2. Validação de alcançabilidade
-        if not self.validate_pose_reachability(pose):
-            return False
-        
-        #if not self.validate_elbow_height_constraint(pose):
-        #    return False
-            
-        # 3. 🔥 VALIDAÇÃO OFICIAL UR_RTDE - isPoseWithinSafetyLimits
-        if not self.validate_pose_safety_limits(pose):
-            return False
-            
-        print(f"✅ POSE TOTALMENTE VALIDADA E SEGURA!")
-        return True
+        if not self.enable_safety_validation:
+            return True
+
+        # Obter pose atual para validação de alcançabilidade
+        current_pose = self.get_current_pose()
+
+        # Executar validação completa
+        result = self.pose_validator.validate_complete(pose, current_pose)
+
+        # Retornar resultado simples
+        return result.is_valid
 
     def validate_pose(self, pose):
         """
-        Valida se a pose está dentro dos limites do workspace
+        ⚠️ DEPRECATED: Use pose_validator.validate_workspace() diretamente.
+
+        Valida se a pose está dentro dos limites do workspace.
+        Mantido para compatibilidade retroativa.
+
         Pose format: [x, y, z, rx, ry, rz] onde:
         - x, y, z em metros
         - rx, ry, rz em radianos (angle-axis representation)

@@ -704,10 +704,23 @@ class RobotService:
         return status_dict
     
     def validate_pose(self, pose):
-        """Wrapper simples para URController"""
+        """
+        Valida pose usando PoseValidationService (via URController).
+
+        Args:
+            pose: RobotPose ou lista [x, y, z, rx, ry, rz]
+
+        Returns:
+            bool: True se pose é válida
+        """
         if not self._check_connection():
             return False
-        return self.controller.validate_pose_complete(pose.to_list())
+
+        # Converter RobotPose para lista se necessário
+        pose_list = pose.to_list() if hasattr(pose, 'to_list') else pose
+
+        # Usar validação completa do URController (que usa PoseValidationService)
+        return self.controller.validate_pose_complete(pose_list)
 
     # ===================  NOVAS FUNÇÕES DE CONTROLE DE SEGURANÇA ===================
 
