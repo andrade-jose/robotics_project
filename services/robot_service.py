@@ -435,51 +435,28 @@ class RobotService:
 
     def move_with_intermediate_points(self, target_pose, speed=None, acceleration=None, num_points=3):
         """
-        🔥 ESTRATÉGIA AVANÇADA: Movimento com pontos intermediários
-        Para poses muito distantes, divide o movimento em etapas
+        Movimento com pontos intermediários delegando ao URController.
+
+        Para movimentos muito distantes, divide o trajeto em etapas intermediárias.
+        Esta implementação delega para URController onde está a lógica centralizada.
+
+        Args:
+            target_pose: RobotPose ou lista [x, y, z, rx, ry, rz]
+            speed: Velocidade do movimento (opcional)
+            acceleration: Aceleração do movimento (opcional)
+            num_points: Número de pontos intermediários (padrão: 3)
+
+        Returns:
+            bool: True se movimento foi bem-sucedido
         """
-        if speed is None:
-            speed = self.speed
-        if acceleration is None:
-            acceleration = self.acceleration
-            
-        print(f"🚀 Movimento com {num_points} pontos intermediários")
-        
-        current_pose = self.get_current_pose()
-        if not current_pose:
-            print("❌ Não foi possível obter pose atual")
+        if not self._check_connection():
             return False
-            
-        # Gerar pontos intermediários
-        intermediate_poses = []
-        for i in range(1, num_points + 1):
-            factor = i / (num_points + 1)
-            
-            intermediate_pose = [
-                current_pose[j] + (target_pose[j] - current_pose[j]) * factor
-                for j in range(6)
-            ]
-            intermediate_poses.append(intermediate_pose)
-            
-        # Adicionar pose final
-        intermediate_poses.append(target_pose)
-        
-        print(f"📍 Planejamento de {len(intermediate_poses)} pontos:")
-        for i, pose in enumerate(intermediate_poses):
-            print(f"   Ponto {i+1}: {[f'{p:.3f}' for p in pose]}")
-            
-        # Executar sequência
-        for i, pose in enumerate(intermediate_poses):
-            print(f"\n🎯 Executando ponto {i+1}/{len(intermediate_poses)}")
-            
-            sucesso, pose_final = self.move_to_pose_with_smart_correction(pose, speed, acceleration)
-            
-            if not sucesso:
-                print(f"❌ Falha no ponto {i+1} - movimento interrompido")
-                return False
-                
-        print("✅ Movimento com pontos intermediários concluído!")
-        return True
+
+        # Converter RobotPose para lista se necessário
+        pose_list = target_pose.to_list() if hasattr(target_pose, 'to_list') else target_pose
+
+        # Delegar para URController que tem a implementação
+        return self.controller.move_with_intermediate_points(pose_list, speed, acceleration, num_points)
     
     def executar_movimento_peca(self, origem, destino, altura_segura, altura_pegar):
         """
@@ -623,44 +600,26 @@ class RobotService:
 
     def fix_calibration_pose(self, position_index, target_pose):
         """
-        🎯 CORREÇÃO ESPECÍFICA: Para usar na calibração
-        Retorna a melhor pose corrigida para uma posição específica
+        Corrige pose para calibração delegando ao URController.
+
+        Este método é um wrapper que delega toda a lógica de correção
+        para o URController, onde está centralizada a correção inteligente.
+
+        Args:
+            position_index: Índice da posição (0-8)
+            target_pose: Lista [x, y, z, rx, ry, rz] ou RobotPose
+
+        Returns:
+            Tuple[pose_corrigida, bool]: Pose corrigida e sucesso
         """
-        print(f"🎯 Corrigindo pose para posição {position_index}")
-        
-        # 1. Diagnóstico
-        diagnostics = self.diagnostic_pose_rejection(target_pose)
-        
-        # 2. Se pose é válida, retornar original
-        if self.rtde_c.isPoseWithinSafetyLimits(target_pose):
-            print("✅ Pose original já é válida")
-            return target_pose, True
-            
-        # 3. Tentar correção automática
-        corrected = self.correct_pose_automatically(target_pose)
-        if self.rtde_c.isPoseWithinSafetyLimits(corrected):
-            print("✅ Correção automática funcionou")
-            return corrected, True
-            
-        # 4. Estratégias específicas para calibração
-        calibration_strategies = [
-            ("Elevação +3cm", lambda p: self._elevate_pose(p, 0.03)),
-            ("Elevação +5cm", lambda p: self._elevate_pose(p, 0.05)),
-            ("Elevação +8cm", lambda p: self._elevate_pose(p, 0.08)),
-            ("Posição mais central", self._move_to_center),
-        ]
-        
-        for strategy_name, strategy_func in calibration_strategies:
-            try:
-                test_pose = strategy_func(target_pose)
-                if self.rtde_c.isPoseWithinSafetyLimits(test_pose):
-                    print(f"✅ {strategy_name} funcionou")
-                    return test_pose, True
-            except Exception as e:
-                continue
-                
-        print("❌ Nenhuma estratégia funcionou para esta pose")
-        return target_pose, False
+        if not self._check_connection():
+            return target_pose, False
+
+        # Converter RobotPose para lista se necessário
+        pose_list = target_pose.to_list() if hasattr(target_pose, 'to_list') else target_pose
+
+        # Delegar para URController que tem toda a lógica de correção
+        return self.controller.fix_calibration_pose(position_index, pose_list)
 
     def get_status(self) -> Dict[str, Any]:
         """

@@ -300,8 +300,22 @@ class URController:
 
     def correct_pose_automatically(self, pose):
         """
-        🔥 CORREÇÃO INTELIGENTE BASEADA EM ARTICULAÇÕES
-        Agora usa diagnóstico avançado para correções precisas
+        Correção inteligente de poses usando diagnóstico avançado.
+
+        RESPONSABILIDADE: Este método centraliza TODA a lógica de correção de poses.
+        É usado por robot_service.fix_calibration_pose() e outros componentes.
+
+        Estratégias de correção:
+        1. Diagnóstico completo da pose (cinemática inversa, limites)
+        2. Correção de articulações fora dos limites
+        3. Ajuste de singularidades (pequenos ajustes de orientação)
+        4. Correção básica de workspace (fallback)
+
+        Args:
+            pose: Lista [x, y, z, rx, ry, rz]
+
+        Returns:
+            pose_corrigida: Lista [x, y, z, rx, ry, rz] corrigida
         """
         print(f"🔧 Iniciando correção INTELIGENTE da pose: {[f'{p:.3f}' for p in pose]}")
         
@@ -483,8 +497,25 @@ class URController:
 
     def move_with_intermediate_points(self, target_pose, speed=None, acceleration=None, num_points=3):
         """
-        🔥 ESTRATÉGIA AVANÇADA: Movimento com pontos intermediários
-        Para poses muito distantes, divide o movimento em etapas
+        Movimento com pontos intermediários (waypoints) para trajetos longos.
+
+        RESPONSABILIDADE: Este método centraliza a lógica de movimento com waypoints.
+        É usado por robot_service.move_with_intermediate_points() e outros componentes.
+
+        Estratégia:
+        1. Calcula pontos intermediários entre pose atual e pose alvo
+        2. Executa movimento sequencial por cada ponto
+        3. Usa interpolação linear para gerar waypoints
+        4. Aplica correção inteligente em cada ponto
+
+        Args:
+            target_pose: Lista [x, y, z, rx, ry, rz]
+            speed: Velocidade do movimento (opcional, usa padrão se None)
+            acceleration: Aceleração do movimento (opcional, usa padrão se None)
+            num_points: Número de pontos intermediários (padrão: 3)
+
+        Returns:
+            bool: True se movimento foi concluído com sucesso
         """
         if speed is None:
             speed = self.speed
