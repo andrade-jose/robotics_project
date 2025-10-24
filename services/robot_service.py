@@ -10,6 +10,7 @@ import math
 from logic_control.ur_controller import URController
 from config.config_completa import CONFIG, ConfigRobo
 from services.game_service import gerar_tabuleiro_tapatan
+from diagnostics.robot_diagnostics import RobotDiagnostics
 
 class RobotStatus(Enum):
     DISCONNECTED = "disconnected"
@@ -113,17 +114,9 @@ class RobotService:
         
         # Setup logging
         self.setup_logging()
-        
-        # Histórico de movimentos para análise
-        self.movement_history: List[Dict] = []
-        self.validation_stats = {
-            "total_validations": 0,
-            "successful_validations": 0,
-            "corrections_applied": 0,
-            "movements_with_intermediate_points": 0
-        }
-        self.verbose_logging = False
-        self.log_summary_only = True
+
+        # Sistema de diagnósticos (substitui variáveis de estatísticas)
+        self.diagnostics = RobotDiagnostics(logger=self.logger)
         
     def setup_logging(self):
         """Configura sistema de logging"""
@@ -557,32 +550,10 @@ class RobotService:
 
     def get_movement_statistics(self) -> Dict[str, Any]:
         """
-         NOVA FUNÇÃO: Estatísticas de movimento e validação
+        Estatísticas de movimento e validação.
+        DELEGA para RobotDiagnostics.
         """
-        total_movements = len(self.movement_history)
-        successful_movements = sum(1 for m in self.movement_history if m.get("success", False))
-        
-        stats = {
-            "total_movements": total_movements,
-            "successful_movements": successful_movements,
-            "failed_movements": total_movements - successful_movements,
-            "success_rate": (successful_movements / total_movements * 100) if total_movements > 0 else 0,
-            "validation_stats": self.validation_stats.copy(),
-            "strategy_usage": {},
-            "average_execution_time": 0
-        }
-        
-        if self.movement_history:
-            # Análise de estratégias usadas
-            for movement in self.movement_history:
-                strategy = movement.get("strategy", "unknown")
-                stats["strategy_usage"][strategy] = stats["strategy_usage"].get(strategy, 0) + 1
-            
-            # Tempo médio de execução
-            total_time = sum(m.get("duration", 0) for m in self.movement_history)
-            stats["average_execution_time"] = total_time / len(self.movement_history)
-        
-        return stats
+        return self.diagnostics.get_movement_statistics()
 
     def get_current_pose(self) -> Optional[RobotPose]:
         """Obtém pose atual do robô"""
@@ -729,79 +700,6 @@ class RobotService:
             else:
                 return self._move_with_correction(pose, speed, acceleration)
             
-    def benchmark_correction_system(self):
-        """
-        📊 BENCHMARK: Testa o sistema de correção com várias poses
-        """
-        print("📊 BENCHMARK - Sistema de Correção")
-        print("=" * 50)
-        
-        # Poses de teste variadas
-        test_poses = [
-            # Poses normais
-            [0.3, 0.0, 0.3, 0.0, 3.14, 0.0],
-            [0.4, 0.1, 0.2, 0.0, 3.14, 0.0], 
-            
-            # Poses problemáticas (muito baixas)
-            [0.4, 0.2, 0.13, 0.0, 3.14, 0.0],
-            [0.5, 0.3, 0.10, 0.0, 3.14, 0.0],
-            
-            # Poses extremas
-            [0.7, 0.3, 0.15, 0.5, 3.14, 0.5],
-            [0.2, -0.3, 0.12, -0.5, 2.5, -0.3],
-            
-            # Poses impossíveis
-            [1.0, 0.8, 0.05, 1.0, 4.0, 2.0],
-        ]
-        
-        results = {
-            'total': len(test_poses),
-            'original_valid': 0,
-            'corrected_valid': 0,
-            'impossible': 0,
-            'details': []
-        }
-        
-        for i, pose in enumerate(test_poses):
-            print(f"\n📊 Teste {i+1}/{len(test_poses)}: {[f'{p:.3f}' for p in pose]}")
-            
-            # Teste original
-            original_valid = self.rtde_c.isPoseWithinSafetyLimits(pose)
-            if original_valid:
-                results['original_valid'] += 1
-                
-            # Teste com correção
-            corrected = self.correct_pose_automatically(pose)
-            corrected_valid = self.rtde_c.isPoseWithinSafetyLimits(corrected)
-            
-            if corrected_valid:
-                results['corrected_valid'] += 1
-                status = "✅ CORRIGIDA"
-            elif original_valid:
-                status = "⚠️ PIOROU"
-            else:
-                results['impossible'] += 1
-                status = "❌ IMPOSSÍVEL"
-                
-            results['details'].append({
-                'pose': pose,
-                'original_valid': original_valid,
-                'corrected_valid': corrected_valid,
-                'status': status
-            })
-            
-            print(f"   Original: {'✅' if original_valid else '❌'} | Corrigida: {'✅' if corrected_valid else '❌'} | {status}")
-        
-        # Relatório final
-        print(f"\n📊 RELATÓRIO FINAL DO BENCHMARK:")
-        print(f"   Total de poses testadas: {results['total']}")
-        print(f"   Originalmente válidas: {results['original_valid']} ({results['original_valid']/results['total']*100:.1f}%)")
-        print(f"   Válidas após correção: {results['corrected_valid']} ({results['corrected_valid']/results['total']*100:.1f}%)")
-        print(f"   Impossíveis: {results['impossible']} ({results['impossible']/results['total']*100:.1f}%)")
-        print(f"   Taxa de melhoria: {((results['corrected_valid'] - results['original_valid'])/results['total']*100):.1f}%")
-        
-        return results
-
     # =================== FUNÇÕES DE CONTROLE EXISTENTES ATUALIZADAS ===================
 
     def emergency_stop(self) -> bool:
@@ -889,95 +787,31 @@ class RobotService:
 
     def generate_safety_report(self) -> Dict[str, Any]:
         """
-         NOVA FUNÇÃO: Gera relatório de segurança detalhado
+        Gera relatório de segurança detalhado.
+        DELEGA para RobotDiagnostics.
         """
-        stats = self.get_movement_statistics()
-        
-        report = {
-            "timestamp": time.time(),
-            "robot_status": self.status.value,
-            "safety_configuration": {
-                "validation_level": self.config.get("default_validation_level"),
-                "movement_strategy": self.config.get("default_movement_strategy"),
-                "auto_correction_enabled": self.config.get("enable_auto_correction"),
-                "ultra_safe_mode": self.config.get("ultra_safe_mode")
-            },
-            "performance_metrics": {
-                "total_movements": stats["total_movements"],
-                "success_rate": stats["success_rate"],
-                "correction_rate": (stats["validation_stats"]["corrections_applied"] / 
-                                  max(stats["total_movements"], 1)) * 100,
-                "intermediate_movement_rate": (stats["validation_stats"]["movements_with_intermediate_points"] / 
-                                             max(stats["total_movements"], 1)) * 100,
-                "average_execution_time": stats["average_execution_time"]
-            },
-            "validation_statistics": stats["validation_stats"],
-            "strategy_distribution": stats["strategy_usage"],
-            "recommendations": []
-        }
-        
-        # Gerar recomendações baseadas nos dados
-        if report["performance_metrics"]["success_rate"] < 90:
-            report["recommendations"].append("Considere usar ValidationLevel.COMPLETE para maior segurança")
-        
-        if report["performance_metrics"]["correction_rate"] > 20:
-            report["recommendations"].append("Alta taxa de correções - verifique configuração do workspace")
-        
-        if report["performance_metrics"]["average_execution_time"] > 10:
-            report["recommendations"].append("Tempo de execução alto - considere otimizar trajetórias")
-        
-        return report
+        return self.diagnostics.generate_safety_report(self.config, self.status.value)
 
     def export_movement_history(self, filename: str = None) -> str:
         """
-         NOVA FUNÇÃO: Exporta histórico de movimentos para JSON
+        Exporta histórico de movimentos para JSON.
+        DELEGA para RobotDiagnostics.
         """
-        if filename is None:
-            filename = f"movement_history_{int(time.time())}.json"
-        
-        export_data = {
-            "export_timestamp": time.time(),
-            "robot_ip": self.robot_ip,
-            "config": self.config,
-            "movement_history": self.movement_history,
-            "validation_stats": self.validation_stats,
-            "safety_report": self.generate_safety_report()
-        }
-        
-        try:
-            with open(filename, 'w') as f:
-                json.dump(export_data, f, indent=2)
-            
-            return filename
-        except Exception as e:
-            self.logger.error(f" Erro ao exportar histórico: {e}")
-            return ""
+        return self.diagnostics.export_movement_history(self.robot_ip, self.config, filename)
 
     def reset_statistics(self):
         """
-         NOVA FUNÇÃO: Reseta estatísticas de movimento
+        Reseta estatísticas de movimento.
+        DELEGA para RobotDiagnostics.
         """
-        self.movement_history.clear()
-        self.validation_stats = {
-            "total_validations": 0,
-            "successful_validations": 0,
-            "corrections_applied": 0,
-            "movements_with_intermediate_points": 0
-        }
+        self.diagnostics.reset_statistics()
 
     def set_logging_mode(self, verbose: bool = False, summary_only: bool = True):
         """
-         NOVA: Controla modo de logging
+        Controla modo de logging.
+        DELEGA para RobotDiagnostics.
         """
-        self.verbose_logging = verbose
-        self.log_summary_only = summary_only
-        
-        # Configurar também no URController
-        if self.controller:
-            # Desabilitar prints excessivos do URController se possível
-            pass
-        
-        mode = "VERBOSE" if verbose else "RESUMO" if summary_only else "NORMAL"
+        self.diagnostics.set_logging_mode(verbose, summary_only)
     
 
     def _generate_safe_fallback_pose(self, problematic_pose: RobotPose) -> RobotPose:
@@ -1000,52 +834,21 @@ class RobotService:
 
     def benchmark_correction_system(self) -> Dict[str, Any]:
         """
-        📊 NOVA FUNÇÃO: Benchmark do sistema de correção
-        Testa o sistema com poses conhecidas
+        Benchmark do sistema de correção.
+        DELEGA análise para RobotDiagnostics.
         """
         if not self._check_connection():
             return {"error": "Robô não conectado"}
-        
-        
-        # Usar função do URController
+
+        # Obter resultados do URController
         benchmark_results = self.controller.benchmark_correction_system()
-        
-        # Adicionar análise do RobotService
-        service_analysis = {
-            "controller_results": benchmark_results,
-            "service_config": {
-                "validation_level": self.config.get("default_validation_level"),
-                "correction_enabled": self.config.get("enable_auto_correction"),
-            },
-            "performance_rating": "unknown",
-            "recommendations": []
-        }
-        
-        # Calcular rating de performance
-        if benchmark_results.get("total", 0) > 0:
-            correction_rate = (benchmark_results.get("corrected_valid", 0) - 
-                            benchmark_results.get("original_valid", 0)) / benchmark_results.get("total", 1) * 100
-            
-            if correction_rate > 50:
-                service_analysis["performance_rating"] = " EXCELENTE"
-            elif correction_rate > 20:
-                service_analysis["performance_rating"] = " BOM"
-            elif correction_rate > 0:
-                service_analysis["performance_rating"] = " REGULAR"
-            else:
-                service_analysis["performance_rating"] = " RUIM"
-            
-            # Recomendações baseadas no desempenho
-            if correction_rate < 10:
-                service_analysis["recommendations"].append("Sistema de correção pouco efetivo - verificar configurações")
-            
-            impossible_rate = benchmark_results.get("impossible", 0) / benchmark_results.get("total", 1) * 100
-            if impossible_rate > 30:
-                service_analysis["recommendations"].append("Muitas poses impossíveis - revisar workspace limits")
-        
-        self.logger.info(f" Benchmark concluído - Rating: {service_analysis['performance_rating']}")
-        
-        return service_analysis
+
+        # Analisar resultados via RobotDiagnostics
+        analysis = self.diagnostics.analyze_benchmark_results(benchmark_results, self.config)
+
+        self.logger.info(f"📊 Benchmark concluído - Rating: {analysis['performance_rating']}")
+
+        return analysis
     
     def debug_pose(self, pose):
         """Wrapper simples para debug"""
