@@ -13,6 +13,7 @@ import logging
 from services.robot_service import RobotService, RobotPose, PickPlaceCommand,ValidationLevel,MovementStrategy
 from services.game_service import GameService
 from services.board_coordinate_system import BoardCoordinateSystem
+from services.physical_movement_executor import PhysicalMovementExecutor
 from config.config_completa import ConfigRobo
 from config.config_completa import ConfigJogo
 
@@ -51,13 +52,13 @@ class TapatanOrchestrator:
         self.setup_logging()
         self.board_coords = BoardCoordinateSystem(logger=self.logger)
 
+        # Executor de movimentos físicos (criado após inicialização do robô)
+        self.movement_executor: Optional[PhysicalMovementExecutor] = None
+
         # Estados
         self.jogo_ativo = False
         self.ultimo_erro: Optional[str] = None
         self.historico_partida: List[Dict] = []
-
-        # Depósito de peças (mantido separado - não faz parte do tabuleiro)
-        self.posicao_deposito_pecas: Dict[str, RobotPose] = {}
         
     def setup_logging(self):
         """Configura sistema de logging"""
@@ -107,19 +108,31 @@ class TapatanOrchestrator:
         try:
             self.robot_service = RobotService()
             self.robot_service.config_robo = self.config_robo
-            
+
             if not self.robot_service.connect():
                 self.logger.error("Falha ao conectar com o robô")
                 return False
-                
+
             # Mover para posição home
             if not self.robot_service.move_home():
                 self.logger.error("Falha ao mover robô para home")
                 return False
-                
+
+            # Criar executor de movimentos físicos
+            self.movement_executor = PhysicalMovementExecutor(
+                robot_service=self.robot_service,
+                board_coords=self.board_coords,
+                config_robo=self.config_robo,
+                logger=self.logger
+            )
+
+            # Configurar posições de depósito (exemplo - ajustar conforme necessário)
+            deposito_pose = RobotPose(0.3, -0.3, 0.1, 0.0, 3.14, 0.0)
+            self.movement_executor.set_piece_depot_position("jogador1", deposito_pose)
+
             self.logger.info("Robô inicializado e em posição home")
             return True
-            
+
         except Exception as e:
             self.logger.error(f"Erro ao inicializar robô: {e}")
             return False
@@ -263,111 +276,23 @@ class TapatanOrchestrator:
             return {"sucesso": False, "mensagem": f"Erro: {str(e)}"}
 
     def _executar_movimento_fisico(self, jogada: Dict[str, Any]) -> bool:
-        """Executa o movimento físico do robô baseado na jogada"""
+        """
+        Executa o movimento físico do robô baseado na jogada.
+        DELEGA para PhysicalMovementExecutor.
+        """
         try:
+            if not self.movement_executor:
+                self.logger.error("Executor de movimentos não inicializado")
+                return False
+
             estado_jogo = self.game_service.obter_estado_jogo()
-
-            if estado_jogo["fase"] == "colocacao":
-                posicao = jogada["posicao"]
-                destino = self.board_coords.get_position(posicao)
-
-                if not destino:
-                    self.logger.error(f"Posição física não encontrada para {posicao}")
-                    return False
-
-                pose_destino = RobotPose.from_list([*destino, 0.0, 3.14, 0.0])
-
-                if self.config_robo.validar_antes_executar:
-                    resultado = self.robot_service.validate_pose(pose_destino, validation_level=ValidationLevel.COMPLETE)
-                    if not resultado.is_valid:
-                        self.logger.error(f" Pose inválida para colocação: {resultado.error_message}")
-                        return False
-
-                return self.robot_service.move_to_pose(
-                    pose=pose_destino,
-                    speed=self.config_robo.velocidade_normal
-                )
-
-            elif estado_jogo["fase"] == "movimento":
-                return self._executar_movimento_fisico_peca(jogada["origem"], jogada["destino"])
-
-            return False
+            return self.movement_executor.executar_movimento_jogada(
+                jogada=jogada,
+                fase=estado_jogo["fase"]
+            )
 
         except Exception as e:
             self.logger.error(f"Erro no movimento físico: {e}")
-            return False
-    def _executar_colocacao_fisica(self, posicao: int) -> bool:
-        """Executa colocação física de peça"""
-        try:
-            # Obter coordenadas da posição
-            coord_destino = self.board_coords.get_position(posicao)
-            if not coord_destino:
-                self.logger.error(f"Posição {posicao} não encontrada nas coordenadas")
-                return False
-            
-            # Criar poses para pick and place
-            origem = self.posicao_deposito_pecas["jogador1"]
-            destino = RobotPose(coord_destino[0], coord_destino[1], coord_destino[2], 0.0, 3.14, 0.0)
-            
-            # Executar pick and place
-            comando = PickPlaceCommand(
-                origin=origem,
-                destination=destino,
-                safe_height=self.config_robo.altura_segura,
-                pick_height=self.config_robo.altura_pegar,
-                speed_normal=self.config_robo.velocidade_normal,
-                speed_precise=self.config_robo.velocidade_precisa
-            )
-            
-            sucesso = self.robot_service.pick_and_place(comando)
-            
-            if sucesso:
-                self.logger.info(f"Peça colocada na posição {posicao}")
-            else:
-                self.logger.error(f"Falha ao colocar peça na posição {posicao}")
-                
-            return sucesso
-            
-        except Exception as e:
-            self.logger.error(f"Erro na colocação física: {e}")
-            return False
-
-    def _executar_movimento_fisico_peca(self, origem: int, destino: int) -> bool:
-        """Executa movimento físico de peça no tabuleiro"""
-        try:
-            # Obter coordenadas
-            coord_origem = self.board_coords.get_position(origem)
-            coord_destino = self.board_coords.get_position(destino)
-
-            if not coord_origem or not coord_destino:
-                self.logger.error(f"Coordenadas não encontradas: origem={origem}, destino={destino}")
-                return False
-            
-            # Criar poses
-            pose_origem = RobotPose(coord_origem[0], coord_origem[1], coord_origem[2], 0.0, 3.14, 0.0)
-            pose_destino = RobotPose(coord_destino[0], coord_destino[1], coord_destino[2], 0.0, 3.14, 0.0)
-            
-            # Executar movimento
-            comando = PickPlaceCommand(
-                origin=pose_origem,
-                destination=pose_destino,
-                safe_height=self.config_robo.altura_segura,
-                pick_height=self.config_robo.altura_pegar,
-                speed_normal=self.config_robo.velocidade_normal,
-                speed_precise=self.config_robo.velocidade_precisa
-            )
-            
-            sucesso = self.robot_service.pick_and_place(comando)
-            
-            if sucesso:
-                self.logger.info(f"Peça movida de {origem} para {destino}")
-            else:
-                self.logger.error(f"Falha ao mover peça de {origem} para {destino}")
-                
-            return sucesso
-            
-        except Exception as e:
-            self.logger.error(f"Erro no movimento físico da peça: {e}")
             return False
 
     # ====================== CONTROLE E MONITORAMENTO ======================
@@ -421,37 +346,40 @@ class TapatanOrchestrator:
             return False
 
     def calibrar_sistema(self) -> bool:
-        """Executa calibração do sistema"""
+        """
+        Executa calibração do sistema.
+        Usa PhysicalMovementExecutor para testar posições.
+        """
         try:
             self.logger.info("Iniciando calibração do sistema...")
-            
+
             # Verificar conexão do robô
             if not self.robot_service or not self.robot_service.get_status()["connected"]:
                 self.logger.error("Robô não conectado para calibração")
                 return False
-                
+
+            if not self.movement_executor:
+                self.logger.error("Executor de movimentos não inicializado")
+                return False
+
             # Mover para home
             if not self.robot_service.move_home():
                 self.logger.error("Falha ao mover para home na calibração")
                 return False
-                
+
             # Testar algumas posições do tabuleiro
             posicoes_teste = [0, 4, 8]  # Cantos e centro
             for pos in posicoes_teste:
-                coord = self.board_coords.get_position(pos)
-                if coord:
-                    pose_teste = RobotPose(coord[0], coord[1], coord[2] + 0.1, 0.0, 3.14, 0.0)
-                    
-                    if not self.robot_service.move_to_pose(pose_teste, 0.05):
-                        self.logger.error(f"Falha ao testar posição {pos}")
-                        return False
-                        
+                if not self.movement_executor.executar_movimento_simples(pos):
+                    self.logger.error(f"Falha ao testar posição {pos}")
+                    return False
+
             # Retornar para home
             self.robot_service.move_home()
-            
+
             self.logger.info("Calibração concluída com sucesso")
             return True
-            
+
         except Exception as e:
             self.logger.error(f"Erro na calibração: {e}")
             return False
