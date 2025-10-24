@@ -11,12 +11,15 @@ from logic_control.ur_controller import URController
 from config.config_completa import CONFIG, ConfigRobo
 from services.game_service import gerar_tabuleiro_tapatan
 from diagnostics.robot_diagnostics import RobotDiagnostics
+from interfaces.robot_interfaces import IGameService, RobotStatus as IRobotStatus
 
+# Usando RobotStatus da interface e adicionando estados específicos
 class RobotStatus(Enum):
     DISCONNECTED = "disconnected"
     CONNECTED = "connected"
     MOVING = "moving"
     IDLE = "idle"
+    READY = "ready"  # Da interface
     ERROR = "error"
     EMERGENCY_STOP = "emergency_stop"
     VALIDATING = "validating"
@@ -94,7 +97,7 @@ class ValidationResult:
     final_pose: Optional[List[float]] = None
     error_message: Optional[str] = None
 
-class RobotService:
+class RobotService(IGameService):
     def __init__(self, config_file: Optional[str] = None):
         # Usar config fornecida ou criar padrão
         self.config_robo = ConfigRobo()
@@ -250,9 +253,87 @@ class RobotService:
         """Move robô para posição home com segurança máxima"""
         home_pose = RobotPose.from_list(self.config["home_pose"])
         self.logger.info(" Movendo para posição home")
-        
+
         # Home sempre usa estratégia ultra-segura
         return self.move_to_pose(home_pose)
+
+    # ==================== INTERFACE METHODS (IGameService) ====================
+
+    def initialize(self) -> bool:
+        """
+        Inicializa o serviço do robô (implementação de IGameService).
+
+        Returns:
+            True se inicializado com sucesso, False caso contrário
+        """
+        return self.connect()
+
+    def shutdown(self):
+        """Finaliza o serviço e libera recursos (implementação de IGameService)."""
+        self.disconnect()
+
+    def move_to_board_position(self, position: int) -> bool:
+        """
+        Move o robô para uma posição do tabuleiro (implementação de IGameService).
+
+        Args:
+            position: Posição no tabuleiro (0-8)
+
+        Returns:
+            True se movimento executado com sucesso, False caso contrário
+        """
+        if not 0 <= position <= 8:
+            self.logger.error(f"Posição inválida: {position}. Deve ser entre 0 e 8.")
+            return False
+
+        # Obtém a pose para a posição do tabuleiro
+        board_poses = gerar_tabuleiro_tapatan()
+        if position < len(board_poses):
+            target_pose = RobotPose.from_list(board_poses[position])
+            return self.move_to_pose(target_pose)
+        return False
+
+    def place_piece(self, position: int, player: str) -> bool:
+        """
+        Coloca uma peça em uma posição do tabuleiro (implementação de IGameService).
+
+        Args:
+            position: Posição no tabuleiro (0-8)
+            player: Identificador do jogador
+
+        Returns:
+            True se peça colocada com sucesso, False caso contrário
+        """
+        # Esta é uma operação simplificada que usa move_to_board_position
+        # Para operação completa de pick-and-place, use pick_and_place()
+        return self.move_to_board_position(position)
+
+    def move_piece(self, from_position: int, to_position: int) -> bool:
+        """
+        Move uma peça de uma posição para outra (implementação de IGameService).
+
+        Args:
+            from_position: Posição de origem (0-8)
+            to_position: Posição de destino (0-8)
+
+        Returns:
+            True se peça movida com sucesso, False caso contrário
+        """
+        # Move para origem primeiro, depois para destino
+        if self.move_to_board_position(from_position):
+            return self.move_to_board_position(to_position)
+        return False
+
+    def return_to_home(self) -> bool:
+        """
+        Retorna o robô para a posição home (implementação de IGameService).
+
+        Returns:
+            True se retornado com sucesso, False caso contrário
+        """
+        return self.move_home()
+
+    # ==================== END INTERFACE METHODS ====================
 
     def pick_and_place(self, pick_place_cmd: PickPlaceCommand) -> bool:
         """

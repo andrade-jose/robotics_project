@@ -14,9 +14,10 @@ import time
 import logging
 from typing import Dict, List, Any, Optional
 from dataclasses import dataclass
+from interfaces.robot_interfaces import IDiagnostics
 
 
-class RobotDiagnostics:
+class RobotDiagnostics(IDiagnostics):
     """
     Gerencia diagnósticos, estatísticas e relatórios do sistema robótico.
 
@@ -312,6 +313,33 @@ class RobotDiagnostics:
             "movements_with_intermediate_points": 0
         }
         self.logger.info("📊 Estatísticas resetadas")
+
+    def export_history(self, filename: str) -> bool:
+        """
+        Exporta histórico de operações para arquivo (implementação de IDiagnostics).
+
+        Args:
+            filename: Nome do arquivo para exportar
+
+        Returns:
+            True se exportado com sucesso, False caso contrário
+        """
+        export_data = {
+            "export_timestamp": time.time(),
+            "movement_history": self.movement_history,
+            "validation_stats": self.validation_stats
+        }
+
+        try:
+            with open(filename, 'w') as f:
+                json.dump(export_data, f, indent=2)
+
+            self.logger.info(f"📊 Histórico exportado para {filename}")
+            return True
+
+        except Exception as e:
+            self.logger.error(f"❌ Erro ao exportar histórico: {e}")
+            return False
 
     def set_logging_mode(self, verbose: bool = False, summary_only: bool = True):
         """

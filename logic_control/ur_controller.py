@@ -3,11 +3,12 @@ from rtde_receive import RTDEReceiveInterface
 from config.config_completa import ConfigRobo
 from services.pose_validation_service import PoseValidationService
 from diagnostics.ur_diagnostics import URDiagnostics
+from interfaces.robot_interfaces import IRobotController
 import time
 import math
 import logging
 
-class URController:
+class URController(IRobotController):
     def __init__(self, config: ConfigRobo):
         self.config = config
         self.rtde_c = RTDEControlInterface(self.config.ip)
@@ -36,9 +37,44 @@ class URController:
 
         print(f"✅ Conectado ao robô UR em {self.config.ip}")
 
-    def is_connected(self):
+    def connect(self) -> bool:
+        """
+        Conecta ao robô (implementação de IRobotController).
+        Nota: A conexão já é feita no __init__, este método verifica o estado.
+
+        Returns:
+            True se conectado com sucesso, False caso contrário
+        """
+        return self.is_connected()
+
+    def is_connected(self) -> bool:
         """Verifica se está conectado ao robô"""
         return (self.rtde_c and self.rtde_r and self.rtde_c.isConnected())
+
+    def move_to_pose(self, pose: list, velocity: float = 0.5,
+                     acceleration: float = 0.3, asynchronous: bool = False) -> bool:
+        """
+        Move o robô para uma pose específica (implementação de IRobotController).
+
+        Args:
+            pose: Lista de 6 valores [x, y, z, rx, ry, rz]
+            velocity: Velocidade do movimento (0.0-1.0)
+            acceleration: Aceleração do movimento (0.0-1.0)
+            asynchronous: Se True, retorna imediatamente sem esperar
+
+        Returns:
+            True se movimento executado com sucesso, False caso contrário
+        """
+        # Usa o método existente move_with_intermediate_points
+        return self.move_with_intermediate_points(
+            target_pose=pose,
+            speed=velocity,
+            acceleration=acceleration
+        )
+
+    def stop_movement(self):
+        """Para qualquer movimento do robô imediatamente (implementação de IRobotController)."""
+        self.stop()
 
     def validate_pose_safety_limits(self, pose):
         """

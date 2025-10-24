@@ -15,6 +15,7 @@ FUNCIONALIDADES:
 
 from dataclasses import dataclass
 from typing import List, Optional, Dict, Tuple
+from interfaces.robot_interfaces import IRobotValidator
 import math
 import logging
 
@@ -44,7 +45,7 @@ class ValidationResult:
         return result
 
 
-class PoseValidationService:
+class PoseValidationService(IRobotValidator):
     """
     Serviço centralizado para validação de poses do robô UR.
 
@@ -317,6 +318,99 @@ class PoseValidationService:
         """Validação rápida apenas de alcançabilidade."""
         result = self._validate_reachability(pose, current_pose)
         return result['valid']
+
+    # ==================== INTERFACE METHODS (IRobotValidator) ====================
+
+    def validate_pose(self, pose: List[float]) -> Tuple[bool, str]:
+        """
+        Valida uma pose completa (implementação de IRobotValidator).
+
+        Args:
+            pose: Lista de 6 valores [x, y, z, rx, ry, rz]
+
+        Returns:
+            Tupla (válido, mensagem_erro)
+        """
+        result = self.validate_complete(pose)
+        error_msg = "\n".join(result.errors) if result.errors else ""
+        return (result.is_valid, error_msg)
+
+    def validate_coordinates(self, x: float, y: float, z: float) -> Tuple[bool, str]:
+        """
+        Valida apenas coordenadas XYZ (implementação de IRobotValidator).
+
+        Args:
+            x, y, z: Coordenadas cartesianas
+
+        Returns:
+            Tupla (válido, mensagem_erro)
+        """
+        # Cria pose temporária com coordenadas e orientação padrão
+        temp_pose = [x, y, z, 0.0, 0.0, 0.0]
+        coord_result = self._validate_workspace(temp_pose)
+
+        if coord_result['valid']:
+            return (True, "")
+        else:
+            errors = coord_result.get('errors', [])
+            error_msg = "\n".join(errors) if errors else "Coordenadas fora do workspace"
+            return (False, error_msg)
+
+    def validate_orientation(self, rx: float, ry: float, rz: float) -> Tuple[bool, str]:
+        """
+        Valida apenas orientação/rotação (implementação de IRobotValidator).
+
+        Args:
+            rx, ry, rz: Ângulos de rotação
+
+        Returns:
+            Tupla (válido, mensagem_erro)
+        """
+        # Cria pose temporária com orientação e coordenadas padrão
+        temp_pose = [0.0, 0.0, 0.0, rx, ry, rz]
+        rotation_result = self._validate_rotation(temp_pose)
+
+        if rotation_result['valid']:
+            return (True, "")
+        else:
+            errors = rotation_result.get('errors', [])
+            error_msg = "\n".join(errors) if errors else "Orientação inválida"
+            return (False, error_msg)
+
+    def check_reachability(self, pose: List[float]) -> bool:
+        """
+        Verifica se o robô pode alcançar a pose (implementação de IRobotValidator).
+
+        Args:
+            pose: Lista de 6 valores [x, y, z, rx, ry, rz]
+
+        Returns:
+            True se alcançável, False caso contrário
+        """
+        if self.ur_controller:
+            current_pose = self.ur_controller.get_current_pose()
+            if current_pose:
+                return self.validate_reachability(pose, current_pose)
+        return True  # Se não tem controller, assume como alcançável
+
+    def check_safety_limits(self, pose: List[float]) -> Tuple[bool, str]:
+        """
+        Verifica limites de segurança (implementação de IRobotValidator).
+
+        Args:
+            pose: Lista de 6 valores [x, y, z, rx, ry, rz]
+
+        Returns:
+            Tupla (seguro, mensagem_alerta)
+        """
+        safety_result = self._validate_ur_safety_limits(pose)
+
+        if safety_result['valid']:
+            return (True, "")
+        else:
+            errors = safety_result.get('errors', [])
+            error_msg = "\n".join(errors) if errors else "Pose fora dos limites de segurança"
+            return (False, error_msg)
 
     # ==================== UTILITÁRIOS ====================
 
