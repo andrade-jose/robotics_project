@@ -9,7 +9,7 @@ import math
 
 from logic_control.ur_controller import URController
 from config.config_completa import CONFIG, ConfigRobo
-from services.game_service import gerar_tabuleiro_tapatan
+from utils.tapatan_board import gerar_tabuleiro_tapatan
 from diagnostics.robot_diagnostics import RobotDiagnostics
 from interfaces.robot_interfaces import IGameService, RobotStatus as IRobotStatus
 
@@ -98,18 +98,18 @@ class ValidationResult:
     error_message: Optional[str] = None
 
 class RobotService(IGameService):
-    def __init__(self, config_file: Optional[str] = None):
+    def __init__(self, config_robo: Optional[ConfigRobo] = None, config_file: Optional[str] = None):
         # Usar config fornecida ou criar padrão
-        self.config_robo = ConfigRobo()
+        self.config_robo = config_robo or ConfigRobo()
         self.robot_ip = self.config_robo.ip
         self.controller: Optional[URController] = None
         self.status = RobotStatus.DISCONNECTED
         self.last_error: Optional[str] = None
         self.poses = gerar_tabuleiro_tapatan
-        
+
         # Converter ConfigRobo para formato dict compatível (temporário)
         self.config = self._convert_config_to_dict()
-        
+
         # Carregar configuração adicional se fornecida
         if config_file:
             additional_config = self.load_config(config_file)
@@ -166,10 +166,10 @@ class RobotService(IGameService):
         try:
             with open(config_file, 'r') as f:
                 config = json.load(f)
-            self.logger.info(f" Configuração carregada de {config_file}")
+            self.logger.info(f"[OK] Configuração carregada de {config_file}")
             return config
         except Exception as e:
-            self.logger.error(f" Erro ao carregar configuração: {e}")
+            self.logger.error(f"[ERRO] Erro ao carregar configuração: {e}")
             return {}
 
     def save_config(self, config_file: str):
@@ -177,19 +177,15 @@ class RobotService(IGameService):
         try:
             with open(config_file, 'w') as f:
                 json.dump(self.config, f, indent=4)
-            self.logger.info(f" Configuração salva em {config_file}")
+            self.logger.info(f"[SALVANDO] Configuração salva em {config_file}")
         except Exception as e:
-            self.logger.error(f" Erro ao salvar configuração: {e}")
+            self.logger.error(f"[ERRO] Erro ao salvar configuração: {e}")
 
     def connect(self) -> bool:
         """Conecta ao robô"""
         try:
-            self.logger.info(f" Conectando ao robô em {self.robot_ip}...")
-            self.controller = URController(
-                robot_ip=self.robot_ip,
-                speed=self.config["speed"],
-                acceleration=self.config["acceleration"]
-            )
+            self.logger.info(f"[CONEXAO] Conectando ao robô em {self.robot_ip}...")
+            self.controller = URController(config=self.config_robo)
             
             if self.controller.is_connected():
                 self.status = RobotStatus.CONNECTED
@@ -198,19 +194,19 @@ class RobotService(IGameService):
                 if self.config.get("enable_auto_correction", True):
                     self.controller.enable_safety_mode(True)
                 
-                self.logger.info(" Robô conectado com sucesso")
-                self.logger.info(f" Modo de segurança: {'HABILITADO' if self.config.get('enable_auto_correction', True) else 'DESABILITADO'}")
+                self.logger.info("[OK] Robô conectado com sucesso")
+                self.logger.info(f"[SEGURANCA] Modo de segurança: {'HABILITADO' if self.config.get('enable_auto_correction', True) else 'DESABILITADO'}")
                 return True
             else:
                 self.status = RobotStatus.ERROR
                 self.last_error = "Falha na conexão"
-                self.logger.error(" Falha ao conectar com o robô")
+                self.logger.error("[ERRO] Falha ao conectar com o robô")
                 return False
                 
         except Exception as e:
             self.status = RobotStatus.ERROR
             self.last_error = str(e)
-            self.logger.error(f" Erro ao conectar: {e}")
+            self.logger.error(f"[ERRO] Erro ao conectar: {e}")
             return False
 
     def disconnect(self):
@@ -220,9 +216,9 @@ class RobotService(IGameService):
                 self.controller.disconnect()
                 self.controller = None
             self.status = RobotStatus.DISCONNECTED
-            self.logger.info(" Robô desconectado")
+            self.logger.info("[CONEXAO] Robô desconectado")
         except Exception as e:
-            self.logger.error(f" Erro ao desconectar: {e}")
+            self.logger.error(f"[ERRO] Erro ao desconectar: {e}")
 
         
     # ===================  FUNÇÕES DE MOVIMENTO ATUALIZADAS ===================
@@ -231,28 +227,28 @@ class RobotService(IGameService):
         """Movimento simplificado - URController faz toda validação"""
         if not self._check_connection():
             return False
-        
+
         try:
             self.status = RobotStatus.MOVING
-            success = self.controller.move_to_pose_safe(
-                pose.to_list(), 
+            success = self.controller.move_to_pose(
+                pose.to_list(),
                 speed or self.config["speed"],
-                acceleration or self.config["acceleration"],
-                strategy
+                acceleration or self.config["acceleration"]
             )
-            
+
             self.status = RobotStatus.IDLE if success else RobotStatus.ERROR
             return success
 
         except Exception as e:
             self.status = RobotStatus.ERROR
             self.last_error = str(e)
+            self.logger.error(f"[ERRO] Erro ao mover para pose: {e}")
             return False
 
     def move_home(self) -> bool:
         """Move robô para posição home com segurança máxima"""
         home_pose = RobotPose.from_list(self.config["home_pose"])
-        self.logger.info(" Movendo para posição home")
+        self.logger.info("[EXECUTANDO] Movendo para posição home")
 
         # Home sempre usa estratégia ultra-segura
         return self.move_to_pose(home_pose)
@@ -344,8 +340,8 @@ class RobotService(IGameService):
             
         try:
             self.status = RobotStatus.MOVING
-            self.logger.info(f"     Origem: {pick_place_cmd.origin}")
-            self.logger.info(f"     Destino: {pick_place_cmd.destination}")
+            self.logger.info(f"[INFO] Origem: {pick_place_cmd.origin}")
+            self.logger.info(f"[INFO] Destino: {pick_place_cmd.destination}")
             
             #  USAR FUNÇÃO ATUALIZADA DO URCONTROLLER
             success = self.controller.executar_movimento_peca(
@@ -357,18 +353,18 @@ class RobotService(IGameService):
             
             if success:
                 self.status = RobotStatus.IDLE
-                self.logger.info(" Pick and place concluído")
+                self.logger.info("[OK] Pick and place concluído")
                 return True
             else:
                 self.status = RobotStatus.ERROR
                 self.last_error = "Falha no pick and place"
-                self.logger.error(" Falha no pick and place")
+                self.logger.error("[ERRO] Falha no pick and place")
                 return False
                 
         except Exception as e:
             self.status = RobotStatus.ERROR
             self.last_error = str(e)
-            self.logger.error(f" Erro durante pick and place: {e}")
+            self.logger.error(f"[ERRO] Erro durante pick and place: {e}")
             return False
 
 
@@ -446,7 +442,7 @@ class RobotService(IGameService):
                 else:
                     sequence_result["failed_commands"] += 1
                     if stop_on_failure:
-                        self.logger.error(f" Falha no comando {i+1} - sequência interrompida")
+                        self.logger.error(f"[ERRO] Falha no comando {i+1} - sequência interrompida")
                         sequence_result["error_summary"].append(f"Comando {i+1}: Execução falhou")
                         break
                 
@@ -470,7 +466,7 @@ class RobotService(IGameService):
         sequence_result["corrections_applied"] = self.validation_stats["corrections_applied"]
         sequence_result["intermediate_movements"] = self.validation_stats["movements_with_intermediate_points"]
         
-        self.logger.info(f" Sequência concluída")
+        self.logger.info(f"[OK] Sequência concluída")
         
         return sequence_result
 
@@ -483,25 +479,25 @@ class RobotService(IGameService):
         """
         🔥 NOVA FUNÇÃO: Debugga uma sequência de movimentos
         """
-        print(f"🐛 DEBUG: Testando sequência de {len(poses_list)} poses...")
-        
+        print(f"[DEBUG] DEBUG: Testando sequência de {len(poses_list)} poses...")
+
         resultados = []
         for i, pose in enumerate(poses_list):
             print(f"\n--- POSE {i+1}/{len(poses_list)} ---")
-            
+
             if test_only:
                 resultado = self.test_pose_validation(pose)
             else:
                 resultado = self.move_to_pose_safe(pose)
-                
+
             resultados.append(resultado)
-            
+
             if not resultado:
-                print(f"❌ Sequência INTERROMPIDA na pose {i+1}")
+                print(f"[ERRO] Sequência INTERROMPIDA na pose {i+1}")
                 break
-                
+
         aprovadas = sum(resultados)
-        print(f"\n📊 RESULTADO DA SEQUÊNCIA:")
+        print(f"\n[STATUS] RESULTADO DA SEQUÊNCIA:")
         print(f"   Poses aprovadas: {aprovadas}/{len(poses_list)}")
         print(f"   Taxa de sucesso: {(aprovadas/len(poses_list)*100):.1f}%")
         
@@ -536,66 +532,66 @@ class RobotService(IGameService):
         """
         🔥 MOVIMENTO DE PEÇA ATUALIZADO com validação em cada etapa
         """
-        print(f"🤖 Executando movimento de peça com VALIDAÇÃO COMPLETA:")
-        print(f"   📍 Origem: {[f'{p:.3f}' for p in origem]}")
-        print(f"   📍 Destino: {[f'{p:.3f}' for p in destino]}")
-        print(f"   ⬆️ Altura segura: {altura_segura:.3f}")
-        print(f"   ⬇️ Altura pegar: {altura_pegar:.3f}")
+        print(f"[ROBO] Executando movimento de peça com VALIDAÇÃO COMPLETA:")
+        print(f"   [INFO] Origem: {[f'{p:.3f}' for p in origem]}")
+        print(f"   [INFO] Destino: {[f'{p:.3f}' for p in destino]}")
+        print(f"   [INFO] Altura segura: {altura_segura:.3f}")
+        print(f"   [INFO] Altura pegar: {altura_pegar:.3f}")
         
         try:
             # 1. Mover para posição segura acima da origem
             pose_segura_origem = origem.copy()
             pose_segura_origem[2] = altura_segura
             
-            print("🔍 Etapa 1: Validando posição segura origem...")
+            print("[EXECUTANDO] Etapa 1: Validando posição segura origem...")
             if not self.move_to_pose_safe(pose_segura_origem):
-                print("❌ Falha ao mover para posição segura origem")
+                print("[ERRO] Falha ao mover para posição segura origem")
                 return False
                 
             # 2. Descer para pegar a peça
             pose_pegar = origem.copy()
             pose_pegar[2] = altura_pegar
             
-            print("🔍 Etapa 2: Validando descida para pegar...")
+            print("[EXECUTANDO] Etapa 2: Validando descida para pegar...")
             if not self.move_to_pose_safe(pose_pegar, speed=self.config.velocidade_precisa):
-                print("❌ Falha ao descer para pegar peça")
+                print("[ERRO] Falha ao descer para pegar peça")
                 return False
                 
             # 3. Subir com a peça
-            print("🔍 Etapa 3: Validando subida com peça...")
+            print("[EXECUTANDO] Etapa 3: Validando subida com peça...")
             if not self.move_to_pose_safe(pose_segura_origem):
-                print("❌ Falha ao subir com peça")
+                print("[ERRO] Falha ao subir com peça")
                 return False
                 
             # 4. Mover para posição segura acima do destino
             pose_segura_destino = destino.copy()
             pose_segura_destino[2] = altura_segura
             
-            print("🔍 Etapa 4: Validando posição segura destino...")
+            print("[EXECUTANDO] Etapa 4: Validando posição segura destino...")
             if not self.move_to_pose_safe(pose_segura_destino):
-                print("❌ Falha ao mover para posição segura destino")
+                print("[ERRO] Falha ao mover para posição segura destino")
                 return False
                 
             # 5. Descer para colocar a peça
             pose_colocar = destino.copy()
             pose_colocar[2] = altura_pegar
             
-            print("🔍 Etapa 5: Validando descida para colocar...")
+            print("[EXECUTANDO] Etapa 5: Validando descida para colocar...")
             if not self.move_to_pose_safe(pose_colocar, speed=self.config.velocidade_precisa):
-                print("❌ Falha ao descer para colocar peça")
+                print("[ERRO] Falha ao descer para colocar peça")
                 return False
                 
             # 6. Subir após colocar
-            print("🔍 Etapa 6: Validando subida final...")
+            print("[EXECUTANDO] Etapa 6: Validando subida final...")
             if not self.move_to_pose_safe(pose_segura_destino):
-                print("❌ Falha ao subir após colocar peça")
+                print("[ERRO] Falha ao subir após colocar peça")
                 return False
-                
-            print("✅ Movimento de peça concluído com SUCESSO TOTAL!")
+
+            print("[OK] Movimento de peça concluído com SUCESSO TOTAL!")
             return True
             
         except Exception as e:
-            print(f"❌ Erro durante movimento de peça: {e}")
+            print(f"[ERRO] Erro durante movimento de peça: {e}")
             return False
     # ===================  NOVAS FUNÇÕES DE DEBUG E ANÁLISE ===================
 
@@ -606,7 +602,7 @@ class RobotService(IGameService):
         if not self._check_connection():
             return {"error": "Robô não conectado"}
             
-        self.logger.info(f" DEBUG: Analisando sequência de {len(poses)} poses")
+        self.logger.info(f"[DEBUG] DEBUG: Analisando sequência de {len(poses)} poses")
         
         # Usar função de debug do URController
         poses_list = [pose.to_list() for pose in poses]
@@ -647,7 +643,7 @@ class RobotService(IGameService):
                 return RobotPose.from_list(pose_list)
             return None
         except Exception as e:
-            self.logger.error(f" Erro ao obter pose atual: {e}")
+            self.logger.error(f"[ERRO] Erro ao obter pose atual: {e}")
             return None
 
     def fix_calibration_pose(self, position_index, target_pose):
@@ -710,7 +706,7 @@ class RobotService(IGameService):
                 status_dict["robot_details"] = robot_status
                 
             except Exception as e:
-                self.logger.error(f" Erro ao obter status detalhado: {e}")
+                self.logger.error(f"[ERRO] Erro ao obter status detalhado: {e}")
         
         return status_dict
     
@@ -744,7 +740,7 @@ class RobotService(IGameService):
             self.controller.enable_safety_mode(enable)
         
         mode_status = "HABILITADO" if enable else "DESABILITADO"
-        self.logger.info(f" Modo ultra-seguro {mode_status}")
+        self.logger.info(f"[SEGURANCA] Modo ultra-seguro {mode_status}")
 
     def set_validation_level(self, level: ValidationLevel):
         """
@@ -760,26 +756,17 @@ class RobotService(IGameService):
 
     def move_to_pose_safe(self, pose, speed=None, acceleration=None, strategy="auto"):
         """
-        Movimento seguro com estratégias configuráveis
-        strategy: "simple", "smart_correction", "intermediate_points", "auto"
+        Movimento seguro - wrapper simplificado que delega para move_to_pose
+        strategy: parâmetro mantido por compatibilidade mas não usado
         """
+        # Usar valores padrão da config se não fornecidos
         if speed is None:
-            speed = self.speed
+            speed = self.config.get("speed", self.config_robo.velocidade_padrao)
         if acceleration is None:
-            acceleration = self.acceleration
-            
-        if strategy == "simple":
-            return self._move_simple(pose, speed, acceleration)
-        elif strategy == "smart_correction":
-            return self._move_with_correction(pose, speed, acceleration)
-        elif strategy == "intermediate_points":
-            return self._move_with_intermediate_points(pose, speed, acceleration)
-        else:  # auto
-            # Tenta simple primeiro, depois smart_correction se falhar
-            if self.validate_pose_complete(pose):
-                return self._move_simple(pose, speed, acceleration)
-            else:
-                return self._move_with_correction(pose, speed, acceleration)
+            acceleration = self.config.get("acceleration", self.config_robo.aceleracao_padrao)
+
+        # Delegar para o método move_to_pose existente
+        return self.move_to_pose(pose, speed, acceleration, strategy)
             
     # =================== FUNÇÕES DE CONTROLE EXISTENTES ATUALIZADAS ===================
 
@@ -790,11 +777,11 @@ class RobotService(IGameService):
                 success = self.controller.emergency_stop()
                 if success:
                     self.status = RobotStatus.EMERGENCY_STOP
-                    self.logger.warning(" PARADA DE EMERGÊNCIA ATIVADA")
+                    self.logger.warning("[ALERTA] PARADA DE EMERGÊNCIA ATIVADA")
                     return True
             return False
         except Exception as e:
-            self.logger.error(f" Erro na parada de emergência: {e}")
+            self.logger.error(f"[ERRO] Erro na parada de emergência: {e}")
             return False
 
     def stop_movement(self) -> bool:
@@ -804,11 +791,11 @@ class RobotService(IGameService):
                 success = self.controller.stop()
                 if success:
                     self.status = RobotStatus.IDLE
-                    self.logger.info(" Movimento parado")
+                    self.logger.info("[PARADA] Movimento parado")
                     return True
             return False
         except Exception as e:
-            self.logger.error(f" Erro ao parar movimento: {e}")
+            self.logger.error(f"[ERRO] Erro ao parar movimento: {e}")
             return False
 
     def get_predefined_pose(self, pose_name: str) -> Optional[RobotPose]:
@@ -818,7 +805,7 @@ class RobotService(IGameService):
         elif pose_name in self.poses:
             return RobotPose.from_list(self.poses)
         else:
-            self.logger.error(f" Pose '{pose_name}' não encontrada")
+            self.logger.error(f"[ERRO] Pose '{pose_name}' não encontrada")
             return None
 
     def update_config(self, new_config: Dict[str, Any]):
@@ -833,14 +820,14 @@ class RobotService(IGameService):
             try:
                 ValidationLevel(new_config["default_validation_level"])
             except ValueError:
-                self.logger.error(f" Nível de validação inválido: {new_config['default_validation_level']}")
+                self.logger.error(f"[ERRO] Nível de validação inválido: {new_config['default_validation_level']}")
                 self.config["default_validation_level"] = old_config["default_validation_level"]
         
         if "default_movement_strategy" in new_config:
             try:
                 MovementStrategy(new_config["default_movement_strategy"])
             except ValueError:
-                self.logger.error(f" Estratégia de movimento inválida: {new_config['default_movement_strategy']}")
+                self.logger.error(f"[ERRO] Estratégia de movimento inválida: {new_config['default_movement_strategy']}")
                 self.config["default_movement_strategy"] = old_config["default_movement_strategy"]
         
         
@@ -860,7 +847,7 @@ class RobotService(IGameService):
         if not self.controller or not self.controller.is_connected():
             self.status = RobotStatus.DISCONNECTED
             self.last_error = "Robô não conectado"
-            self.logger.error(" Robô não está conectado")
+            self.logger.error("[ERRO] Robô não está conectado")
             return False
         return True
 
@@ -927,7 +914,7 @@ class RobotService(IGameService):
         # Analisar resultados via RobotDiagnostics
         analysis = self.diagnostics.analyze_benchmark_results(benchmark_results, self.config)
 
-        self.logger.info(f"📊 Benchmark concluído - Rating: {analysis['performance_rating']}")
+        self.logger.info(f"[STATUS] Benchmark concluído - Rating: {analysis['performance_rating']}")
 
         return analysis
     

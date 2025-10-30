@@ -91,7 +91,7 @@ class TapatanOrchestrator:
             # Calibração automática se habilitada
             if self.config_robo.auto_calibrar:
                 if not self.calibrar_sistema():
-                    self.logger.warning("⚠️ Calibração automática falhou, continuando...")
+                    self.logger.warning("[AVISO] Calibração automática falhou, continuando...")
             
             self.status = OrquestradorStatus.PRONTO
             self.logger.info("Orquestrador inicializado com sucesso!")
@@ -106,8 +106,7 @@ class TapatanOrchestrator:
     def _inicializar_robot(self) -> bool:
         """Inicializa conexão com o robô"""
         try:
-            self.robot_service = RobotService()
-            self.robot_service.config_robo = self.config_robo
+            self.robot_service = RobotService(config_robo=self.config_robo)
 
             if not self.robot_service.connect():
                 self.logger.error("Falha ao conectar com o robô")
@@ -147,23 +146,23 @@ class TapatanOrchestrator:
         try:
             # Verificar se sistema de visão está disponível
             if not hasattr(self, 'board_coords') or self.board_coords is None:
-                self.logger.error("❌ Sistema de coordenadas não inicializado")
+                self.logger.error("[ERRO] Sistema de coordenadas não inicializado")
                 return False
 
             # Tentar gerar coordenadas dinâmicas via visão
             if self.board_coords.vision_system and self.board_coords.vision_system.is_calibrated:
-                self.logger.info("🎯 Carregando coordenadas dinâmicas...")
+                self.logger.info("[EXECUTANDO] Carregando coordenadas dinâmicas...")
                 if self.board_coords.generate_from_vision(self.board_coords.vision_system):
-                    self.logger.info("✅ Coordenadas dinâmicas carregadas")
+                    self.logger.info("[OK] Coordenadas dinâmicas carregadas")
                     return True
 
             # Fallback: coordenadas temporárias
-            self.logger.warning("⚠️ Usando coordenadas temporárias")
+            self.logger.warning("[AVISO] Usando coordenadas temporárias")
             self.board_coords.generate_temporary_grid()
             return True
 
         except Exception as e:
-            self.logger.error(f"❌ Erro ao carregar coordenadas: {e}")
+            self.logger.error(f"[ERRO] Erro ao carregar coordenadas: {e}")
             self.board_coords.generate_temporary_grid()
             return False
 
@@ -316,13 +315,13 @@ class TapatanOrchestrator:
         """Pausa o jogo atual"""
         if self.jogo_ativo:
             self.status = OrquestradorStatus.PAUSADO
-            self.logger.info("⏸️ Jogo pausado")
+            self.logger.info("[PARADA] Jogo pausado")
 
     def retomar_jogo(self):
         """Retoma o jogo pausado"""
         if self.status == OrquestradorStatus.PAUSADO:
             self.status = OrquestradorStatus.JOGANDO
-            self.logger.info("▶️ Jogo retomado")
+            self.logger.info("[INICIO] Jogo retomado")
 
     def parar_jogo(self):
         """Para o jogo atual"""

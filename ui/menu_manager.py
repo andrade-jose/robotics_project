@@ -63,12 +63,12 @@ class MenuManager:
             print("\n" + "=" * 50)
             print("           MENU PRINCIPAL - TAPATAN COM VISÃO")
             print("=" * 50)
-            print("  1. 🚀 Iniciar nova partida")
-            print("  2. 🔧 Calibrar sistema robótico")
-            print("  3. 📹 Testar sistema de visão")
-            print("  4. 📊 Ver status do sistema")
-            print("  5. 🚨 Parada de emergência")
-            print("  6. 👋 Sair")
+            print("  1. [INICIO] Iniciar nova partida")
+            print("  2. [CONFIG] Calibrar sistema robótico")
+            print("  3. [VISAO] Testar sistema de visão")
+            print("  4. [STATUS] Ver status do sistema")
+            print("  5. [ALERTA] Parada de emergência")
+            print("  6. [INFO] Sair")
             print("=" * 50)
 
             try:
@@ -87,7 +87,7 @@ class MenuManager:
                 elif opcao == "6":
                     return False  # Sinaliza que deve sair
                 else:
-                    print("   ❌ Opção inválida!")
+                    print("   [ERRO] Opção inválida!")
 
             except KeyboardInterrupt:
                 return False
@@ -96,21 +96,21 @@ class MenuManager:
 
     def calibrar_sistema(self):
         """Executa a rotina de calibração do sistema robótico."""
-        print("\n🔧 Iniciando calibração do sistema robótico...")
+        print("\n[CONFIG] Iniciando calibração do sistema robótico...")
 
         if not (self.orquestrador and hasattr(self.orquestrador, 'calibrar_sistema')):
-            print("⚠️ Função de calibração não implementada no orquestrador.")
+            print("[AVISO] Função de calibração não implementada no orquestrador.")
             input("Pressione ENTER para voltar...")
             return
 
-        print("⚠️ O robô visitará algumas posições do tabuleiro.")
+        print("[AVISO] O robô visitará algumas posições do tabuleiro.")
         confirmacao = input("   Continuar? (s/N): ").lower().strip()
 
         if confirmacao.startswith('s'):
             if self.orquestrador.calibrar_sistema():
-                print("✅ Calibração concluída com sucesso!")
+                print("[OK] Calibração concluída com sucesso!")
             else:
-                print("❌ Falha na calibração!")
+                print("[ERRO] Falha na calibração!")
         else:
             print("Calibração cancelada.")
 
@@ -118,10 +118,10 @@ class MenuManager:
 
     def testar_sistema_visao(self):
         """Testa o sistema de visão de forma isolada."""
-        print("\n📹 Iniciando teste do sistema de visão...")
+        print("\n[VISAO] Iniciando teste do sistema de visão...")
 
         if not self.vision_integration:
-            print("❌ Sistema de visão não disponível.")
+            print("[ERRO] Sistema de visão não disponível.")
             input("Pressione ENTER para voltar...")
             return
 
@@ -130,7 +130,7 @@ class MenuManager:
             return
 
         print("\n" + "+" + "-" * 58 + "+")
-        print("| 🎥 Janela de visão aberta. Pressione 'q' na janela para fechar. |")
+        print("| [VISAO] Janela de visão aberta. Pressione 'q' na janela para fechar. |")
         print("|    - Pressione 'c' para tentar calibrar.                    |")
         print("|    - Pressione 's' para salvar um screenshot.                |")
         print("+" + "-" * 58 + "+")
@@ -152,23 +152,23 @@ class MenuManager:
 
         self.vision_integration.parar_sistema_visao()
         self.vision_integration.show_vision_window = False
-        print("\n✅ Teste de visão finalizado.")
+        print("\n[OK] Teste de visão finalizado.")
 
     # ========== STATUS DO SISTEMA ==========
 
     def mostrar_status_completo(self):
         """Mostra o status completo do robô e da visão."""
-        print("\n" + "=" * 35 + "\n      📊 STATUS GERAL DO SISTEMA\n" + "=" * 35)
+        print("\n" + "=" * 35 + "\n      [STATUS] STATUS GERAL DO SISTEMA\n" + "=" * 35)
 
         # Status do orquestrador
         if self.orquestrador and hasattr(self.orquestrador, 'obter_status_completo'):
             status = self.orquestrador.obter_status_completo()
-            print(f"🎮 Orquestrador: {status.get('orquestrador', {}).get('status', 'N/A')}")
+            print(f"[JOGO] Orquestrador: {status.get('orquestrador', {}).get('status', 'N/A')}")
         else:
             print("  - Serviço do robô não disponível ou status não implementado.")
 
         # Status da visão
-        print("\n📹 Status da Visão:")
+        print("\n[VISAO] Status da Visão:")
         if self.vision_integration:
             estado_visao = self.vision_integration.obter_estado_visao()
             if estado_visao.get('available'):
@@ -187,9 +187,9 @@ class MenuManager:
 
     def parada_emergencia(self):
         """Para todos os sistemas imediatamente após confirmação."""
-        print("\n" + "🚨" * 15 + "\n      PARADA DE EMERGÊNCIA\n" + "🚨" * 15)
+        print("\n" + "[ALERTA]" * 15 + "\n      PARADA DE EMERGÊNCIA\n" + "[ALERTA]" * 15)
 
-        confirmacao = input("⚠️ Confirma parada de emergência? (s/N): ").lower().strip()
+        confirmacao = input("[AVISO] Confirma parada de emergência? (s/N): ").lower().strip()
 
         if confirmacao.startswith('s'):
             # Para o orquestrador
@@ -200,7 +200,7 @@ class MenuManager:
             if self.vision_integration:
                 self.vision_integration.parar_sistema_visao()
 
-            print("🛑 Todos os sistemas foram parados. Encerrando por segurança.")
+            print("[PARADA] Todos os sistemas foram parados. Encerrando por segurança.")
             sys.exit(1)
         else:
             print("Parada de emergência cancelada.")
@@ -215,15 +215,15 @@ class MenuManager:
             True se o usuário confirmar, False se cancelar ou falhar
         """
         print("\n" + "=" * 50)
-        print("    🔧 PREPARAÇÃO DO TABULEIRO COM VISÃO 🔧")
+        print("    [CONFIG] PREPARAÇÃO DO TABULEIRO COM VISÃO [CONFIG]")
         print("=" * 50)
 
         if not self.vision_integration:
-            print("❌ Sistema de visão não disponível.")
+            print("[ERRO] Sistema de visão não disponível.")
             return False
 
         if not self.vision_integration.inicializar_sistema_visao():
-            print("❌ Não foi possível iniciar a visão. O jogo continuará sem ela.")
+            print("[ERRO] Não foi possível iniciar a visão. O jogo continuará sem ela.")
             return False
 
         self.vision_integration.show_vision_window = True
@@ -240,13 +240,13 @@ class MenuManager:
             # Verifica se há peças no tabuleiro
             estado_visao = self.vision_integration.obter_estado_visao()
             if len(estado_visao['board_positions']) > 0:
-                print("⚠️  Atenção: A visão detectou peças no tabuleiro. O jogo espera um tabuleiro vazio.")
+                print("[AVISO]  Atenção: A visão detectou peças no tabuleiro. O jogo espera um tabuleiro vazio.")
                 confirmacao = input("   Deseja continuar mesmo assim? (s/N): ").lower().strip()
                 if confirmacao != 's':
                     print("   Partida cancelada pelo usuário.")
                     return False
 
-            print("✅ Tabuleiro pronto! Iniciando partida...")
+            print("[OK] Tabuleiro pronto! Iniciando partida...")
             return True
 
         except KeyboardInterrupt:

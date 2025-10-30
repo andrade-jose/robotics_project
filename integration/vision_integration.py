@@ -62,22 +62,22 @@ class VisionIntegration:
             True se inicializado com sucesso, False caso contrário
         """
         if not VISION_AVAILABLE:
-            print("❌ Sistema de visão não está disponível (bibliotecas ausentes).")
+            print("[ERRO] Sistema de visão não está disponível (bibliotecas ausentes).")
             return False
 
         try:
-            print("📹 Inicializando sistema de visão...")
+            print("[VISAO] Inicializando sistema de visão...")
             self.vision_system, self.camera_manager, self.visual_monitor = create_vision_system()
 
             if not self.camera_manager.initialize_camera():
-                print("⚠️ Câmera não disponível - jogo continuará sem visão")
+                print("[AVISO] Câmera não disponível - jogo continuará sem visão")
                 return False
 
-            print("✅ Sistema de visão inicializado!")
+            print("[OK] Sistema de visão inicializado!")
             return True
 
         except Exception as e:
-            print(f"❌ Erro ao inicializar visão: {e}")
+            print(f"[ERRO] Erro ao inicializar visão: {e}")
             return False
 
     def parar_sistema_visao(self):
@@ -93,7 +93,7 @@ class VisionIntegration:
         if VISION_AVAILABLE:
             cv2.destroyAllWindows()
 
-        print("📹 Sistema de visão finalizado")
+        print("[VISAO] Sistema de visão finalizado")
 
     # ========== THREAD DE VISÃO ==========
 
@@ -105,7 +105,7 @@ class VisionIntegration:
         self.vision_active = True
         self.vision_thread = threading.Thread(target=self._loop_visao, daemon=True)
         self.vision_thread.start()
-        print("🎥 Sistema de visão ativo em background")
+        print("[VISAO] Sistema de visão ativo em background")
 
     def _loop_visao(self):
         """Loop principal da visão executado na thread."""
@@ -128,7 +128,7 @@ class VisionIntegration:
                 if not self.vision_calibrated and len(detections.get('reference_markers', {})) >= 2:
                     if self.vision_system.calibrate_system(detections):
                         self.vision_calibrated = True
-                        print("\n🎯 Sistema de visão calibrado automaticamente!")
+                        print("\n[EXECUTANDO] Sistema de visão calibrado automaticamente!")
 
                 # Mostra janela de visualização se habilitada
                 if self.show_vision_window:
@@ -144,12 +144,12 @@ class VisionIntegration:
                     elif key == ord('s'):
                         filename = f"tapatan_vision_{int(time.time())}.jpg"
                         cv2.imwrite(filename, display_frame)
-                        print(f"📸 Screenshot salvo como {filename}")
+                        print(f"[INFO] Screenshot salvo como {filename}")
 
                 time.sleep(0.03)  # ~30 FPS
 
             except Exception as e:
-                print(f"❌ Erro no loop de visão: {e}")
+                print(f"[ERRO] Erro no loop de visão: {e}")
                 time.sleep(1)
 
         if self.show_vision_window:
@@ -207,7 +207,7 @@ class VisionIntegration:
             return row * 3 + col
 
         except (TypeError, ValueError) as e:
-            print(f"❌ Erro na conversão de coordenadas: {e}")
+            print(f"[ERRO] Erro na conversão de coordenadas: {e}")
             return None
 
     # ========== CALIBRAÇÃO ==========
@@ -221,11 +221,11 @@ class VisionIntegration:
         """
         if self.vision_system.calibrate_system(detections):
             self.vision_calibrated = True
-            print("\n✅ Sistema de visão calibrado manualmente!")
+            print("\n[OK] Sistema de visão calibrado manualmente!")
             summary = self.visual_monitor.show_detection_summary(detections)
-            print(f"📊 Status: {summary}")
+            print(f"[STATUS] Status: {summary}")
         else:
-            print("\n❌ Calibração manual falhou - verifique marcadores de referência")
+            print("\n[ERRO] Calibração manual falhou - verifique marcadores de referência")
 
     # ========== ESTADO DO SISTEMA ==========
 

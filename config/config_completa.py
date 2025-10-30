@@ -29,12 +29,16 @@ class ConfigRobo:
     # === MOVIMENTO BÁSICO ===
     velocidade_maxima: float = 0.2
     velocidade_normal: float = 0.1
+    velocidade_padrao: float = 0.1
     velocidade_lenta: float = 0.05
+    velocidade_precisa: float = 0.03
     velocidade_minima: float = 0.01
     aceleracao_normal: float = 0.1
+    aceleracao_padrao: float = 0.1
     altura_segura: float = 0.3
     altura_pegar: float = 0.05
     pausa_entre_movimentos: float = 1.0
+    pausa_entre_jogadas: float = 2.0
     aceleracao_minima: float = 0.01
     aceleracao_maxima: float = 0.5
     desaceleracao_parada: float = 2.0
@@ -52,12 +56,19 @@ class ConfigRobo:
     })
     
     # === CONFIGURAÇÕES DE MOVIMENTO INTELIGENTE E SEGURANÇA ===
+    auto_calibrar: bool = False
+    habilitar_correcao_automatica: bool = True
+    habilitar_correcao_inteligente: bool = True
+    habilitar_pontos_intermediarios: bool = True
     usar_pontos_intermediarios: bool = True
     passo_pontos_intermediarios: float = 0.1
     distancia_threshold_pontos_intermediarios: float = 0.3
     distancia_maxima_movimento: float = 0.8
     max_tentativas_movimento: int = 3
     max_tentativas_correcao: int = 3
+    tentativas_validacao: int = 3
+    modo_ultra_seguro: bool = False
+    fator_velocidade_ultra_seguro: float = 0.5
     
     # === TIMEOUTS ===
     timeout_movimento: float = 30.0
@@ -91,11 +102,11 @@ class ConfigRobo:
     def _ajustar_configuracoes_ambiente(self):
         """Ajusta parâmetros para o UR3e e para o ambiente (simulação vs. real)."""
         if self.is_simulation_mode():
-            print("🔧 Detectado ambiente de SIMULAÇÃO.")
+            print("[CONFIG] Detectado ambiente de SIMULACAO.")
         else:
-            print("🔧 Detectado ROBÔ REAL - aplicando configurações de segurança.")
-            
-        print("🔧 Aplicando configurações específicas para UR3e.")
+            print("[CONFIG] Detectado ROBO REAL - aplicando configuracoes de seguranca.")
+
+        print("[CONFIG] Aplicando configuracoes especificas para UR3e.")
         self.distancia_maxima_movimento = 0.6
         self.velocidade_normal = 0.05
         self.passo_pontos_intermediarios = 0.08
@@ -103,13 +114,13 @@ class ConfigRobo:
     def _validar_configuracoes_criticas(self):
         """Valida e ajusta limites para garantir a segurança do UR3e."""
         if self.limites_workspace['z_min'] < 0.01:
-            print(f"⚠️ AVISO: z_min muito baixo, ajustando para 0.01m.")
+            print(f"[CONFIG] AVISO: z_min muito baixo, ajustando para 0.01m.")
             self.limites_workspace['z_min'] = 0.01
-            
+
         max_reach_ur3e = 0.5
         for axis in ['x', 'y']:
             if abs(self.limites_workspace[f'{axis}_max']) > max_reach_ur3e:
-                print(f"⚠️ AVISO: {axis}_max fora do alcance do UR3e, ajustando para ±{max_reach_ur3e}m.")
+                print(f"[CONFIG] AVISO: {axis}_max fora do alcance do UR3e, ajustando para +/-{max_reach_ur3e}m.")
                 self.limites_workspace[f'{axis}_min'] = -max_reach_ur3e
                 self.limites_workspace[f'{axis}_max'] = max_reach_ur3e
     

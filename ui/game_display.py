@@ -36,10 +36,10 @@ class GameDisplay:
     def mostrar_banner(self):
         """Mostra o banner inicial da aplicação."""
         print("=" * 70)
-        print("       🎮 TAPATAN ROBÓTICO COM SISTEMA DE VISÃO ArUco 🤖📹")
+        print("       [JOGO] TAPATAN ROBÓTICO COM SISTEMA DE VISÃO ArUco [ROBO][VISAO]")
         print("=" * 70)
         print("  Sistema completo: Robô UR + Lógica do jogo + Visão em tempo real")
-        print(f"  📹 Sistema de visão ArUco: {'DISPONÍVEL' if self.vision_available else 'INDISPONÍVEL'}")
+        print(f"  [VISAO] Sistema de visão ArUco: {'DISPONÍVEL' if self.vision_available else 'INDISPONÍVEL'}")
         print("=" * 70)
 
     # ========== EXIBIÇÃO DO TABULEIRO ==========
@@ -52,7 +52,7 @@ class GameDisplay:
             estado_jogo: Dicionário com o estado completo do jogo
         """
         tabuleiro = estado_jogo['tabuleiro']
-        simbolos = {0: ' ', 1: '🤖', 2: '👤'}
+        simbolos = {0: ' ', 1: '[ROBO]', 2: '[HUMANO]'}
 
         print("\n" + "=" * 30)
         print("        TABULEIRO TAPATAN")
@@ -75,8 +75,8 @@ class GameDisplay:
         self.mostrar_tabuleiro(estado_jogo)
 
         if estado_visao.get('available'):
-            status_calibracao = '🟢 Calibrada' if estado_visao['calibrated'] else '🟡 Não calibrada'
-            print(f"📹 Visão: {status_calibracao} | "
+            status_calibracao = '[OK] Calibrada' if estado_visao['calibrated'] else '[AVISO] Não calibrada'
+            print(f"[VISAO] Visão: {status_calibracao} | "
                   f"Detecções: {estado_visao['detections_count']} | "
                   f"Peças Visíveis: {len(estado_visao['board_positions'])}")
 
@@ -108,7 +108,7 @@ class GameDisplay:
                     f"Pos {pos}: Jogador diferente (Jogo: {jogo_valor}, Visão: {visao_info['player']})")
 
         if discrepancias:
-            print("⚠️ Discrepâncias detectadas entre jogo e visão:")
+            print("[AVISO] Discrepâncias detectadas entre jogo e visão:")
             for disc in discrepancias[:3]:
                 print(f"   {disc}")
 
@@ -121,16 +121,16 @@ class GameDisplay:
         Args:
             estado_jogo: Dicionário com o estado do jogo
         """
-        jogador_atual = "🤖 Robô" if estado_jogo['jogador_atual'] == 1 else "👤 Humano"
+        jogador_atual = "[ROBO] Robô" if estado_jogo['jogador_atual'] == 1 else "[HUMANO] Humano"
         fase = "Colocação" if estado_jogo['fase'] == "colocacao" else "Movimento"
 
         print(f"\n👾 Jogador atual: {jogador_atual}  |  ⚡ Fase: {fase}")
-        print(f"   🤖 Peças robô: {estado_jogo['pecas_colocadas'][1]}/3  |  "
-              f"👤 Peças humano: {estado_jogo['pecas_colocadas'][2]}/3")
+        print(f"   [ROBO] Peças robô: {estado_jogo['pecas_colocadas'][1]}/3  |  "
+              f"[HUMANO] Peças humano: {estado_jogo['pecas_colocadas'][2]}/3")
 
         if estado_jogo['jogo_terminado']:
-            vencedor = "🤖 Robô" if estado_jogo['vencedor'] == 1 else "👤 Humano"
-            print(f"🏆 VENCEDOR: {vencedor}!")
+            vencedor = "[ROBO] Robô" if estado_jogo['vencedor'] == 1 else "[HUMANO] Humano"
+            print(f"[VENCEDOR] VENCEDOR: {vencedor}!")
         print()
 
     # ========== INPUT DO JOGADOR ==========
@@ -148,18 +148,18 @@ class GameDisplay:
         """
         try:
             if estado_jogo['fase'] == "colocacao":
-                print("🎯 Sua vez! Escolha uma posição para colocar sua peça (0-8):")
+                print("[EXECUTANDO] Sua vez! Escolha uma posição para colocar sua peça (0-8):")
                 while True:
                     try:
                         posicao = int(input("   Posição: "))
                         if 0 <= posicao <= 8:
                             return {'posicao': posicao}
                         else:
-                            print("   ❌ Posição inválida! Use números de 0 a 8.")
+                            print("   [ERRO] Posição inválida! Use números de 0 a 8.")
                     except ValueError:
-                        print("   ❌ Digite apenas números!")
+                        print("   [ERRO] Digite apenas números!")
             else:
-                print("🎯 Sua vez! Mova uma de suas peças:")
+                print("[EXECUTANDO] Sua vez! Mova uma de suas peças:")
                 print("   Digite 'origem destino' (ex: '3 4')")
                 while True:
                     try:
@@ -169,13 +169,13 @@ class GameDisplay:
                             if 0 <= origem <= 8 and 0 <= destino <= 8:
                                 return {'origem': origem, 'destino': destino}
                             else:
-                                print("   ❌ Posições inválidas! Use números de 0 a 8.")
+                                print("   [ERRO] Posições inválidas! Use números de 0 a 8.")
                         else:
-                            print("   ❌ Formato inválido! Digite 'origem destino'.")
+                            print("   [ERRO] Formato inválido! Digite 'origem destino'.")
                     except ValueError:
-                        print("   ❌ Digite apenas números!")
+                        print("   [ERRO] Digite apenas números!")
         except KeyboardInterrupt:
-            print("\n\n👋 Saindo do jogo...")
+            print("\n\n[INFO] Saindo do jogo...")
             return None
 
     def obter_jogada_humano_com_visao(self, estado_jogo: dict, estado_visao: dict) -> Optional[Dict[str, int]]:
@@ -202,7 +202,7 @@ class GameDisplay:
             estado_jogo: Estado do jogo
             estado_visao: Estado da visão
         """
-        print("\n💡 Sugestões baseadas na visão:")
+        print("\n[INFO] Sugestões baseadas na visão:")
         posicoes_detectadas = estado_visao['board_positions']
 
         if not posicoes_detectadas:
@@ -260,5 +260,5 @@ class GameDisplay:
     @staticmethod
     def aguardar_confirmacao_robo():
         """Pausa a execução até o usuário confirmar que o robô terminou."""
-        print("\n🤖 Robô está executando movimento...")
+        print("\n[ROBO] Robô está executando movimento...")
         input("   ⏳ Pressione ENTER após o robô completar o movimento...")

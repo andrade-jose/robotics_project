@@ -70,7 +70,7 @@ class BoardCoordinateSystem:
             coordinates[i] = (x, y, z)
 
         self.coordinates = coordinates
-        self.logger.info(f"⚠️ Coordenadas temporárias criadas: {len(coordinates)} posições")
+        self.logger.info(f"[AVISO] Coordenadas temporárias criadas: {len(coordinates)} posições")
         return coordinates
 
     def generate_from_vision(self, vision_system) -> bool:
@@ -86,14 +86,14 @@ class BoardCoordinateSystem:
         try:
             # Verificar se sistema de visão está disponível e calibrado
             if not hasattr(vision_system, 'is_calibrated') or not vision_system.is_calibrated:
-                self.logger.warning("⚠️ Sistema de visão não calibrado")
+                self.logger.warning("[AVISO] Sistema de visão não calibrado")
                 return False
 
             # Calcular posições do grid 3x3
             grid_positions = vision_system.calculate_grid_3x3_positions()
 
             if not grid_positions or len(grid_positions) != 9:
-                self.logger.error(f"❌ Grid incompleto: {len(grid_positions) if grid_positions else 0}/9")
+                self.logger.error(f"[ERRO] Grid incompleto: {len(grid_positions) if grid_positions else 0}/9")
                 return False
 
             # Converter coordenadas de visão para coordenadas do robô
@@ -107,11 +107,11 @@ class BoardCoordinateSystem:
 
                 self.coordinates[pos['index']] = (x_final, y_final, z_final)
 
-            self.logger.info(f"✅ Coordenadas dinâmicas geradas: {len(self.coordinates)}/9 posições")
+            self.logger.info(f"[OK] Coordenadas dinâmicas geradas: {len(self.coordinates)}/9 posições")
             return True
 
         except Exception as e:
-            self.logger.error(f"❌ Erro ao gerar coordenadas de visão: {e}")
+            self.logger.error(f"[ERRO] Erro ao gerar coordenadas de visão: {e}")
             return False
 
     # ==================== VALIDAÇÃO ====================
@@ -165,7 +165,7 @@ class BoardCoordinateSystem:
             result['valid'] = (result['positions_ok'] == 9 and result['distances_ok'])
 
             if result['valid']:
-                result['details'].append("✅ Tabuleiro válido")
+                result['details'].append("[OK] Tabuleiro válido")
 
             return result
 
@@ -181,12 +181,12 @@ class BoardCoordinateSystem:
             True se todas as 9 posições estão definidas
         """
         if len(self.coordinates) != 9:
-            self.logger.warning(f"❌ Coordenadas incompletas: {len(self.coordinates)}/9")
+            self.logger.warning(f"[ERRO] Coordenadas incompletas: {len(self.coordinates)}/9")
             return False
 
         for i in range(9):
             if i not in self.coordinates:
-                self.logger.warning(f"❌ Posição {i} não definida")
+                self.logger.warning(f"[ERRO] Posição {i} não definida")
                 return False
 
         return True
@@ -204,7 +204,7 @@ class BoardCoordinateSystem:
             Tupla (x, y, z) ou None se não existir
         """
         if index not in self.coordinates:
-            self.logger.warning(f"⚠️ Posição {index} não encontrada")
+            self.logger.warning(f"[AVISO] Posição {index} não encontrada")
             return None
 
         return self.coordinates[index]
@@ -226,7 +226,7 @@ class BoardCoordinateSystem:
             coordinates: Dict {posição: (x, y, z)} das 9 posições
         """
         self.coordinates = coordinates.copy()
-        self.logger.info(f"📍 Coordenadas definidas: {len(coordinates)} posições")
+        self.logger.info(f"[INFO] Coordenadas definidas: {len(coordinates)} posições")
 
     # ==================== PERSISTÊNCIA ====================
 
@@ -244,7 +244,7 @@ class BoardCoordinateSystem:
             path = Path(filepath)
 
             if not path.exists():
-                self.logger.warning(f"⚠️ Arquivo não encontrado: {filepath}")
+                self.logger.warning(f"[AVISO] Arquivo não encontrado: {filepath}")
                 return False
 
             with open(path, 'r') as f:
@@ -255,11 +255,11 @@ class BoardCoordinateSystem:
             for key, value in data.items():
                 self.coordinates[int(key)] = tuple(value)
 
-            self.logger.info(f"✅ Coordenadas carregadas de {filepath}: {len(self.coordinates)} posições")
+            self.logger.info(f"[OK] Coordenadas carregadas de {filepath}: {len(self.coordinates)} posições")
             return True
 
         except Exception as e:
-            self.logger.error(f"❌ Erro ao carregar coordenadas: {e}")
+            self.logger.error(f"[ERRO] Erro ao carregar coordenadas: {e}")
             return False
 
     def save_to_file(self, filepath: str) -> bool:
@@ -282,11 +282,11 @@ class BoardCoordinateSystem:
             with open(path, 'w') as f:
                 json.dump(data, f, indent=2)
 
-            self.logger.info(f"💾 Coordenadas salvas em {filepath}")
+            self.logger.info(f"[SALVANDO] Coordenadas salvas em {filepath}")
             return True
 
         except Exception as e:
-            self.logger.error(f"❌ Erro ao salvar coordenadas: {e}")
+            self.logger.error(f"[ERRO] Erro ao salvar coordenadas: {e}")
             return False
 
     # ==================== INTEGRAÇÃO COM VISÃO E ROBÔ ====================
@@ -314,7 +314,7 @@ class BoardCoordinateSystem:
         """
         self.robot_offset_x = offset_x
         self.robot_offset_y = offset_y
-        self.logger.info(f"🤖 Offset robô: X={offset_x:.3f}m, Y={offset_y:.3f}m")
+        self.logger.info(f"[ROBO] Offset robô: X={offset_x:.3f}m, Y={offset_y:.3f}m")
 
         # Se sistema de visão está calibrado, recarregar coordenadas com novo offset
         if self.vision_system and hasattr(self.vision_system, 'is_calibrated') and self.vision_system.is_calibrated:
@@ -347,7 +347,7 @@ class BoardCoordinateSystem:
     def print_coordinates(self):
         """Imprime todas as coordenadas de forma legível."""
         print("\n" + "="*50)
-        print("📍 COORDENADAS DO TABULEIRO")
+        print("[INFO] COORDENADAS DO TABULEIRO")
         print("="*50)
 
         for i in range(3):
@@ -360,7 +360,7 @@ class BoardCoordinateSystem:
 
         validation = self.validate_coordinates()
         print("="*50)
-        print(f"Status: {'✅ VÁLIDO' if validation['valid'] else '❌ INVÁLIDO'}")
+        print(f"Status: {'[OK] VÁLIDO' if validation['valid'] else '[ERRO] INVÁLIDO'}")
         print("="*50 + "\n")
 
     def __repr__(self) -> str:

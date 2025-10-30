@@ -262,15 +262,12 @@ class TapatanTestInterface(TapatanInterface):
     def __init__(self):
         """Inicializa a interface em modo de teste."""
         # Configurações específicas de teste
-        self.config_robo = ConfigRobo(
-            pausa_entre_jogadas=1.0,
-            velocidade_padrao=0.05,
-            auto_calibrar=False
-        )
-        self.config_jogo = ConfigJogo(
-            profundidade_ia=3,
-            debug_mode=True
-        )
+        self.config_robo = ConfigRobo()
+        self.config_robo.pausa_entre_jogadas = 1.0
+        self.config_robo.velocidade_padrao = 0.05
+        self.config_robo.auto_calibrar = False
+
+        self.config_jogo = ConfigJogo(profundidade_ia=3, debug_mode=True)
 
         # Orquestrador com configs de teste
         try:

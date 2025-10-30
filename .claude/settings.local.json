@@ -4,7 +4,9 @@
       "Bash(python -m py_compile:*)",
       "Bash(python test_interfaces.py:*)",
       "Bash(iconv:*)",
-      "Bash(python -c:*)"
+      "Bash(python -c:*)",
+      "Bash(python -m pytest:*)",
+      "Bash(python main.py:*)"
     ],
     "deny": [],
     "ask": []

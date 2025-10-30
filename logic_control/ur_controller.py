@@ -35,7 +35,7 @@ class URController(IRobotController):
         # Sistema de diagnósticos
         self.diagnostics = URDiagnostics(config=self.config, logger=self.logger)
 
-        print(f"✅ Conectado ao robô UR em {self.config.ip}")
+        print(f"[OK] Conectado ao robô UR em {self.config.ip}")
 
     def connect(self) -> bool:
         """
@@ -78,14 +78,14 @@ class URController(IRobotController):
 
     def validate_pose_safety_limits(self, pose):
         """
-        🔥 NOVA FUNÇÃO: Usa isPoseWithinSafetyLimits() da biblioteca ur_rtde
+        NOVA FUNÇÃO: Usa isPoseWithinSafetyLimits() da biblioteca ur_rtde
         Valida se a pose está dentro dos limites de segurança definidos no robô
         """
         if not self.enable_safety_validation:
             return True
             
         if not self.is_connected():
-            print("❌ Robô não conectado para validação")
+            print("[ERRO] Robô não conectado para validação")
             return False
             
         try:
@@ -93,14 +93,14 @@ class URController(IRobotController):
             is_safe = self.rtde_c.isPoseWithinSafetyLimits(pose)
             
             if is_safe:
-                print(f"✅ Pose APROVADA nos limites de segurança: {[f'{p:.3f}' for p in pose]}")
+                print(f"[OK] Pose APROVADA nos limites de segurança: {[f'{p:.3f}' for p in pose]}")
             else:
-                print(f"❌ Pose REJEITADA pelos limites de segurança: {[f'{p:.3f}' for p in pose]}")
+                print(f"[ERRO] Pose REJEITADA pelos limites de segurança: {[f'{p:.3f}' for p in pose]}")
                 
             return is_safe
             
         except Exception as e:
-            print(f"❌ Erro na validação de limites de segurança: {e}")
+            print(f"[ERRO] Erro na validação de limites de segurança: {e}")
             return False
         
 
@@ -117,7 +117,7 @@ class URController(IRobotController):
 
     def validate_pose_reachability(self, pose):
         """
-        ⚠️ DEPRECATED: Use pose_validator.validate_reachability() diretamente.
+        [AVISO] DEPRECATED: Use pose_validator.validate_reachability() diretamente.
 
         Validação de alcançabilidade.
         Mantido para compatibilidade retroativa.
@@ -125,13 +125,13 @@ class URController(IRobotController):
         try:
             # Verificar se a pose tem formato correto
             if len(pose) != 6:
-                print(f"❌ Formato de pose inválido: deve ter 6 elementos, recebeu {len(pose)}")
+                print(f"[ERRO] Formato de pose inválido: deve ter 6 elementos, recebeu {len(pose)}")
                 return False
-                
+
             # Obter pose atual para calcular distância
             current_pose = self.get_current_pose()
             if not current_pose:
-                print("❌ Não foi possível obter pose atual")
+                print("[ERRO] Não foi possível obter pose atual")
                 return False
                 
             # Calcular distância euclidiana do movimento
@@ -143,20 +143,20 @@ class URController(IRobotController):
             
             # Verificar se a distância não é muito grande
             if distance > self.max_movement_distance:
-                print(f"❌ Movimento muito grande: {distance:.3f}m > {self.max_movement_distance}m")
+                print(f"[ERRO] Movimento muito grande: {distance:.3f}m > {self.max_movement_distance}m")
                 return False
-                
+
             # Verificar se as orientações não são extremas
             rotation_magnitude = math.sqrt(pose[3]**2 + pose[4]**2 + pose[5]**2)
             if rotation_magnitude > math.pi:
-                print(f"❌ Magnitude de rotação extrema: {rotation_magnitude:.3f} > π")
+                print(f"[ERRO] Magnitude de rotação extrema: {rotation_magnitude:.3f} > π")
                 return False
-                
-            print(f"✅ Pose alcançável - Distância: {distance:.3f}m, Rotação: {rotation_magnitude:.3f}rad")
+
+            print(f"[OK] Pose alcançável - Distância: {distance:.3f}m, Rotação: {rotation_magnitude:.3f}rad")
             return True
             
         except Exception as e:
-            print(f"❌ Erro na validação de alcançabilidade: {e}")
+            print(f"[ERRO] Erro na validação de alcançabilidade: {e}")
             return False
 
     def validate_pose_complete(self, pose):
@@ -183,7 +183,7 @@ class URController(IRobotController):
 
     def validate_pose(self, pose):
         """
-        ⚠️ DEPRECATED: Use pose_validator.validate_workspace() diretamente.
+        [AVISO] DEPRECATED: Use pose_validator.validate_workspace() diretamente.
 
         Valida se a pose está dentro dos limites do workspace.
         Mantido para compatibilidade retroativa.
@@ -193,31 +193,31 @@ class URController(IRobotController):
         - rx, ry, rz em radianos (angle-axis representation)
         """
         if len(pose) != 6:
-            print(f"❌ Pose inválida: deve ter 6 elementos, recebeu {len(pose)}")
+            print(f"[ERRO] Pose inválida: deve ter 6 elementos, recebeu {len(pose)}")
             return False
-            
+
         x, y, z, rx, ry, rz = pose
-        
+
         # Validar posição cartesiana
         if not (self.workspace_limits['x_min'] <= x <= self.workspace_limits['x_max']):
-            print(f"❌ X fora dos limites: {x} (min: {self.workspace_limits['x_min']}, max: {self.workspace_limits['x_max']})")
+            print(f"[ERRO] X fora dos limites: {x} (min: {self.workspace_limits['x_min']}, max: {self.workspace_limits['x_max']})")
             return False
-            
+
         if not (self.workspace_limits['y_min'] <= y <= self.workspace_limits['y_max']):
-            print(f"❌ Y fora dos limites: {y} (min: {self.workspace_limits['y_min']}, max: {self.workspace_limits['y_max']})")
+            print(f"[ERRO] Y fora dos limites: {y} (min: {self.workspace_limits['y_min']}, max: {self.workspace_limits['y_max']})")
             return False
-            
+
         if not (self.workspace_limits['z_min'] <= z <= self.workspace_limits['z_max']):
-            print(f"❌ Z fora dos limites: {z} (min: {self.workspace_limits['z_min']}, max: {self.workspace_limits['z_max']})")
+            print(f"[ERRO] Z fora dos limites: {z} (min: {self.workspace_limits['z_min']}, max: {self.workspace_limits['z_max']})")
             return False
-        
+
         # Validar orientação (angle-axis)
         rotation_magnitude = math.sqrt(rx**2 + ry**2 + rz**2)
         if rotation_magnitude > math.pi:
-            print(f"❌ Magnitude de rotação muito grande: {rotation_magnitude} > π")
+            print(f"[ERRO] Magnitude de rotação muito grande: {rotation_magnitude} > π")
             return False
-            
-        print(f"✅ Pose válida no workspace: x={x:.3f}, y={y:.3f}, z={z:.3f}, rx={rx:.3f}, ry={ry:.3f}, rz={rz:.3f}")
+
+        print(f"[OK] Pose válida no workspace: x={x:.3f}, y={y:.3f}, z={z:.3f}, rx={rx:.3f}, ry={ry:.3f}, rz={rz:.3f}")
         return True
 
     def get_current_pose(self):
@@ -226,11 +226,11 @@ class URController(IRobotController):
             try:
                 pose = self.rtde_r.getActualTCPPose()
                 if pose:
-                    print(f"📍 Pose atual: x={pose[0]:.3f}, y={pose[1]:.3f}, z={pose[2]:.3f}, "
+                    print(f"[INFO] Pose atual: x={pose[0]:.3f}, y={pose[1]:.3f}, z={pose[2]:.3f}, "
                           f"rx={pose[3]:.3f}, ry={pose[4]:.3f}, rz={pose[5]:.3f}")
                 return pose
             except Exception as e:
-                print(f"❌ Erro ao obter pose atual: {e}")
+                print(f"[ERRO] Erro ao obter pose atual: {e}")
                 return None
         return None
 
@@ -243,16 +243,16 @@ class URController(IRobotController):
             try:
                 joints = self.rtde_r.getActualQ()
                 if joints:
-                    print(f"🔧 Juntas atuais: {[f'{j:.3f}' for j in joints]}")
+                    print(f"[CONFIG] Juntas atuais: {[f'{j:.3f}' for j in joints]}")
                 return joints
             except Exception as e:
-                print(f"❌ Erro ao obter juntas: {e}")
+                print(f"[ERRO] Erro ao obter juntas: {e}")
                 return None
         return None
 
     def is_pose_reachable(self, target_pose):
         """
-        🔄 FUNÇÃO ATUALIZADA: Agora usa validate_pose_complete
+        FUNÇÃO ATUALIZADA: Agora usa validate_pose_complete
         """
         return self.validate_pose_complete(target_pose)
 
@@ -277,13 +277,13 @@ class URController(IRobotController):
         Returns:
             pose_corrigida: Lista [x, y, z, rx, ry, rz] corrigida
         """
-        print(f"🔧 Iniciando correção INTELIGENTE da pose: {[f'{p:.3f}' for p in pose]}")
-        
+        print(f"[CONFIG] Iniciando correção INTELIGENTE da pose: {[f'{p:.3f}' for p in pose]}")
+
         # 1. DIAGNÓSTICO COMPLETO
         diagnostics = self.diagnostic_pose_rejection(pose)
-        
+
         if not diagnostics['pose_alcancavel']:
-            print("❌ Pose impossível cinematicamente - tentando correções básicas")
+            print("[ERRO] Pose impossível cinematicamente - tentando correções básicas")
             return self._correct_basic_workspace(pose)  # Fallback para método antigo
         
         corrected_pose = pose.copy()
@@ -292,7 +292,7 @@ class URController(IRobotController):
         
         # 3. CORREÇÃO: Articulações problemáticas
         if diagnostics['joints_problematicas']:
-            print("🔧 Corrigindo articulações fora dos limites...")
+            print("[CONFIG] Corrigindo articulações fora dos limites...")
             
             joints = diagnostics['joints_calculadas'].copy()
             
@@ -312,11 +312,11 @@ class URController(IRobotController):
                     corrected_pose = new_pose
                     corrections_applied.append("Pose recalculada a partir de articulações corrigidas")
             except Exception as e:
-                print(f"⚠️ Erro na cinemática direta: {e}")
-        
+                print(f"[AVISO] Erro na cinemática direta: {e}")
+
         # 4. CORREÇÃO: Singularidades
         if diagnostics['singularidades']:
-            print("🔧 Corrigindo singularidades...")
+            print("[CONFIG] Corrigindo singularidades...")
             
             # Ajustar orientação ligeiramente para sair da singularidade
             orientation_adjustments = [
@@ -342,12 +342,12 @@ class URController(IRobotController):
         
         # 6. RELATÓRIO DE CORREÇÕES
         if corrections_applied:
-            print("🔧 Correções aplicadas:")
+            print("[CONFIG] Correções aplicadas:")
             for correction in corrections_applied:
                 print(f"   • {correction}")
-            print(f"🔧 Pose final corrigida: {[f'{p:.3f}' for p in corrected_pose]}")
+            print(f"[CONFIG] Pose final corrigida: {[f'{p:.3f}' for p in corrected_pose]}")
         else:
-            print("🔧 Nenhuma correção necessária")
+            print("[CONFIG] Nenhuma correção necessária")
             
         return corrected_pose
 
@@ -394,7 +394,7 @@ class URController(IRobotController):
 
     def _apply_drastic_corrections(self, pose, original_pose):
         """NOVO: Correções drásticas para poses impossíveis"""
-        print("🚨 Aplicando correções DRÁSTICAS...")
+        print("[ALERTA] Aplicando correções DRÁSTICAS...")
         
         corrected = pose.copy()
         
@@ -405,46 +405,46 @@ class URController(IRobotController):
         for i in range(3):  # Apenas posição, não orientação
             corrected[i] = pose[i] * 0.5 + center_workspace[i] * 0.5
             
-        # 2. Garantir altura mínima segura
-        min_safe_z = self.config.altura_base_ferro + self.config.margem_seguranca_base_ferro + 0.1
+        # 2. Garantir altura mínima segura (usar z_min do workspace)
+        min_safe_z = self.workspace_limits['z_min'] + 0.05  # Adiciona margem de segurança
         if corrected[2] < min_safe_z:
             corrected[2] = min_safe_z
-            
-        print(f"🚨 Pose drasticamente corrigida: {[f'{p:.3f}' for p in corrected]}")
+
+        print(f"[ALERTA] Pose drasticamente corrigida: {[f'{p:.3f}' for p in corrected]}")
         return corrected
 
     def _apply_alternative_corrections(self, pose, attempt_number):
         """NOVO: Estratégias alternativas baseadas no número da tentativa"""
-        print(f"🔧 Estratégia alternativa #{attempt_number + 1}")
+        print(f"[CONFIG] Estratégia alternativa #{attempt_number + 1}")
         
         corrected = pose.copy()
         
         if attempt_number == 0:
             # Tentativa 1: Elevar significativamente
             corrected[2] += 0.05
-            print(f"🔧 Elevando Z em 5cm: {corrected[2]:.3f}")
-            
+            print(f"[CONFIG] Elevando Z em 5cm: {corrected[2]:.3f}")
+
         elif attempt_number == 1:
             # Tentativa 2: Mover para posição mais central
             corrected[0] = 0.4  # X central
             corrected[1] = 0.0  # Y central
             corrected[2] = max(corrected[2], 0.3)  # Z seguro
-            print(f"🔧 Movendo para posição central segura")
-            
+            print(f"[CONFIG] Movendo para posição central segura")
+
         elif attempt_number == 2:
             # Tentativa 3: Orientação mais conservadora
             corrected[3] = 0.0   # rx = 0
             corrected[4] = 3.14  # ry = π (TCP para baixo)
             corrected[5] = 0.0   # rz = 0
-            print(f"🔧 Orientação conservadora aplicada")
-            
+            print(f"[CONFIG] Orientação conservadora aplicada")
+
         else:
             # Tentativa final: Pose home modificada
             home_pose = self.config.pose_home.copy()
             home_pose[0] = pose[0]  # Manter X desejado
             home_pose[1] = pose[1]  # Manter Y desejado
             corrected = home_pose
-            print(f"🔧 Usando pose home modificada")
+            print(f"[CONFIG] Usando pose home modificada")
             
         return corrected
 
@@ -481,12 +481,12 @@ class URController(IRobotController):
             speed = self.speed
         if acceleration is None:
             acceleration = self.acceleration
-            
-        print(f"🚀 Movimento com {num_points} pontos intermediários")
-        
+
+        print(f"[INICIO] Movimento com {num_points} pontos intermediários")
+
         current_pose = self.get_current_pose()
         if not current_pose:
-            print("❌ Não foi possível obter pose atual")
+            print("[ERRO] Não foi possível obter pose atual")
             return False
             
         # Gerar pontos intermediários
@@ -502,32 +502,36 @@ class URController(IRobotController):
             
         # Adicionar pose final
         intermediate_poses.append(target_pose)
-        
-        print(f"📍 Planejamento de {len(intermediate_poses)} pontos:")
+
+        print(f"[INFO] Planejamento de {len(intermediate_poses)} pontos:")
         for i, pose in enumerate(intermediate_poses):
             print(f"   Ponto {i+1}: {[f'{p:.3f}' for p in pose]}")
-            
+
         # Executar sequência
         for i, pose in enumerate(intermediate_poses):
-            print(f"\n🎯 Executando ponto {i+1}/{len(intermediate_poses)}")
-            
-            sucesso, pose_final = self.move_to_pose_with_smart_correction(pose, speed, acceleration)
-            
-            if not sucesso:
-                print(f"❌ Falha no ponto {i+1} - movimento interrompido")
+            print(f"\n[EXECUTANDO] Executando ponto {i+1}/{len(intermediate_poses)}")
+
+            # Usar método básico do RTDE para mover
+            try:
+                sucesso = self.rtde_c.moveL(pose, speed, acceleration, asynchronous=False)
+                if not sucesso:
+                    print(f"[ERRO] Falha no ponto {i+1} - movimento interrompido")
+                    return False
+            except Exception as e:
+                print(f"[ERRO] Erro ao executar movimento: {e}")
                 return False
-                
-        print("✅ Movimento com pontos intermediários concluído!")
+
+        print("[OK] Movimento com pontos intermediários concluído!")
         return True
 
 
     def enable_safety_mode(self, enable=True):
         """
-        🔥 NOVA FUNÇÃO: Liga/desliga validações de segurança
+        NOVA FUNÇÃO: Liga/desliga validações de segurança
         """
         self.enable_safety_validation = enable
         status = "HABILITADA" if enable else "DESABILITADA"
-        print(f"🛡️ Validação de segurança {status}")
+        print(f"[SEGURANCA] Validação de segurança {status}")
 
     def emergency_stop(self):
         """Parada de emergência"""
@@ -535,24 +539,24 @@ class URController(IRobotController):
             if self.rtde_c:
                 self.rtde_c.stopScript()
                 self.em_movimento = False
-                print("🚨 PARADA DE EMERGÊNCIA ATIVADA!")
+                print("[ALERTA] PARADA DE EMERGÊNCIA ATIVADA!")
                 return True
         except Exception as e:
-            print(f"❌ Erro na parada de emergência: {e}")
+            print(f"[ERRO] Erro na parada de emergência: {e}")
             return False
 
     def stop(self):
         """Para movimentos atuais"""
         try:
             if self.rtde_c and self.em_movimento:
-                # ✅ ALTERAR para valor fixo ou adicionar campo na config:
-                self.rtde_c.stopL(2.0)  # Desaceleração fixa
+                # ALTERAR para valor fixo ou adicionar campo na config:
+                self.rtde_c.stopL()  # Para movimento linear
                 self.em_movimento = False
-                print("🛑 Robô parado com sucesso")
+                print("[PARADA] Robô parado com sucesso")
                 return True
             return True
         except Exception as e:
-            print(f"❌ Erro ao parar robô: {e}")
+            print(f"[ERRO] Erro ao parar robô: {e}")
             return False
 
     def set_speed_parameters(self, speed, acceleration):
@@ -560,7 +564,7 @@ class URController(IRobotController):
         self.speed = max(self.config.velocidade_minima, min(speed, self.config.velocidade_maxima))
         self.acceleration = max(self.config.aceleracao_minima, min(acceleration, self.config.aceleracao_maxima))
 
-        print(f"⚙️ Parâmetros atualizados - Velocidade: {self.speed:.3f}, Aceleração: {self.acceleration:.3f}")
+        print(f"[CONFIG] Parâmetros atualizados - Velocidade: {self.speed:.3f}, Aceleração: {self.acceleration:.3f}")
     
     def get_robot_status(self):
         """Obtém status detalhado do robô"""
@@ -579,7 +583,7 @@ class URController(IRobotController):
             }
             return status
         except Exception as e:
-            print(f"❌ Erro ao obter status: {e}")
+            print(f"[ERRO] Erro ao obter status: {e}")
             return {"connected": False, "error": str(e)}
 
     def disconnect(self):
@@ -587,10 +591,10 @@ class URController(IRobotController):
         try:
             if self.rtde_c:
                 self.rtde_c.stopScript()
-                print("🔌 Desconectado do robô")
+                print("[CONEXAO] Desconectado do robô")
             self.em_movimento = False
         except Exception as e:
-            print(f"❌ Erro ao desconectar: {e}")
+            print(f"[ERRO] Erro ao desconectar: {e}")
 
     # ====================== FUNÇÕES DE DEBUG ======================
     
@@ -623,23 +627,23 @@ class URController(IRobotController):
     # FUNÇÃO PARA USAR NO SEU CASO ESPECÍFICO
     def fix_calibration_pose(self, position_index, target_pose):
         """
-        🎯 CORREÇÃO ESPECÍFICA: Para usar na calibração
+        CORREÇÃO ESPECÍFICA: Para usar na calibração
         Retorna a melhor pose corrigida para uma posição específica
         """
-        print(f"🎯 Corrigindo pose para posição {position_index}")
+        print(f"[EXECUTANDO] Corrigindo pose para posição {position_index}")
         
         # 1. Diagnóstico
         diagnostics = self.diagnostic_pose_rejection(target_pose)
         
         # 2. Se pose é válida, retornar original
         if self.rtde_c.isPoseWithinSafetyLimits(target_pose):
-            print("✅ Pose original já é válida")
+            print("[OK] Pose original já é válida")
             return target_pose, True
-            
+
         # 3. Tentar correção automática
         corrected = self.correct_pose_automatically(target_pose)
         if self.rtde_c.isPoseWithinSafetyLimits(corrected):
-            print("✅ Correção automática funcionou")
+            print("[OK] Correção automática funcionou")
             return corrected, True
             
         # 4. Estratégias específicas para calibração
@@ -654,10 +658,10 @@ class URController(IRobotController):
             try:
                 test_pose = strategy_func(target_pose)
                 if self.rtde_c.isPoseWithinSafetyLimits(test_pose):
-                    print(f"✅ {strategy_name} funcionou")
+                    print(f"[OK] {strategy_name} funcionou")
                     return test_pose, True
             except Exception as e:
                 continue
-                
-        print("❌ Nenhuma estratégia funcionou para esta pose")
+
+        print("[ERRO] Nenhuma estratégia funcionou para esta pose")
         return target_pose, False

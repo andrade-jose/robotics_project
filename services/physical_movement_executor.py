@@ -150,9 +150,9 @@ class PhysicalMovementExecutor:
             sucesso = self.robot_service.pick_and_place(comando)
 
             if sucesso:
-                self.logger.info(f"✅ Peça colocada na posição {posicao}")
+                self.logger.info(f"[OK] Peça colocada na posição {posicao}")
             else:
-                self.logger.error(f"❌ Falha ao colocar peça na posição {posicao}")
+                self.logger.error(f"[ERRO] Falha ao colocar peça na posição {posicao}")
 
             return sucesso
 
@@ -224,9 +224,9 @@ class PhysicalMovementExecutor:
             sucesso = self.robot_service.pick_and_place(comando)
 
             if sucesso:
-                self.logger.info(f"✅ Peça movida de {origem} para {destino}")
+                self.logger.info(f"[OK] Peça movida de {origem} para {destino}")
             else:
-                self.logger.error(f"❌ Falha ao mover peça de {origem} para {destino}")
+                self.logger.error(f"[ERRO] Falha ao mover peça de {origem} para {destino}")
 
             return sucesso
 
