@@ -664,6 +664,110 @@ class ArUcoVisionSystem:
         if self.enable_debug_logs:
             self.logger.info("Calibração resetada")
     
+    def calibrate_system(self, detections: Dict[str, Any]) -> bool:
+        """
+        Calibra o sistema de coordenadas baseado nas detecções atuais.
+
+        Este método é chamado pelo loop de visão para calibração automática
+        quando ambos os marcadores de referência são detectados.
+
+        Args:
+            detections: Dicionário de detecções retornado por detect_markers()
+
+        Returns:
+            bool: True se calibração foi bem-sucedida
+        """
+        try:
+            # Verificar se temos pelo menos 2 marcadores de referência
+            reference_markers = detections.get('reference_markers', {})
+            if len(reference_markers) < 2:
+                if self.enable_debug_logs:
+                    self.logger.warning(f"Insuficientes marcadores de referência para calibração: {len(reference_markers)}/2")
+                return False
+
+            # Se já temos referência markers configurados, usar calibração interna
+            if self.reference_markers and len(self.reference_markers) >= 2:
+                success = self._calibrate_coordinate_system()
+
+                if success and not self.calculated_grid_positions:
+                    self._calculate_grid_3x3()
+
+                if success and self.enable_debug_logs:
+                    self.logger.info(f"[VISAO] Sistema calibrado - Grid {self.grid_size}x{self.grid_size} calculado")
+
+                return success
+
+            # Fallback: tentar configurar manualmente a partir das detecções
+            if len(reference_markers) >= 2:
+                # Copiar marcadores de referência detectados
+                self.reference_markers = reference_markers.copy()
+                success = self._calibrate_coordinate_system()
+
+                if success and not self.calculated_grid_positions:
+                    self._calculate_grid_3x3()
+
+                if success and self.enable_debug_logs:
+                    self.logger.info(f"[VISAO] Sistema calibrado manualmente - {len(self.calculated_grid_positions)}/9 posições calculadas")
+
+                return success
+
+            return False
+
+        except Exception as e:
+            self.logger.error(f"Erro ao calibrar sistema: {e}")
+            return False
+
+    def get_board_coordinates(self, marker_info: MarkerInfo) -> Optional[Tuple[float, float]]:
+        """
+        Converte informações do marcador para coordenadas normalizadas do tabuleiro.
+
+        As coordenadas retornadas são normalizadas em [-1, 1] para cada eixo,
+        representando a posição relativa no grid 3x3 do tabuleiro.
+
+        Args:
+            marker_info: Informações do marcador (MarkerInfo com position, rotation, etc)
+
+        Returns:
+            Tuple[x_norm, y_norm]: Coordenadas normalizadas em [-1, 1] ou None se sistema não calibrado
+        """
+        try:
+            if not self.is_calibrated:
+                if self.enable_debug_logs:
+                    self.logger.debug(f"Sistema não calibrado - não consegue converter coordenadas")
+                return None
+
+            if marker_info is None or marker_info.position is None:
+                return None
+
+            # Converter para coordenadas de referência (em mm)
+            board_coords = self.convert_to_reference_coordinates(marker_info.position, project_to_plane=True)
+
+            if board_coords is None:
+                return None
+
+            x_mm, y_mm, z_mm = board_coords
+
+            # Normalizamos em relação à metade da distância de referência
+            # para que [-1, 1] represente o grid 3x3
+            norm_range = self.configured_reference_distance_mm / 2.0  # Raio do grid
+
+            if norm_range <= 0:
+                return None
+
+            # Normalizar coordenadas para [-1, 1]
+            x_norm = np.clip(x_mm / norm_range, -1.0, 1.0)
+            y_norm = np.clip(y_mm / norm_range, -1.0, 1.0)
+
+            if self.enable_debug_logs:
+                self.logger.debug(f"Marcador em board: ({x_norm:.2f}, {y_norm:.2f})")
+
+            return (float(x_norm), float(y_norm))
+
+        except Exception as e:
+            if self.enable_debug_logs:
+                self.logger.debug(f"Erro ao converter coordenadas do marcador: {e}")
+            return None
+
     def get_debug_info(self) -> Dict[str, Any]:
         """Retorna informações detalhadas para debug"""
         return {
