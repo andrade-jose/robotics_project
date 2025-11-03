@@ -230,7 +230,17 @@ class MenuManager:
         self.vision_integration.iniciar_visao_em_thread()
 
         print("\n1. Posicione o tabuleiro e os marcadores de referência.")
-        print("2. Pressione 'c' na janela de visão para calibrar o sistema.")
+        print("2. Para ver a câmera em tempo real:")
+
+        # Mostrar informações sobre como acessar a visão
+        if hasattr(self.vision_integration, 'vision_display') and self.vision_integration.vision_display:
+            status = self.vision_integration.vision_display.get_status()
+            if status['mode'] == 'web':
+                print(f"   - Abra http://localhost:{status['web_port']} no seu navegador")
+                print(f"   - URL: {status['web_url']}")
+            else:
+                print("   - Veja a janela OpenCV que foi aberta")
+
         print("3. Remova TODAS as peças do tabuleiro (deixe-o vazio).")
         print("4. Quando estiver pronto, volte para este terminal e pressione ENTER.")
 

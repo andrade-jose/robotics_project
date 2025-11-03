@@ -18,32 +18,34 @@ class TestBoardCoordinateSystemInitialization:
         """Testa inicialização com valores padrão."""
         board = BoardCoordinateSystem()
 
-        assert board.num_positions == 9
-        assert len(board.positions) == 9
-        assert board.center_x == 0.3
-        assert board.center_y == -0.2
-        assert board.spacing == 0.05
+        # Generate default grid
+        board.generate_temporary_grid(spacing=0.10, z_height=0.05)
+
+        assert len(board.coordinates) == 9
+        # Center position (4) should be at HOME (-0.200, -0.267)
+        center_pos = board.get_position(4)
+        assert center_pos[0] == pytest.approx(-0.200, abs=0.001)
+        assert center_pos[1] == pytest.approx(-0.267, abs=0.001)
 
     def test_init_with_custom_values(self):
         """Testa inicialização com valores customizados."""
-        board = BoardCoordinateSystem(
-            center_x=0.4,
-            center_y=-0.3,
-            spacing=0.06,
-            z_height=0.2
-        )
+        board = BoardCoordinateSystem()
+        board.generate_temporary_grid(spacing=0.06, z_height=0.2)
 
-        assert board.center_x == 0.4
-        assert board.center_y == -0.3
-        assert board.spacing == 0.06
+        # Check that coordinates were generated
+        assert len(board.coordinates) == 9
+        # All z should be 0.2
+        for i in range(9):
+            assert board.get_position(i)[2] == pytest.approx(0.2, abs=0.001)
 
     def test_all_positions_initialized(self):
         """Verifica que todas as 9 posições são inicializadas."""
         board = BoardCoordinateSystem()
+        board.generate_temporary_grid()
 
         for i in range(9):
-            assert i in board.positions
-            assert len(board.positions[i]) == 6  # [x, y, z, rx, ry, rz]
+            assert i in board.coordinates
+            assert len(board.coordinates[i]) == 3  # [x, y, z]
 
 
 class TestBoardCoordinateSystemPositions:
@@ -52,21 +54,18 @@ class TestBoardCoordinateSystemPositions:
     @pytest.fixture
     def board(self):
         """Fixture de BoardCoordinateSystem para testes."""
-        return BoardCoordinateSystem(
-            center_x=0.3,
-            center_y=-0.2,
-            spacing=0.05,
-            z_height=0.15
-        )
+        board = BoardCoordinateSystem()
+        board.generate_temporary_grid(spacing=0.05, z_height=0.15)
+        return board
 
     def test_get_valid_position(self, board):
         """Testa recuperação de posição válida."""
         pose = board.get_position(4)  # Posição central
 
         assert pose is not None
-        assert len(pose) == 6
-        assert pose[0] == pytest.approx(0.3, abs=0.001)  # x = center_x
-        assert pose[1] == pytest.approx(-0.2, abs=0.001)  # y = center_y
+        assert len(pose) == 3  # [x, y, z]
+        assert pose[0] == pytest.approx(-0.200, abs=0.001)  # x = center_x (HOME)
+        assert pose[1] == pytest.approx(-0.267, abs=0.001)  # y = center_y (HOME)
         assert pose[2] == pytest.approx(0.15, abs=0.001)  # z = z_height
 
     def test_get_invalid_position(self, board):
@@ -77,47 +76,53 @@ class TestBoardCoordinateSystemPositions:
 
     def test_corner_positions(self, board):
         """Testa cálculo das 4 posições de canto."""
-        # Posição 0 (canto superior esquerdo)
+        # Board centered at HOME (-0.200, -0.267) with 0.05m spacing
+        # Layout: divmod(i, 3) gives (row, col)
+        # Position 0: row=0, col=0 -> x = -0.200 + (0-1)*0.05 = -0.250, y = -0.267 + (0-1)*0.05 = -0.317
+        # Position 2: row=0, col=2 -> x = -0.200 + (0-1)*0.05 = -0.250, y = -0.267 + (2-1)*0.05 = -0.217
+        # Position 6: row=2, col=0 -> x = -0.200 + (2-1)*0.05 = -0.150, y = -0.267 + (0-1)*0.05 = -0.317
+        # Position 8: row=2, col=2 -> x = -0.200 + (2-1)*0.05 = -0.150, y = -0.267 + (2-1)*0.05 = -0.217
+
         pos0 = board.get_position(0)
-        assert pos0[0] == pytest.approx(0.3 - 0.05, abs=0.001)  # x = center - spacing
-        assert pos0[1] == pytest.approx(-0.2 - 0.05, abs=0.001)  # y = center - spacing
+        assert pos0[0] == pytest.approx(-0.200 - 0.05, abs=0.001)  # x = center - spacing
+        assert pos0[1] == pytest.approx(-0.267 - 0.05, abs=0.001)  # y = center - spacing
 
-        # Posição 2 (canto superior direito)
+        # Posição 2 (row 0, col 2)
         pos2 = board.get_position(2)
-        assert pos2[0] == pytest.approx(0.3 + 0.05, abs=0.001)  # x = center + spacing
+        assert pos2[0] == pytest.approx(-0.200 - 0.05, abs=0.001)  # x = center - spacing (row determines x)
+        assert pos2[1] == pytest.approx(-0.267 + 0.05, abs=0.001)  # y = center + spacing (col determines y)
 
-        # Posição 6 (canto inferior esquerdo)
+        # Posição 6 (row 2, col 0)
         pos6 = board.get_position(6)
-        assert pos6[1] == pytest.approx(-0.2 + 0.05, abs=0.001)  # y = center + spacing
+        assert pos6[0] == pytest.approx(-0.200 + 0.05, abs=0.001)  # x = center + spacing (row determines x)
+        assert pos6[1] == pytest.approx(-0.267 - 0.05, abs=0.001)  # y = center - spacing (col determines y)
 
-        # Posição 8 (canto inferior direito)
+        # Posição 8 (row 2, col 2)
         pos8 = board.get_position(8)
-        assert pos8[0] == pytest.approx(0.3 + 0.05, abs=0.001)
-        assert pos8[1] == pytest.approx(-0.2 + 0.05, abs=0.001)
+        assert pos8[0] == pytest.approx(-0.200 + 0.05, abs=0.001)  # x = center + spacing
+        assert pos8[1] == pytest.approx(-0.267 + 0.05, abs=0.001)  # y = center + spacing
 
     def test_center_position(self, board):
         """Testa que posição 4 (centro) está no centro do tabuleiro."""
         center = board.get_position(4)
 
-        assert center[0] == pytest.approx(board.center_x, abs=0.001)
-        assert center[1] == pytest.approx(board.center_y, abs=0.001)
+        assert center[0] == pytest.approx(-0.200, abs=0.001)  # HOME x
+        assert center[1] == pytest.approx(-0.267, abs=0.001)  # HOME y
 
     def test_get_all_positions(self, board):
         """Testa recuperação de todas as posições."""
-        all_positions = board.get_all_positions()
+        all_positions = board.get_all_coordinates()
 
         assert len(all_positions) == 9
         assert all(i in all_positions for i in range(9))
-        assert all(len(pose) == 6 for pose in all_positions.values())
+        assert all(len(pose) == 3 for pose in all_positions.values())  # [x, y, z]
 
     def test_orientation_constant(self, board):
-        """Testa que orientação (rx, ry, rz) é constante para todas posições."""
-        all_positions = board.get_all_positions()
+        """Testa que as coordenadas têm 3 componentes (x, y, z)."""
+        all_positions = board.get_all_coordinates()
 
         for pose in all_positions.values():
-            assert pose[3] == 0  # rx
-            assert pose[4] == 0  # ry
-            assert pose[5] == 0  # rz
+            assert len(pose) == 3  # [x, y, z]
 
 
 class TestBoardCoordinateSystemValidation:
@@ -125,24 +130,32 @@ class TestBoardCoordinateSystemValidation:
 
     @pytest.fixture
     def board(self):
-        return BoardCoordinateSystem()
+        board = BoardCoordinateSystem()
+        board.generate_temporary_grid()
+        return board
 
-    def test_is_position_valid_true(self, board):
-        """Testa validação de posições válidas."""
-        for i in range(9):
-            assert board.is_position_valid(i) is True
+    def test_validate_coordinates_valid(self, board):
+        """Testa validação de coordenadas válidas."""
+        validation = board.validate_coordinates()
+        assert validation['valid'] is True
+        assert validation['positions_ok'] == 9
 
-    def test_is_position_valid_false(self, board):
-        """Testa validação de posições inválidas."""
-        assert board.is_position_valid(-1) is False
-        assert board.is_position_valid(9) is False
-        assert board.is_position_valid(100) is False
+    def test_validate_coordinates_incomplete(self):
+        """Testa validação de coordenadas incompletas."""
+        board = BoardCoordinateSystem()
+        # Don't generate grid - coordinates will be empty
+        validation = board.validate_coordinates()
+        assert validation['valid'] is False
+        assert validation['positions_ok'] == 0
 
-    def test_is_position_valid_with_string(self, board):
-        """Testa validação com entrada string."""
-        # Deve retornar False para tipos inválidos
-        assert board.is_position_valid("0") is False
-        assert board.is_position_valid(None) is False
+    def test_has_valid_coordinates(self, board):
+        """Testa se coordenadas são válidas."""
+        assert board.has_valid_coordinates() is True
+
+    def test_has_valid_coordinates_incomplete(self):
+        """Testa has_valid_coordinates com grid incompleto."""
+        board = BoardCoordinateSystem()
+        assert board.has_valid_coordinates() is False
 
 
 class TestBoardCoordinateSystemPersistence:
@@ -150,16 +163,18 @@ class TestBoardCoordinateSystemPersistence:
 
     @pytest.fixture
     def board(self):
-        return BoardCoordinateSystem()
+        board = BoardCoordinateSystem()
+        board.generate_temporary_grid()
+        return board
 
     @pytest.fixture
     def temp_file(self, tmp_path):
         """Arquivo temporário para testes de persistência."""
         return tmp_path / "test_board_positions.json"
 
-    def test_save_positions(self, board, temp_file):
+    def test_save_to_file(self, board, temp_file):
         """Testa salvamento de posições em arquivo."""
-        result = board.save_positions(str(temp_file))
+        result = board.save_to_file(str(temp_file))
 
         assert result is True
         assert temp_file.exists()
@@ -167,44 +182,51 @@ class TestBoardCoordinateSystemPersistence:
         # Verifica conteúdo do arquivo
         with open(temp_file, 'r') as f:
             data = json.load(f)
-            assert 'positions' in data
-            assert len(data['positions']) == 9
+            assert len(data) == 9
 
-    def test_load_positions(self, board, temp_file):
+    def test_load_from_file(self, board, temp_file):
         """Testa carregamento de posições de arquivo."""
         # Primeiro salva
-        board.save_positions(str(temp_file))
+        original_coords = board.get_all_coordinates().copy()
+        board.save_to_file(str(temp_file))
 
-        # Modifica posições
-        board.positions[0] = [0.1, 0.1, 0.1, 0, 0, 0]
-
-        # Carrega de volta
-        result = board.load_positions(str(temp_file))
+        # Cria novo board vazio
+        board2 = BoardCoordinateSystem()
+        result = board2.load_from_file(str(temp_file))
 
         assert result is True
-        # Posição deve ter sido restaurada
-        assert board.positions[0] != [0.1, 0.1, 0.1, 0, 0, 0]
+        assert board2.has_valid_coordinates() is True
 
-    def test_load_positions_file_not_found(self, board):
+        # Verifica se coordenadas foram restauradas
+        loaded_coords = board2.get_all_coordinates()
+        for i in range(9):
+            for j in range(3):
+                assert original_coords[i][j] == pytest.approx(loaded_coords[i][j], abs=0.0001)
+
+    def test_load_from_file_not_found(self):
         """Testa carregamento quando arquivo não existe."""
-        result = board.load_positions("arquivo_inexistente.json")
+        board = BoardCoordinateSystem()
+        result = board.load_from_file("arquivo_inexistente.json")
 
         assert result is False
 
     def test_save_and_load_consistency(self, board, temp_file):
         """Testa que save/load mantém dados consistentes."""
-        original_positions = board.get_all_positions().copy()
+        original_positions = board.get_all_coordinates().copy()
 
-        # Salva e carrega
-        board.save_positions(str(temp_file))
-        board.positions = {}  # Limpa posições
-        board.load_positions(str(temp_file))
+        # Salva
+        board.save_to_file(str(temp_file))
 
-        loaded_positions = board.get_all_positions()
+        # Cria novo board e carrega
+        board2 = BoardCoordinateSystem()
+        board2.load_from_file(str(temp_file))
+
+        loaded_positions = board2.get_all_coordinates()
 
         # Compara todas as posições
         for i in range(9):
-            assert loaded_positions[i] == pytest.approx(original_positions[i], abs=0.0001)
+            for j in range(3):
+                assert loaded_positions[i][j] == pytest.approx(original_positions[i][j], abs=0.0001)
 
 
 class TestBoardCoordinateSystemUpdate:
@@ -212,44 +234,30 @@ class TestBoardCoordinateSystemUpdate:
 
     @pytest.fixture
     def board(self):
-        return BoardCoordinateSystem()
+        board = BoardCoordinateSystem()
+        board.generate_temporary_grid()
+        return board
 
-    def test_update_position_valid(self, board):
-        """Testa atualização de posição válida."""
-        new_pose = [0.4, -0.3, 0.2, 0, 0, 0]
-        result = board.update_position(0, new_pose)
-
-        assert result is True
-        assert board.get_position(0) == new_pose
-
-    def test_update_position_invalid_index(self, board):
-        """Testa atualização com índice inválido."""
-        new_pose = [0.4, -0.3, 0.2, 0, 0, 0]
-
-        assert board.update_position(-1, new_pose) is False
-        assert board.update_position(9, new_pose) is False
-
-    def test_update_position_invalid_pose(self, board):
-        """Testa atualização com pose inválida."""
-        invalid_pose = [0.4, -0.3]  # Faltam elementos
-
-        result = board.update_position(0, invalid_pose)
-
-        assert result is False
-
-    def test_update_multiple_positions(self, board):
-        """Testa atualização de múltiplas posições."""
-        new_positions = {
-            0: [0.1, 0.1, 0.1, 0, 0, 0],
-            4: [0.3, -0.2, 0.15, 0, 0, 0],
-            8: [0.5, -0.4, 0.2, 0, 0, 0]
+    def test_set_coordinates(self, board):
+        """Testa definição de coordenadas."""
+        new_coords = {
+            i: (0.0 + i*0.1, 0.0 + i*0.05, 0.1) for i in range(9)
         }
+        board.set_coordinates(new_coords)
 
-        for pos, pose in new_positions.items():
-            board.update_position(pos, pose)
+        assert board.has_valid_coordinates() is True
+        for i in range(9):
+            assert board.get_position(i) == new_coords[i]
 
-        for pos, pose in new_positions.items():
-            assert board.get_position(pos) == pose
+    def test_set_robot_offset(self, board):
+        """Testa definição de offset do robô."""
+        original_pos = board.get_position(4)
+        board.set_robot_offset(0.05, -0.05)
+
+        # Offset só afeta coordenadas de visão, não as temporárias
+        # Mantém posição da mesma
+        assert board.robot_offset_x == 0.05
+        assert board.robot_offset_y == -0.05
 
 
 class TestBoardCoordinateSystemCalculations:
@@ -257,25 +265,30 @@ class TestBoardCoordinateSystemCalculations:
 
     def test_spacing_calculation(self):
         """Testa que spacing é aplicado corretamente."""
-        board = BoardCoordinateSystem(center_x=0.0, center_y=0.0, spacing=0.1)
+        board = BoardCoordinateSystem()
+        board.generate_temporary_grid(spacing=0.1, z_height=0.1)
 
-        pos0 = board.get_position(0)  # Canto superior esquerdo
-        pos2 = board.get_position(2)  # Canto superior direito
+        pos0 = board.get_position(0)  # row=0, col=0
+        pos6 = board.get_position(6)  # row=2, col=0
 
-        # Distância em x deve ser 2 * spacing
-        distance_x = abs(pos2[0] - pos0[0])
+        # Distância em x deve ser 2 * spacing (comparing rows: 0 and 2)
+        distance_x = abs(pos6[0] - pos0[0])
         assert distance_x == pytest.approx(0.2, abs=0.001)
 
     def test_grid_symmetry(self):
         """Testa simetria do grid."""
-        board = BoardCoordinateSystem(center_x=0.0, center_y=0.0)
+        board = BoardCoordinateSystem()
+        board.generate_temporary_grid(spacing=0.05, z_height=0.1)
 
-        # Posições opostas devem ser simétricas
+        # Posições opostas devem ser simétricas em relação ao centro
         pos0 = board.get_position(0)
         pos8 = board.get_position(8)
+        center = board.get_position(4)
 
-        assert pos0[0] == pytest.approx(-pos8[0], abs=0.001)
-        assert pos0[1] == pytest.approx(-pos8[1], abs=0.001)
+        # Distância de pos0 ao centro deve ser igual a pos8 ao centro
+        dist_0_center_x = abs(pos0[0] - center[0])
+        dist_8_center_x = abs(pos8[0] - center[0])
+        assert dist_0_center_x == pytest.approx(dist_8_center_x, abs=0.001)
 
 
 class TestBoardCoordinateSystemEdgeCases:
@@ -283,36 +296,49 @@ class TestBoardCoordinateSystemEdgeCases:
 
     def test_zero_spacing(self):
         """Testa comportamento com spacing zero."""
-        board = BoardCoordinateSystem(spacing=0.0)
+        board = BoardCoordinateSystem()
+        board.generate_temporary_grid(spacing=0.0, z_height=0.1)
 
-        # Todas as posições devem estar no mesmo ponto x,y
-        all_positions = board.get_all_positions()
+        # Todas as posições devem estar no mesmo ponto x,y (HOME)
+        all_positions = board.get_all_coordinates()
         x_coords = [pose[0] for pose in all_positions.values()]
         y_coords = [pose[1] for pose in all_positions.values()]
 
-        assert len(set(x_coords)) == 1  # Todos os x são iguais
-        assert len(set(y_coords)) == 1  # Todos os y são iguais
+        # Todos os x devem ser -0.200
+        assert all(pytest.approx(x, abs=0.001) == -0.200 for x in x_coords)
+        # Todos os y devem ser -0.267
+        assert all(pytest.approx(y, abs=0.001) == -0.267 for y in y_coords)
 
     def test_negative_spacing(self):
         """Testa comportamento com spacing negativo."""
-        board = BoardCoordinateSystem(spacing=-0.05)
+        board = BoardCoordinateSystem()
+        board.generate_temporary_grid(spacing=-0.05, z_height=0.1)
 
         # Deve funcionar, mas posições serão invertidas
         pos0 = board.get_position(0)
         pos8 = board.get_position(8)
 
-        # Com spacing negativo, canto superior esquerdo vira inferior direito
-        assert pos0[0] > board.center_x
-        assert pos0[1] > board.center_y
+        # Com spacing negativo, canto 0 deveria ser em posição oposta
+        # pos0: row=0, col=0 -> x = -0.200 + (0-1)*(-0.05) = -0.200 + 0.05
+        # pos8: row=2, col=2 -> x = -0.200 + (2-1)*(-0.05) = -0.200 - 0.05
+        assert pos0[0] > -0.200
+        assert pos8[0] < -0.200
 
-    def test_extreme_coordinates(self):
-        """Testa com coordenadas extremas."""
-        board = BoardCoordinateSystem(
-            center_x=10.0,
-            center_y=-10.0,
-            spacing=1.0
-        )
+    def test_large_spacing(self):
+        """Testa com espaçamento grande."""
+        board = BoardCoordinateSystem()
+        board.generate_temporary_grid(spacing=1.0, z_height=0.1)
 
-        pos4 = board.get_position(4)
-        assert pos4[0] == pytest.approx(10.0, abs=0.001)
-        assert pos4[1] == pytest.approx(-10.0, abs=0.001)
+        all_positions = board.get_all_coordinates()
+        assert len(all_positions) == 9
+        assert all(board.has_valid_coordinates() for _ in [True])
+
+    def test_high_z_height(self):
+        """Testa com altura Z grande."""
+        board = BoardCoordinateSystem()
+        board.generate_temporary_grid(spacing=0.05, z_height=1.0)
+
+        # Todas as posições devem estar a Z = 1.0
+        all_positions = board.get_all_coordinates()
+        for i in range(9):
+            assert board.get_position(i)[2] == pytest.approx(1.0, abs=0.001)

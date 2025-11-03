@@ -230,8 +230,11 @@ class RobotService(IGameService):
 
         try:
             self.status = RobotStatus.MOVING
+            # Aceitar tanto RobotPose quanto lista [x, y, z, rx, ry, rz]
+            pose_list = pose.to_list() if hasattr(pose, 'to_list') else pose
+
             success = self.controller.move_to_pose(
-                pose.to_list(),
+                pose_list,
                 speed or self.config["speed"],
                 acceleration or self.config["acceleration"]
             )

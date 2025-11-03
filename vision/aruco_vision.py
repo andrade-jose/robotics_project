@@ -75,12 +75,14 @@ class ArUcoVisionSystem:
         """
         self.config = config or ConfigVisao()
         self.logger = VisionLogger(__name__)
-        
+
         # Configurações do sistema flexível
         self.configured_reference_distance_mm = reference_distance_mm or 150.0  # Padrão: 15cm
         self.grid_size = 3  # Tabuleiro 3x3
         self.calculated_grid_positions: List[GridPosition] = []
         self.enable_reduced_logs = enable_reduced_logs
+        # Alias para compatibilidade com código existente
+        self.enable_debug_logs = not enable_reduced_logs
         
         # Configurar detector ArUco
         self._setup_aruco()
@@ -187,40 +189,44 @@ class ArUcoVisionSystem:
         try:
             # Usar dicionário configurado no projeto
             self.aruco_dict = cv2.aruco.getPredefinedDictionary(self.config.aruco_dict_type)
-            
+
             # Parâmetros de detecção otimizados para estabilidade
             self.parameters = cv2.aruco.DetectorParameters()
-            
+
             # Configurações para detecção mais estável (reduz valores estranhos)
             self.parameters.adaptiveThreshWinSizeMin = 3
             self.parameters.adaptiveThreshWinSizeMax = 23
             self.parameters.adaptiveThreshWinSizeStep = 10
             self.parameters.adaptiveThreshConstant = 7
-            
+
             # Filtros de qualidade mais rigorosos
             self.parameters.minMarkerPerimeterRate = 0.03
             self.parameters.maxMarkerPerimeterRate = 4.0
             self.parameters.polygonalApproxAccuracyRate = 0.03
             self.parameters.minCornerDistanceRate = 0.05
             self.parameters.minDistanceToBorder = 3
-            
+
+            # Criar detector ArUco com novo API (OpenCV 4.7+)
+            self.detector = cv2.aruco.ArucoDetector(self.aruco_dict, self.parameters)
+
             # Usar tamanho do marcador da configuração
-            self.marker_size_meters = self.config_visao.marker_size_meters
-            
+            self.marker_size_meters = self.config.marker_size_meters
+
             if self.enable_debug_logs:
-                self.logger.debug(f"ArUco configurado - tamanho: {self.marker_size_meters}m, dict: {self.config_visao.aruco_dict_type}")
-                
+                self.logger.debug(f"ArUco configurado - tamanho: {self.marker_size_meters}m, dict: {self.config.aruco_dict_type}")
+
         except Exception as e:
             self.logger.error(f"Erro ao configurar detector ArUco: {e}")
             self.aruco_dict = cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_6X6_250)
-            self.aruco_params = cv2.aruco.DetectorParameters()
+            self.parameters = cv2.aruco.DetectorParameters()
+            self.detector = cv2.aruco.ArucoDetector(self.aruco_dict, self.parameters)
             raise
     
     def _setup_camera_params(self):
         """Configura parâmetros intrínsecos da câmera usando resolução do projeto"""
         # Usar resolução configurada no projeto
-        width = self.config_visao.frame_width
-        height = self.config_visao.frame_height
+        width = self.config.frame_width
+        height = self.config.frame_height
         
         # Estimativa melhorada da distância focal baseada na resolução
         fx = fy = max(width, height) * 0.7  # Aproximação mais precisa
@@ -239,9 +245,9 @@ class ArUcoVisionSystem:
     def _init_state_variables(self):
         """Inicializa variáveis de estado do sistema usando configurações do projeto"""
         # Usar grupos configurados no projeto
-        self.reference_ids = self.config_visao.reference_ids
-        self.group1_ids = self.config_visao.group1_ids  # Jogador 1 (robô)
-        self.group2_ids = self.config_visao.group2_ids  # Jogador 2 (humano)
+        self.reference_ids = self.config.reference_ids
+        self.group1_ids = self.config.group1_ids  # Jogador 1 (robô)
+        self.group2_ids = self.config.group2_ids  # Jogador 2 (humano)
         
         # Marcadores detectados
         self.reference_markers: Dict[int, MarkerInfo] = {}
@@ -282,54 +288,117 @@ class ArUcoVisionSystem:
         
         if self.enable_debug_logs:
             self.logger.debug(f"Sistema inicializado - Refs: {self.reference_ids}, G1: {self.group1_ids}, G2: {self.group2_ids}")
-    
-    def detect_markers(self, frame: np.ndarray) -> bool:
+
+    def _estimate_marker_poses(self, corners, marker_size_meters):
+        """
+        Estima poses dos marcadores usando solvePnP (compatível com OpenCV 4.7+).
+        Substitui o método deprecated estimatePoseSingleMarkers.
+
+        Args:
+            corners: Lista de corners dos marcadores
+            marker_size_meters: Tamanho do marcador em metros
+
+        Returns:
+            rvecs: Lista de vetores de rotação
+            tvecs: Lista de vetores de translação
+        """
+        rvecs = []
+        tvecs = []
+
+        # Definir corners 3D do marcador quadrado
+        half_size = marker_size_meters / 2.0
+        objPoints = np.array([
+            [-half_size, half_size, 0],
+            [half_size, half_size, 0],
+            [half_size, -half_size, 0],
+            [-half_size, -half_size, 0]
+        ], dtype=np.float32)
+
+        for corner_set in corners:
+            # corner_set tem shape (1, 4, 2)
+            imgPoints = corner_set[0].astype(np.float32)
+
+            try:
+                # Usar solvePnP para estimar pose
+                success, rvec, tvec = cv2.solvePnP(
+                    objPoints, imgPoints,
+                    self.camera_matrix, self.dist_coeffs,
+                    useExtrinsicGuess=False,
+                    flags=cv2.SOLVEPNP_ITERATIVE
+                )
+
+                if success:
+                    rvecs.append(rvec)
+                    tvecs.append(tvec)
+                else:
+                    # Fallback para valores padrão se solvePnP falhar
+                    rvecs.append(np.zeros((3, 1), dtype=np.float32))
+                    tvecs.append(np.zeros((3, 1), dtype=np.float32))
+
+            except Exception as e:
+                if self.enable_debug_logs:
+                    self.logger.debug(f"Erro ao estimar pose do marcador: {e}")
+                # Adicionar valores padrão
+                rvecs.append(np.zeros((3, 1), dtype=np.float32))
+                tvecs.append(np.zeros((3, 1), dtype=np.float32))
+
+        return rvecs, tvecs
+
+    def detect_markers(self, frame: np.ndarray) -> dict:
         """
         Detecta todos os marcadores no frame
-        
+
         Args:
             frame: Frame de vídeo da câmera
-            
+
         Returns:
-            bool: True se pelo menos um marcador foi detectado
+            dict: Dicionário com detecções {reference_markers, group1_markers, group2_markers, ...}
         """
         # Limpar detecções anteriores
         self.reference_markers.clear()
         self.group1_markers.clear()
         self.group2_markers.clear()
-        
-        # Detectar marcadores ArUco
-        corners, ids, _ = cv2.aruco.detectMarkers(
-            frame, self.aruco_dict, parameters=self.parameters
-        )
-        
+
+        # Detectar marcadores ArUco usando novo API (OpenCV 4.7+)
+        corners, ids, rejected = self.detector.detectMarkers(frame)
+
+        detections = {
+            'reference_markers': {},
+            'group1_markers': {},
+            'group2_markers': {},
+            'detection_count': 0,
+            'timestamp': time.time(),
+            'frame_shape': frame.shape if frame is not None else None
+        }
+
         if ids is not None and len(ids) > 0:
-            # Estimar poses de todos os marcadores
-            rvecs, tvecs, _ = cv2.aruco.estimatePoseSingleMarkers(
-                corners, self.marker_size_meters,
-                self.camera_matrix, self.dist_coeffs
-            )
+            # Estimar poses de todos os marcadores usando novo método compatível
+            rvecs, tvecs = self._estimate_marker_poses(corners, self.marker_size_meters)
 
             # Desenhar marcadores detectados no frame
             cv2.aruco.drawDetectedMarkers(frame, corners, ids)
-            
+
             # Processar cada marcador detectado
             for i, marker_id in enumerate(ids):
                 marker_id = marker_id[0]
                 self._process_marker(marker_id, corners[i], rvecs[i], tvecs[i])
-            
+
             # Calibrar sistema se ambos marcadores de referência detectados
             if len(self.reference_markers) == 2:
                 success = self._calibrate_coordinate_system()
                 if success and not self.calculated_grid_positions:
                     self._calculate_grid_3x3()
-            
+
             # Atualizar estatísticas
             self._update_detection_stats()
-            
-            return True
-        
-        return False
+
+            # Populer dicionário de retorno
+            detections['reference_markers'] = self.reference_markers
+            detections['group1_markers'] = self.group1_markers
+            detections['group2_markers'] = self.group2_markers
+            detections['detection_count'] = len(ids)
+
+        return detections
     
     def _process_marker(self, marker_id: int, corners: np.ndarray, 
                        rvec: np.ndarray, tvec: np.ndarray):

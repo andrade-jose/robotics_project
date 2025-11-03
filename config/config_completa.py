@@ -47,13 +47,21 @@ class ConfigRobo:
     enable_safety_validation: bool = True
     
     # === POSE HOME ===
-    pose_home: List[float] = field(default_factory=lambda: [0.3, 0.0, 0.25, 0.0, 3.14, 0.0])
+    # Posição inicial: braço em repouso, virado para TRÁS
+    # X=-0.200m (referência), Y=-0.267m (centro), Z=0.200m (altura)
+    # RX=-0.001, RY=3.116 (≈180°, virado para trás), RZ=0.039
+    pose_home: List[float] = field(default_factory=lambda: [-0.200, -0.267, 0.200, -0.001, 3.116, 0.039])
 
     # === WORKSPACE E LIMITES ===
+    # Tabuleiro 30x30cm centrado na posição HOME (-0.200, -0.267)
+    # ±15cm em X e Y = 30cm x 30cm total
     limites_workspace: dict = field(default_factory=lambda: {
-        'x_min': -0.5, 'x_max': 0.5, 'y_min': -0.5, 'y_max': 0.5,
-        'z_min': 0.05, 'z_max': 0.6, 'rx_min': -math.pi, 'rx_max': math.pi,
-        'ry_min': -math.pi, 'ry_max': math.pi, 'rz_min': -math.pi, 'rz_max': math.pi
+        'x_min': -0.350, 'x_max': -0.050,    # -0.200 ± 0.15 (30cm em X)
+        'y_min': -0.417, 'y_max': -0.117,    # -0.267 ± 0.15 (30cm em Y)
+        'z_min': 0.147, 'z_max': 0.250,      # 14.7-25cm altura (segurança acima do tabuleiro)
+        'rx_min': -0.1, 'rx_max': 0.1,       # ±5.7° em X
+        'ry_min': 3.0, 'ry_max': 3.3,        # ≈180° (virado para trás, orientação da frente)
+        'rz_min': -0.1, 'rz_max': 0.1        # ±5.7° em Z
     })
     
     # === CONFIGURAÇÕES DE MOVIMENTO INTELIGENTE E SEGURANÇA ===
@@ -86,12 +94,12 @@ class ConfigRobo:
     
     # === CONFIGURAÇÕES ESPECÍFICAS TAPATAN ===
     tapatan_config: dict = field(default_factory=lambda: {
-        "altura_tabuleiro": 0.05, "altura_peca": 0.02,
-        "espacamento_posicoes": 0.1, "validacao_pre_movimento": True,
+        "altura_tabuleiro": 0.05,           # Altura do tabuleiro
+        "altura_peca": 0.02,                # Altura das peças
+        "espacamento_posicoes": 0.10,       # 10cm entre posições
+        "validacao_pre_movimento": True,
         "estrategia_movimento_tapatan": "smart_correction",
-        "usar_pontos_intermediarios_tapatan": True,
-        "tabuleiro_offset_x": 0.30,  # 30cm à frente do robô
-        "tabuleiro_offset_y": 0.00   # Centralizado em Y
+        "usar_pontos_intermediarios_tapatan": True
     })
     
     # === LOGGING ===
@@ -149,10 +157,11 @@ class ConfigVisao:
     camera_index: int = 1
     frame_width: int = 640
     frame_height: int = 480
+    fps: int = 30
     calibration_file: str = 'data/camera_calibration.npz'
     use_camera_calibration: bool = True
     enable_debug_view: bool = False
-    
+
     reference_ids: List[int] = field(default_factory=lambda: [0, 1])
     group1_ids: List[int] = field(default_factory=lambda: [2, 4, 6])
     group2_ids: List[int] = field(default_factory=lambda: [3, 5, 7])

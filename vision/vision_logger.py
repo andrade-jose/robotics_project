@@ -93,35 +93,35 @@ class VisionLogger:
     
     def debug(self, message: str):
         """Log de debug (desenvolvimento)"""
-        self.logger.debug(f"🔧 {message}")
+        self.logger.debug(f"[DEBUG] {message}")
     
     def info(self, message: str):
         """Log informativo (operação normal)"""
-        self.logger.info(f"ℹ️ {message}")
+        self.logger.info(f"[INFO] {message}")
     
     def warning(self, message: str):
         """Log de aviso (situação atípica mas não crítica)"""
-        self.logger.warning(f"⚠️ {message}")
+        self.logger.warning(f"[WARNING] {message}")
     
     def error(self, message: str):
         """Log de erro (falha operacional)"""
-        self.logger.error(f"❌ {message}")
+        self.logger.error(f"[ERROR] {message}")
     
     def critical(self, message: str):
         """Log crítico (falha grave do sistema)"""
-        self.logger.critical(f"🚨 {message}")
+        self.logger.critical(f"[CRITICAL] {message}")
     
     def detection(self, message: str):
         """Log específico para detecções (para análise posterior)"""
-        self.logger.info(f"📹 DETECTION: {message}")
+        self.logger.info(f"[DETECTION] {message}")
     
     def performance(self, message: str):
         """Log de performance (FPS, timing, etc.)"""
-        self.logger.debug(f"⏱️ PERFORMANCE: {message}")
+        self.logger.debug(f"[PERFORMANCE] {message}")
     
     def calibration(self, message: str):
         """Log de calibração do sistema"""
-        self.logger.info(f"🎯 CALIBRATION: {message}")
+        self.logger.info(f"[CALIBRATION] {message}")
     
     def set_level(self, level: int):
         """
@@ -178,18 +178,18 @@ logger = VisionLogger(__name__)
 
 # Teste se executado diretamente
 if __name__ == "__main__":
-    print("🧪 Teste do VisionLogger")
-    
+    print("[TEST] Teste do VisionLogger")
+
     # Criar logger de teste
     test_logger = VisionLogger("test")
-    
+
     # Testar todos os níveis
     test_logger.debug("Mensagem de debug")
-    test_logger.info("Sistema funcionando normalmente")  
+    test_logger.info("Sistema funcionando normalmente")
     test_logger.warning("Situação atípica detectada")
     test_logger.error("Erro na operação")
     test_logger.detection("Marcador ID=1 detectado em (100,200)")
     test_logger.performance("FPS: 30.5, Latência: 12ms")
     test_logger.calibration("Sistema calibrado com 2 marcadores de referência")
-    
-    print("✅ Teste concluído - verifique os logs na pasta configurada")
+
+    print("[OK] Teste concluído - verifique os logs na pasta configurada")

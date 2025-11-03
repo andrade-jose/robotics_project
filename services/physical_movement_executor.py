@@ -47,21 +47,11 @@ class PhysicalMovementExecutor:
         self.config_robo = config_robo
         self.logger = logger or logging.getLogger('PhysicalMovementExecutor')
 
-        # Depósito de peças (posições de onde pegar peças novas)
-        self.posicao_deposito_pecas: Dict[str, RobotPose] = {}
+        # Nota: Depósito de peças removido - peças permanecem sempre no tabuleiro
 
     # ========== CONFIGURAÇÃO ==========
 
-    def set_piece_depot_position(self, player: str, pose: RobotPose):
-        """
-        Define a posição do depósito de peças para um jogador.
-
-        Args:
-            player: Identificador do jogador (ex: "jogador1", "jogador2")
-            pose: Posição do depósito
-        """
-        self.posicao_deposito_pecas[player] = pose
-        self.logger.info(f"Posição do depósito definida para {player}")
+    # Método set_piece_depot_position removido - depósito de peças não é mais utilizado
 
     # ========== EXECUÇÃO DE MOVIMENTOS ==========
 
@@ -94,65 +84,6 @@ class PhysicalMovementExecutor:
             self.logger.error(f"Erro ao executar movimento da jogada: {e}")
             return False
 
-    def executar_colocacao(self, posicao: int, player: str = "jogador1") -> bool:
-        """
-        Executa colocação física de peça em uma posição do tabuleiro.
-
-        Args:
-            posicao: Posição no tabuleiro (0-8)
-            player: Identificador do jogador
-
-        Returns:
-            True se a colocação foi bem-sucedida
-        """
-        try:
-            # Obter coordenadas da posição de destino
-            coord_destino = self.board_coords.get_position(posicao)
-            if not coord_destino:
-                self.logger.error(f"Posição {posicao} não encontrada nas coordenadas")
-                return False
-
-            # Obter posição do depósito de peças
-            if player not in self.posicao_deposito_pecas:
-                self.logger.error(f"Posição do depósito não definida para {player}")
-                return False
-
-            origem = self.posicao_deposito_pecas[player]
-            destino = RobotPose(
-                coord_destino[0],
-                coord_destino[1],
-                coord_destino[2],
-                0.0,  # rx
-                3.14,  # ry (180 graus)
-                0.0   # rz
-            )
-
-            # Nota: Validação de pose é feita internamente pelo pick_and_place
-            # não precisa ser explícita aqui
-
-            # Criar e executar comando pick-and-place
-            comando = PickPlaceCommand(
-                origin=origem,
-                destination=destino,
-                safe_height=self.config_robo.altura_segura,
-                pick_height=self.config_robo.altura_pegar,
-                speed_normal=self.config_robo.velocidade_normal,
-                speed_precise=self.config_robo.velocidade_precisa
-            )
-
-            sucesso = self.robot_service.pick_and_place(comando)
-
-            if sucesso:
-                self.logger.info(f"[OK] Peça colocada na posição {posicao}")
-            else:
-                self.logger.error(f"[ERRO] Falha ao colocar peça na posição {posicao}")
-
-            return sucesso
-
-        except Exception as e:
-            self.logger.error(f"Erro na colocação física: {e}")
-            return False
-
     def executar_movimento_peca(self, origem: int, destino: int) -> bool:
         """
         Executa movimento físico de peça de uma posição para outra no tabuleiro.
@@ -175,22 +106,22 @@ class PhysicalMovementExecutor:
                 )
                 return False
 
-            # Criar poses
+            # Criar poses - RY≈3.116 (braço virado para TRÁS, orientação padrão)
             pose_origem = RobotPose(
                 coord_origem[0],
                 coord_origem[1],
                 coord_origem[2],
-                0.0,
-                3.14,
-                0.0
+                -0.001,   # rx (praticamente 0)
+                3.116,    # ry - Braço virado para TRÁS (≈180°)
+                0.039     # rz (praticamente 0)
             )
             pose_destino = RobotPose(
                 coord_destino[0],
                 coord_destino[1],
                 coord_destino[2],
-                0.0,
-                3.14,
-                0.0
+                -0.001,   # rx (praticamente 0)
+                3.116,    # ry - Braço virado para TRÁS (≈180°)
+                0.039     # rz (praticamente 0)
             )
 
             # Nota: Validação de poses é feita internamente pelo pick_and_place
@@ -236,14 +167,15 @@ class PhysicalMovementExecutor:
                 return False
 
             # Criar pose com altura um pouco acima da posição
-            # OBS: coord já inclui o offset do tabuleiro
+            # OBS: coord já inclui coordenadas absolutas do tabuleiro
+            # RY≈3.116 significa braço virado para TRÁS (orientação padrão)
             pose_teste = RobotPose(
                 coord[0],
                 coord[1],
                 coord[2] + 0.1,  # 10cm acima
-                0.0,
-                3.14,
-                0.0
+                -0.001,   # rx (praticamente 0)
+                3.116,    # ry - Braço virado para TRÁS (≈180°)
+                0.039     # rz (praticamente 0)
             )
 
             self.logger.debug(f"[DEBUG] Movendo para posição {posicao}: {pose_teste}")

@@ -54,6 +54,13 @@ def board_config() -> Dict:
     }
 
 
+@pytest.fixture
+def config_robo():
+    """Configuração real do robô UR3e."""
+    from config.config_completa import ConfigRobo
+    return ConfigRobo()
+
+
 # ============================================================================
 # FIXTURES: Poses e Coordenadas
 # ============================================================================

@@ -47,12 +47,17 @@ class BoardCoordinateSystem:
 
     # ==================== GERAÇÃO DE COORDENADAS ====================
 
-    def generate_temporary_grid(self, spacing: float = 0.06, z_height: float = 0.05) -> Dict[int, Tuple[float, float, float]]:
+    def generate_temporary_grid(self, spacing: float = 0.10, z_height: float = 0.05) -> Dict[int, Tuple[float, float, float]]:
         """
-        Gera coordenadas temporárias em grid 3x3 centrado.
+        Gera coordenadas do tabuleiro 3x3 centrado na posição HOME.
+
+        Layout:
+        0 1 2
+        3 4 5  (visto de cima, tabuleiro 30x30cm centrado em HOME)
+        6 7 8
 
         Args:
-            spacing: Espaçamento entre posições em metros (padrão: 6cm)
+            spacing: Espaçamento entre posições em metros (padrão: 10cm)
             z_height: Altura do tabuleiro em metros (padrão: 5cm)
 
         Returns:
@@ -60,17 +65,23 @@ class BoardCoordinateSystem:
         """
         coordinates = {}
 
+        # Tabuleiro centrado na posição HOME (-0.200, -0.267)
+        # Grid 3x3: posição central (4) = HOME
+        tabuleiro_x_center = -0.200  # Centro X da HOME
+        tabuleiro_y_center = -0.267  # Centro Y da HOME
+
         for i in range(9):
             row, col = divmod(i, 3)
-            # Centralizar no grid: -1, 0, 1 * spacing
-            x = (col - 1) * spacing
-            y = (row - 1) * spacing
+            # Grid 3x3 centrado em HOME
+            # (row - 1) e (col - 1) deixam a posição central (4) no centro
+            x = tabuleiro_x_center + (row - 1) * spacing  # X: -0.300, -0.200, -0.100
+            y = tabuleiro_y_center + (col - 1) * spacing  # Y: -0.367, -0.267, -0.167
             z = z_height
 
             coordinates[i] = (x, y, z)
 
         self.coordinates = coordinates
-        self.logger.info(f"[AVISO] Coordenadas temporárias criadas: {len(coordinates)} posições")
+        self.logger.info(f"[GRID] Tabuleiro gerado centrado em HOME (-0.200, -0.267): 9 posições ({spacing*100:.0f}cm espaçamento)")
         return coordinates
 
     def generate_from_vision(self, vision_system) -> bool:

@@ -117,12 +117,8 @@ class TapatanOrchestrator:
                 self.logger.error("Falha ao mover robô para home")
                 return False
 
-            # Definir offset do tabuleiro em relação à base do robô
-            # Lê da configuração (pode ser ajustado via calibração manual)
-            tabuleiro_offset_x = self.config_robo.tapatan_config.get("tabuleiro_offset_x", 0.30)
-            tabuleiro_offset_y = self.config_robo.tapatan_config.get("tabuleiro_offset_y", 0.00)
-            self.board_coords.set_robot_offset(tabuleiro_offset_x, tabuleiro_offset_y)
-            self.logger.info(f"[CONFIG] Offset do tabuleiro definido: X={tabuleiro_offset_x:.2f}m, Y={tabuleiro_offset_y:.2f}m")
+            # Nota: Offset removido - tabuleiro é gerado diretamente à frente do robô
+            # sem necessidade de offset (coordenadas já incluem posição absoluta)
 
             # Criar executor de movimentos físicos
             self.movement_executor = PhysicalMovementExecutor(
@@ -132,9 +128,7 @@ class TapatanOrchestrator:
                 logger=self.logger
             )
 
-            # Configurar posições de depósito (exemplo - ajustar conforme necessário)
-            deposito_pose = RobotPose(0.3, -0.3, 0.1, 0.0, 3.14, 0.0)
-            self.movement_executor.set_piece_depot_position("jogador1", deposito_pose)
+            # Nota: Depósito de peças removido - peças permanecem no tabuleiro durante todo o jogo
 
             self.logger.info("Robô inicializado e em posição home")
             return True

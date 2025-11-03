@@ -14,13 +14,20 @@ from typing import Optional, Dict, Any
 
 try:
     import cv2
+    import sys
+    from pathlib import Path
+    # Adicionar raiz do projeto ao path para importações relativas
+    sys.path.insert(0, str(Path(__file__).parent.parent))
     from vision import ArUcoVisionSystem, CameraManager, VisualMonitor, create_vision_system
+    from vision.vision_display import VisionDisplay
     VISION_AVAILABLE = True
-except ImportError:
+except ImportError as e:
     VISION_AVAILABLE = False
     ArUcoVisionSystem = None
     CameraManager = None
     VisualMonitor = None
+    VisionDisplay = None
+    print(f"[AVISO] Visão não disponível: {e}")
 
 
 class VisionIntegration:
@@ -41,6 +48,7 @@ class VisionIntegration:
         self.vision_system: Optional[ArUcoVisionSystem] = None
         self.camera_manager: Optional[CameraManager] = None
         self.visual_monitor: Optional[VisualMonitor] = None
+        self.vision_display: Optional[VisionDisplay] = None
 
         # Thread e controle
         self.vision_thread: Optional[threading.Thread] = None
@@ -73,6 +81,18 @@ class VisionIntegration:
                 print("[AVISO] Câmera não disponível - jogo continuará sem visão")
                 return False
 
+            # Inicializar display
+            if VisionDisplay:
+                self.vision_display = VisionDisplay(
+                    window_name="Tapatan Vision System",
+                    use_web_stream=True,
+                    web_port=8080
+                )
+                status = self.vision_display.get_status()
+                print(f"[VISAO] Display iniciado: {status['mode']}")
+                if status['web_url']:
+                    print(f"[VISAO] Acesse o stream em: {status['web_url']}")
+
             print("[OK] Sistema de visão inicializado!")
             return True
 
@@ -90,8 +110,15 @@ class VisionIntegration:
         if self.camera_manager:
             self.camera_manager.release()
 
+        if self.vision_display:
+            self.vision_display.close()
+
         if VISION_AVAILABLE:
-            cv2.destroyAllWindows()
+            try:
+                cv2.destroyAllWindows()
+            except Exception as e:
+                # Windows headless ou sem suporte a GUI - apenas log
+                pass
 
         print("[VISAO] Sistema de visão finalizado")
 
@@ -131,20 +158,23 @@ class VisionIntegration:
                         print("\n[EXECUTANDO] Sistema de visão calibrado automaticamente!")
 
                 # Mostra janela de visualização se habilitada
-                if self.show_vision_window:
+                if self.show_vision_window and self.vision_display:
                     display_frame = self.visual_monitor.draw_detection_overlay(frame, detections)
-                    cv2.imshow("Tapatan Vision System", display_frame)
 
-                    key = cv2.waitKey(1) & 0xFF
-                    if key == ord('q'):
-                        self.vision_active = False
-                        break
-                    elif key == ord('c'):
-                        self._calibrar_visao_manual(detections)
-                    elif key == ord('s'):
-                        filename = f"tapatan_vision_{int(time.time())}.jpg"
-                        cv2.imwrite(filename, display_frame)
-                        print(f"[INFO] Screenshot salvo como {filename}")
+                    # Exibir frame no display (nativo OpenCV ou web stream)
+                    key = self.vision_display.show_frame(display_frame, wait_key_time=1)
+
+                    # Processar entradas do teclado (apenas em modo OpenCV nativo)
+                    if key is not None:
+                        if key == ord('q'):
+                            self.vision_active = False
+                            break
+                        elif key == ord('c'):
+                            self._calibrar_visao_manual(detections)
+                        elif key == ord('s'):
+                            filename = f"tapatan_vision_{int(time.time())}.jpg"
+                            cv2.imwrite(filename, display_frame)
+                            print(f"[INFO] Screenshot salvo como {filename}")
 
                 time.sleep(0.03)  # ~30 FPS
 
@@ -153,7 +183,11 @@ class VisionIntegration:
                 time.sleep(1)
 
         if self.show_vision_window:
-            cv2.destroyAllWindows()
+            try:
+                cv2.destroyAllWindows()
+            except Exception as e:
+                # Windows headless ou sem suporte a GUI - apenas log
+                pass
 
     # ========== PROCESSAMENTO DE DETECÇÕES ==========
 

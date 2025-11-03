@@ -20,7 +20,7 @@ Uso básico:
 
 # Importações principais do módulo
 from .aruco_vision import ArUcoVisionSystem, MarkerInfo
-from config.config_visao import ConfigVisao
+from config.config_completa import ConfigVisao
 from .camera_manager import CameraManager, CameraInfo  
 from .visual_monitor import VisualMonitor
 from .vision_logger import VisionLogger
