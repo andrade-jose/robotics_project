@@ -195,25 +195,31 @@ class VisualMonitor:
     def _draw_text_with_background(self, frame: np.ndarray, text: str, position: Tuple[int, int], color: Tuple[int, int, int]):
         """Desenha texto com fundo para melhor visibilidade"""
         try:
-            x, y = position
-            
+            # Garantir que posição é tupla de int
+            if isinstance(position, np.ndarray):
+                x, y = int(position.flat[0]), int(position.flat[1])
+            else:
+                x, y = int(position[0]), int(position[1])
+
             # Calcular tamanho do texto
-            (text_width, text_height), baseline = cv2.getTextSize(
+            text_size, baseline = cv2.getTextSize(
                 text, self.font, self.font_scale, self.font_thickness
             )
-            
-            # Desenhar fundo
-            cv2.rectangle(
-                frame,
-                (x - 5, y - text_height - 5),
-                (x + text_width + 5, y + baseline + 5),
-                self.colors['background'],
-                -1
-            )
-            
+            text_width, text_height = text_size
+
+            # Converter para int para evitar erros de tipo
+            text_width = int(text_width)
+            text_height = int(text_height)
+            baseline = int(baseline)
+
+            # Desenhar fundo (retângulo)
+            pt1 = (x - 5, y - text_height - 5)
+            pt2 = (x + text_width + 5, y + baseline + 5)
+            cv2.rectangle(frame, pt1, pt2, self.colors['background'], -1)
+
             # Desenhar texto
             cv2.putText(frame, text, (x, y), self.font, self.font_scale, color, self.font_thickness)
-            
+
         except Exception as e:
             self.logger.debug(f"Erro ao desenhar texto: {e}")
     

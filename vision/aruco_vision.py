@@ -35,6 +35,7 @@ class MarkerInfo:
     corners: np.ndarray
     timestamp: float
     confidence: float
+    player_group: str = 'unknown'  # 'reference', 'group1', 'group2', ou 'unknown'
 
 @dataclass
 class GridPosition:
@@ -285,7 +286,15 @@ class ArUcoVisionSystem:
             'last_positions': {},
             'is_stable': False
         }
-        
+
+        # Transformação de calibração (usado por visual_monitor para exibir info)
+        self.calibration_transform = {
+            'scale_factor': 1.0,
+            'origin': [0.0, 0.0, 0.0],
+            'reference_distance_mm': self.configured_reference_distance_mm,
+            'is_valid': False
+        }
+
         if self.enable_debug_logs:
             self.logger.debug(f"Sistema inicializado - Refs: {self.reference_ids}, G1: {self.group1_ids}, G2: {self.group2_ids}")
 
@@ -400,13 +409,22 @@ class ArUcoVisionSystem:
 
         return detections
     
-    def _process_marker(self, marker_id: int, corners: np.ndarray, 
+    def _process_marker(self, marker_id: int, corners: np.ndarray,
                        rvec: np.ndarray, tvec: np.ndarray):
         """Processa um marcador detectado e o classifica por grupo"""
-        
+
         # Aplicar suavização na posição
         smoothed_position = self._apply_smoothing_filter(marker_id, tvec.flatten())
-        
+
+        # Determinar grupo do marcador
+        player_group = 'unknown'
+        if marker_id in self.reference_ids:
+            player_group = 'reference'
+        elif marker_id in self.group1_ids:
+            player_group = 'group1'
+        elif marker_id in self.group2_ids:
+            player_group = 'group2'
+
         # Criar info do marcador
         marker_info = MarkerInfo(
             id=marker_id,
@@ -414,9 +432,10 @@ class ArUcoVisionSystem:
             rotation=rvec.flatten(),
             corners=corners,
             timestamp=time.time(),
-            confidence=1.0  # Placeholder - poderia ser calculado baseado na detecção
+            confidence=1.0,  # Placeholder - poderia ser calculado baseado na detecção
+            player_group=player_group
         )
-        
+
         # Classificar por grupo
         if marker_id in self.reference_ids:
             self.reference_markers[marker_id] = marker_info
@@ -480,13 +499,22 @@ class ArUcoVisionSystem:
 
             # Armazenar distância configurada (não medida)
             self.reference_distance_mm = self.configured_reference_distance_mm
-            
+
+            # Atualizar calibration_transform com informações de calibração
+            self.calibration_transform = {
+                'scale_factor': scale_factor,
+                'origin': self.origin_3d.tolist() if isinstance(self.origin_3d, np.ndarray) else self.origin_3d,
+                'reference_distance_mm': self.reference_distance_mm,
+                'is_valid': True,
+                'measured_distance_mm': measured_distance * 1000
+            }
+
             self.is_calibrated = True
             self.detection_stats['calibration_attempts'] += 1
-            
+
             if self.enable_debug_logs:
                 self.logger.info(f"Sistema calibrado - Distância configurada: {self.reference_distance_mm:.1f}mm")
-            
+
             return True
             
         except Exception as e:
