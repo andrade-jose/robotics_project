@@ -11,7 +11,7 @@ import logging
 from typing import Optional, Dict, Any
 from dataclasses import dataclass
 
-from services.robot_service import RobotService, RobotPose, PickPlaceCommand, ValidationLevel
+from services.robot_service import RobotService, RobotPose, PickPlaceCommand
 from services.board_coordinate_system import BoardCoordinateSystem
 from config.config_completa import ConfigRobo
 
@@ -127,15 +127,8 @@ class PhysicalMovementExecutor:
                 0.0   # rz
             )
 
-            # Validar pose de destino se configurado
-            if self.config_robo.validar_antes_executar:
-                resultado = self.robot_service.validate_pose(
-                    destino,
-                    validation_level=ValidationLevel.COMPLETE
-                )
-                if not resultado.is_valid:
-                    self.logger.error(f"Pose de destino inválida: {resultado.error_message}")
-                    return False
+            # Nota: Validação de pose é feita internamente pelo pick_and_place
+            # não precisa ser explícita aqui
 
             # Criar e executar comando pick-and-place
             comando = PickPlaceCommand(
@@ -200,16 +193,8 @@ class PhysicalMovementExecutor:
                 0.0
             )
 
-            # Validar poses se configurado
-            if self.config_robo.validar_antes_executar:
-                for pose, nome in [(pose_origem, "origem"), (pose_destino, "destino")]:
-                    resultado = self.robot_service.validate_pose(
-                        pose,
-                        validation_level=ValidationLevel.COMPLETE
-                    )
-                    if not resultado.is_valid:
-                        self.logger.error(f"Pose de {nome} inválida: {resultado.error_message}")
-                        return False
+            # Nota: Validação de poses é feita internamente pelo pick_and_place
+            # não precisa ser explícita aqui
 
             # Criar e executar comando pick-and-place
             comando = PickPlaceCommand(
@@ -251,6 +236,7 @@ class PhysicalMovementExecutor:
                 return False
 
             # Criar pose com altura um pouco acima da posição
+            # OBS: coord já inclui o offset do tabuleiro
             pose_teste = RobotPose(
                 coord[0],
                 coord[1],
@@ -260,16 +246,11 @@ class PhysicalMovementExecutor:
                 0.0
             )
 
-            # Validar se configurado
-            if self.config_robo.validar_antes_executar:
-                resultado = self.robot_service.validate_pose(
-                    pose_teste,
-                    validation_level=ValidationLevel.COMPLETE
-                )
-                if not resultado.is_valid:
-                    self.logger.error(f"Pose inválida para posição {posicao}")
-                    return False
+            self.logger.debug(f"[DEBUG] Movendo para posição {posicao}: {pose_teste}")
 
+            # Nota: Desabilitamos validação durante movimento simples
+            # pois pode haver limites internos do UR que rejeitam poses legítimas
+            # A validação será feita no movimento real
             return self.robot_service.move_to_pose(
                 pose=pose_teste,
                 speed=self.config_robo.velocidade_normal

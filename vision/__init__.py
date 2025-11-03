@@ -20,6 +20,7 @@ Uso básico:
 
 # Importações principais do módulo
 from .aruco_vision import ArUcoVisionSystem, MarkerInfo
+from config.config_visao import ConfigVisao
 from .camera_manager import CameraManager, CameraInfo  
 from .visual_monitor import VisualMonitor
 from .vision_logger import VisionLogger
@@ -38,7 +39,8 @@ __all__ = [
     'CameraManager',
     'CameraInfo',
     'VisualMonitor', 
-    'VisionLogger'
+    'VisionLogger',
+    'ConfigVisao'
 ]
 
 # Função de conveniência para inicialização rápida
@@ -53,6 +55,7 @@ def create_vision_system():
     from config.config_completa import CONFIG
     
     # Criar componentes usando configurações integradas
+    config_visao = ConfigVisao()
     vision_system = ArUcoVisionSystem()
     camera_manager = CameraManager()
     visual_monitor = VisualMonitor(vision_system)

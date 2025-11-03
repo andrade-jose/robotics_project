@@ -342,9 +342,9 @@ class RobotService(IGameService):
             self.status = RobotStatus.MOVING
             self.logger.info(f"[INFO] Origem: {pick_place_cmd.origin}")
             self.logger.info(f"[INFO] Destino: {pick_place_cmd.destination}")
-            
-            #  USAR FUNÇÃO ATUALIZADA DO URCONTROLLER
-            success = self.controller.executar_movimento_peca(
+
+            # Usar método de movimento de peça com validação completa
+            success = self.executar_movimento_peca(
                 pick_place_cmd.origin.to_list(),
                 pick_place_cmd.destination.to_list(),
                 pick_place_cmd.safe_height,

@@ -27,20 +27,21 @@ class ConfigRobo:
     limites_articulacoes: dict = field(default_factory=lambda: _UR3E_JOINT_LIMITS)
 
     # === MOVIMENTO BÁSICO ===
-    velocidade_maxima: float = 0.2
-    velocidade_normal: float = 0.1
-    velocidade_padrao: float = 0.1
-    velocidade_lenta: float = 0.05
-    velocidade_precisa: float = 0.03
+    # RECOMENDAÇÃO COMUNIDADE UR: Manter velocidades < 0.33 m/s para evitar C204A3
+    velocidade_maxima: float = 0.15  # 15cm/s máximo (reduzido de 0.2)
+    velocidade_normal: float = 0.08  # 8cm/s normal (reduzido de 0.1)
+    velocidade_padrao: float = 0.08  # 8cm/s padrão (reduzido de 0.1)
+    velocidade_lenta: float = 0.05   # 5cm/s lenta (mantido)
+    velocidade_precisa: float = 0.03 # 3cm/s precisa (mantido)
     velocidade_minima: float = 0.01
-    aceleracao_normal: float = 0.1
-    aceleracao_padrao: float = 0.1
+    aceleracao_normal: float = 0.08  # Reduzida de 0.1 (mais suave)
+    aceleracao_padrao: float = 0.08  # Reduzida de 0.1 (mais suave)
     altura_segura: float = 0.3
     altura_pegar: float = 0.05
     pausa_entre_movimentos: float = 1.0
     pausa_entre_jogadas: float = 2.0
     aceleracao_minima: float = 0.01
-    aceleracao_maxima: float = 0.5
+    aceleracao_maxima: float = 0.4  # Reduzida de 0.5 para evitar desacelerações abruptas
     desaceleracao_parada: float = 2.0
     max_mudanca_junta: float = 1.57  # 90 graus em radianos
     enable_safety_validation: bool = True
@@ -88,7 +89,9 @@ class ConfigRobo:
         "altura_tabuleiro": 0.05, "altura_peca": 0.02,
         "espacamento_posicoes": 0.1, "validacao_pre_movimento": True,
         "estrategia_movimento_tapatan": "smart_correction",
-        "usar_pontos_intermediarios_tapatan": True
+        "usar_pontos_intermediarios_tapatan": True,
+        "tabuleiro_offset_x": 0.30,  # 30cm à frente do robô
+        "tabuleiro_offset_y": 0.00   # Centralizado em Y
     })
     
     # === LOGGING ===

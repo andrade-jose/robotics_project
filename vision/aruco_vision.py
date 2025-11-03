@@ -60,7 +60,8 @@ class ArUcoVisionSystem:
     - Logs reduzidos conforme requisito do projeto
     """
 
-    def __init__(self, reference_distance_mm: Optional[float] = None,
+    def __init__(self, 
+                 config : Optional[ConfigVisao] = None,reference_distance_mm: Optional[float] = None,
                  calibration_file: Optional[str] = None,
                  enable_reduced_logs: bool = True):
         """
@@ -72,7 +73,7 @@ class ArUcoVisionSystem:
             reference_distance_mm: Distância entre marcadores de referência em mm
             enable_debug_logs: Habilitar logs detalhados (False para produção)
         """
-        self.config = ConfigVisao()
+        self.config = config or ConfigVisao()
         self.logger = VisionLogger(__name__)
         
         # Configurações do sistema flexível
@@ -93,7 +94,7 @@ class ArUcoVisionSystem:
         # Inicializar variáveis de estado
         self._init_state_variables()
         
-        if self.enable_debug_logs:
+        if not self.enable_reduced_logs:
             self.logger.info(f"Sistema ArUco Vision flexível inicializado - Distância ref: {self.configured_reference_distance_mm}mm")
     
     def set_reference_distance(self, distance_mm: float) -> bool:
@@ -185,7 +186,7 @@ class ArUcoVisionSystem:
         """Configura detector ArUco usando configurações do projeto"""
         try:
             # Usar dicionário configurado no projeto
-            self.aruco_dict = cv2.aruco.getPredefinedDictionary(self.config_visao.aruco_dict_type)
+            self.aruco_dict = cv2.aruco.getPredefinedDictionary(self.config.aruco_dict_type)
             
             # Parâmetros de detecção otimizados para estabilidade
             self.parameters = cv2.aruco.DetectorParameters()
@@ -211,6 +212,8 @@ class ArUcoVisionSystem:
                 
         except Exception as e:
             self.logger.error(f"Erro ao configurar detector ArUco: {e}")
+            self.aruco_dict = cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_6X6_250)
+            self.aruco_params = cv2.aruco.DetectorParameters()
             raise
     
     def _setup_camera_params(self):

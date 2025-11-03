@@ -111,3 +111,177 @@
 2025-10-28 10:29:41,633 - RobotService - ERROR - [ERRO] Robô não está conectado
 2025-10-28 10:29:41,633 - RobotService - INFO - [CONEXAO] Robô desconectado
 2025-10-28 10:29:41,633 - TapatanOrchestrator - INFO - Orquestrador finalizado
+2025-10-30 12:01:14,440 - TapatanOrchestrator - INFO - Iniciando orquestrador Tapatan...
+2025-10-30 12:01:14,444 - RobotService - INFO - [CONEXAO] Conectando ao robô em 10.1.7.30...
+2025-10-30 12:01:16,455 - RobotService - ERROR - [ERRO] Erro ao conectar: Timeout connecting to UR dashboard server.
+2025-10-30 12:01:16,457 - TapatanOrchestrator - ERROR - Falha ao conectar com o robô
+2025-10-30 12:01:16,458 - TapatanOrchestrator - INFO - Finalizando orquestrador...
+2025-10-30 12:01:16,459 - RobotService - INFO - [EXECUTANDO] Movendo para posição home
+2025-10-30 12:01:16,459 - RobotService - ERROR - [ERRO] Robô não está conectado
+2025-10-30 12:01:16,460 - RobotService - INFO - [CONEXAO] Robô desconectado
+2025-10-30 12:01:16,460 - TapatanOrchestrator - INFO - Orquestrador finalizado
+2025-10-30 12:04:30,957 - TapatanOrchestrator - INFO - Iniciando orquestrador Tapatan...
+2025-10-30 12:04:30,960 - RobotService - INFO - [CONEXAO] Conectando ao robô em 10.1.7.30...
+2025-10-30 12:04:32,766 - RobotService - INFO - [OK] Robô conectado com sucesso
+2025-10-30 12:04:32,767 - RobotService - INFO - [SEGURANCA] Modo de segurança: HABILITADO
+2025-10-30 12:04:32,767 - RobotService - INFO - [EXECUTANDO] Movendo para posição home
+2025-10-30 12:04:50,017 - TapatanOrchestrator - INFO - Posição do depósito definida para jogador1
+2025-10-30 12:04:50,017 - TapatanOrchestrator - INFO - Robô inicializado e em posição home
+2025-10-30 12:04:50,018 - TapatanOrchestrator - WARNING - [AVISO] Usando coordenadas temporárias
+2025-10-30 12:04:50,018 - TapatanOrchestrator - INFO - [AVISO] Coordenadas temporárias criadas: 9 posições
+2025-10-30 12:04:50,018 - TapatanOrchestrator - INFO - Orquestrador inicializado com sucesso!
+2025-10-30 12:05:06,036 - TapatanOrchestrator - INFO - Iniciando calibração do sistema...
+2025-10-30 12:05:06,037 - RobotService - INFO - [EXECUTANDO] Movendo para posição home
+2025-10-30 12:05:06,124 - TapatanOrchestrator - ERROR - Erro no movimento simples: 'ConfigRobo' object has no attribute 'validar_antes_executar'
+2025-10-30 12:05:06,125 - TapatanOrchestrator - ERROR - Falha ao testar posição 0
+2025-10-30 12:05:45,218 - vision.vision.aruco_vision - INFO - VisionLogger inicializado para 'vision.aruco_vision'
+2025-10-30 12:05:56,481 - TapatanOrchestrator - INFO - Iniciando nova partida de Tapatan...
+2025-10-30 12:05:56,481 - RobotService - INFO - [EXECUTANDO] Movendo para posição home
+2025-10-30 12:05:56,547 - TapatanOrchestrator - INFO - Partida iniciada! Aguardando primeiro movimento...
+2025-10-30 12:06:01,037 - TapatanOrchestrator - INFO - Executando jogada do robô...
+2025-10-30 12:06:01,041 - TapatanOrchestrator - ERROR - Erro no movimento físico da peça: 'ConfigRobo' object has no attribute 'validar_antes_executar'
+2025-10-30 12:06:07,498 - TapatanOrchestrator - INFO - Finalizando orquestrador...
+2025-10-30 12:06:07,498 - TapatanOrchestrator - INFO - Jogo parado
+2025-10-30 12:06:07,498 - RobotService - INFO - [EXECUTANDO] Movendo para posição home
+2025-10-30 12:06:07,603 - RobotService - INFO - [CONEXAO] Robô desconectado
+2025-10-30 12:06:07,603 - TapatanOrchestrator - INFO - Orquestrador finalizado
+2025-10-31 12:27:33,891 - TapatanOrchestrator - INFO - Iniciando orquestrador Tapatan...
+2025-10-31 12:27:33,897 - RobotService - INFO - [CONEXAO] Conectando ao robô em 10.1.7.30...
+2025-10-31 12:27:35,901 - RobotService - ERROR - [ERRO] Erro ao conectar: Timeout connecting to UR dashboard server.
+2025-10-31 12:27:35,902 - TapatanOrchestrator - ERROR - Falha ao conectar com o robô
+2025-10-31 12:27:35,902 - TapatanOrchestrator - INFO - Finalizando orquestrador...
+2025-10-31 12:27:35,902 - RobotService - INFO - [EXECUTANDO] Movendo para posição home
+2025-10-31 12:27:35,902 - RobotService - ERROR - [ERRO] Robô não está conectado
+2025-10-31 12:27:35,902 - RobotService - INFO - [CONEXAO] Robô desconectado
+2025-10-31 12:27:35,902 - TapatanOrchestrator - INFO - Orquestrador finalizado
+2025-10-31 13:14:44,972 - TapatanOrchestrator - INFO - Iniciando orquestrador Tapatan...
+2025-10-31 13:14:44,977 - RobotService - INFO - [CONEXAO] Conectando ao robô em 10.1.7.30...
+2025-10-31 13:14:46,118 - RobotService - INFO - [OK] Robô conectado com sucesso
+2025-10-31 13:14:46,118 - RobotService - INFO - [SEGURANCA] Modo de segurança: HABILITADO
+2025-10-31 13:14:46,119 - RobotService - INFO - [EXECUTANDO] Movendo para posição home
+2025-10-31 13:14:58,777 - TapatanOrchestrator - INFO - Posição do depósito definida para jogador1
+2025-10-31 13:14:58,778 - TapatanOrchestrator - INFO - Robô inicializado e em posição home
+2025-10-31 13:14:58,778 - TapatanOrchestrator - WARNING - [AVISO] Usando coordenadas temporárias
+2025-10-31 13:14:58,778 - TapatanOrchestrator - INFO - [AVISO] Coordenadas temporárias criadas: 9 posições
+2025-10-31 13:14:58,778 - TapatanOrchestrator - INFO - Orquestrador inicializado com sucesso!
+2025-10-31 13:15:07,722 - TapatanOrchestrator - INFO - Iniciando calibração do sistema...
+2025-10-31 13:15:07,723 - RobotService - INFO - [EXECUTANDO] Movendo para posição home
+2025-10-31 13:15:07,789 - TapatanOrchestrator - ERROR - Erro no movimento simples: 'ConfigRobo' object has no attribute 'validar_antes_executar'
+2025-10-31 13:15:07,789 - TapatanOrchestrator - ERROR - Falha ao testar posição 0
+2025-10-31 13:20:38,799 - TapatanOrchestrator - INFO - Finalizando orquestrador...
+2025-10-31 13:20:38,799 - RobotService - INFO - [EXECUTANDO] Movendo para posição home
+2025-10-31 13:20:38,860 - RobotService - INFO - [CONEXAO] Robô desconectado
+2025-10-31 13:20:38,860 - TapatanOrchestrator - INFO - Orquestrador finalizado
+2025-10-31 13:20:45,960 - TapatanOrchestrator - INFO - Iniciando orquestrador Tapatan...
+2025-10-31 13:20:45,964 - RobotService - INFO - [CONEXAO] Conectando ao robô em 10.1.7.30...
+2025-10-31 13:20:47,145 - RobotService - INFO - [OK] Robô conectado com sucesso
+2025-10-31 13:20:47,145 - RobotService - INFO - [SEGURANCA] Modo de segurança: HABILITADO
+2025-10-31 13:20:47,145 - RobotService - INFO - [EXECUTANDO] Movendo para posição home
+2025-10-31 13:20:47,210 - TapatanOrchestrator - INFO - Posição do depósito definida para jogador1
+2025-10-31 13:20:47,210 - TapatanOrchestrator - INFO - Robô inicializado e em posição home
+2025-10-31 13:20:47,210 - TapatanOrchestrator - WARNING - [AVISO] Usando coordenadas temporárias
+2025-10-31 13:20:47,210 - TapatanOrchestrator - INFO - [AVISO] Coordenadas temporárias criadas: 9 posições
+2025-10-31 13:20:47,211 - TapatanOrchestrator - INFO - Orquestrador inicializado com sucesso!
+2025-10-31 13:21:01,191 - TapatanOrchestrator - INFO - Iniciando calibração do sistema...
+2025-10-31 13:21:01,192 - RobotService - INFO - [EXECUTANDO] Movendo para posição home
+2025-10-31 13:21:01,242 - TapatanOrchestrator - ERROR - Erro no movimento simples: RobotService.validate_pose() got an unexpected keyword argument 'validation_level'
+2025-10-31 13:21:01,242 - TapatanOrchestrator - ERROR - Falha ao testar posição 0
+2025-10-31 13:25:08,170 - TapatanOrchestrator - INFO - Finalizando orquestrador...
+2025-10-31 13:25:08,170 - RobotService - INFO - [EXECUTANDO] Movendo para posição home
+2025-10-31 13:25:08,220 - RobotService - INFO - [CONEXAO] Robô desconectado
+2025-10-31 13:25:08,220 - TapatanOrchestrator - INFO - Orquestrador finalizado
+2025-10-31 13:25:12,608 - TapatanOrchestrator - INFO - Iniciando orquestrador Tapatan...
+2025-10-31 13:25:12,612 - RobotService - INFO - [CONEXAO] Conectando ao robô em 10.1.7.30...
+2025-10-31 13:25:13,618 - RobotService - INFO - [OK] Robô conectado com sucesso
+2025-10-31 13:25:13,619 - RobotService - INFO - [SEGURANCA] Modo de segurança: HABILITADO
+2025-10-31 13:25:13,619 - RobotService - INFO - [EXECUTANDO] Movendo para posição home
+2025-10-31 13:25:13,662 - TapatanOrchestrator - INFO - Posição do depósito definida para jogador1
+2025-10-31 13:25:13,662 - TapatanOrchestrator - INFO - Robô inicializado e em posição home
+2025-10-31 13:25:13,662 - TapatanOrchestrator - WARNING - [AVISO] Usando coordenadas temporárias
+2025-10-31 13:25:13,662 - TapatanOrchestrator - INFO - [AVISO] Coordenadas temporárias criadas: 9 posições
+2025-10-31 13:25:13,662 - TapatanOrchestrator - INFO - Orquestrador inicializado com sucesso!
+2025-10-31 13:25:17,859 - TapatanOrchestrator - INFO - Iniciando calibração do sistema...
+2025-10-31 13:25:17,860 - RobotService - INFO - [EXECUTANDO] Movendo para posição home
+2025-10-31 13:25:23,754 - TapatanOrchestrator - ERROR - Falha ao testar posição 0
+2025-10-31 13:29:56,409 - TapatanOrchestrator - INFO - Finalizando orquestrador...
+2025-10-31 13:29:56,409 - RobotService - INFO - [EXECUTANDO] Movendo para posição home
+2025-10-31 13:29:56,409 - RobotService - ERROR - [ERRO] Robô não está conectado
+2025-10-31 13:29:56,409 - RobotService - INFO - [CONEXAO] Robô desconectado
+2025-10-31 13:29:56,410 - TapatanOrchestrator - INFO - Orquestrador finalizado
+2025-10-31 13:30:13,569 - TapatanOrchestrator - INFO - Iniciando orquestrador Tapatan...
+2025-10-31 13:30:13,573 - RobotService - INFO - [CONEXAO] Conectando ao robô em 10.1.7.30...
+2025-10-31 13:30:14,912 - RobotService - INFO - [OK] Robô conectado com sucesso
+2025-10-31 13:30:14,912 - RobotService - INFO - [SEGURANCA] Modo de segurança: HABILITADO
+2025-10-31 13:30:14,912 - RobotService - INFO - [EXECUTANDO] Movendo para posição home
+2025-10-31 13:30:28,009 - TapatanOrchestrator - INFO - Posição do depósito definida para jogador1
+2025-10-31 13:30:28,009 - TapatanOrchestrator - INFO - Robô inicializado e em posição home
+2025-10-31 13:30:28,009 - TapatanOrchestrator - WARNING - [AVISO] Usando coordenadas temporárias
+2025-10-31 13:30:28,009 - TapatanOrchestrator - INFO - [AVISO] Coordenadas temporárias criadas: 9 posições
+2025-10-31 13:30:28,009 - TapatanOrchestrator - INFO - Orquestrador inicializado com sucesso!
+2025-10-31 13:30:38,788 - TapatanOrchestrator - INFO - Iniciando calibração do sistema...
+2025-10-31 13:30:38,788 - RobotService - INFO - [EXECUTANDO] Movendo para posição home
+2025-10-31 13:30:44,953 - TapatanOrchestrator - ERROR - Falha ao testar posição 0
+2025-10-31 13:38:00,142 - TapatanOrchestrator - INFO - Finalizando orquestrador...
+2025-10-31 13:38:00,142 - RobotService - INFO - [EXECUTANDO] Movendo para posição home
+2025-10-31 13:38:00,144 - RobotService - INFO - [CONEXAO] Robô desconectado
+2025-10-31 13:38:00,144 - TapatanOrchestrator - INFO - Orquestrador finalizado
+2025-10-31 13:46:35,762 - TapatanOrchestrator - INFO - Iniciando orquestrador Tapatan...
+2025-10-31 13:46:35,766 - RobotService - INFO - [CONEXAO] Conectando ao robô em 10.1.7.30...
+2025-10-31 13:46:36,679 - RobotService - INFO - [OK] Robô conectado com sucesso
+2025-10-31 13:46:36,679 - RobotService - INFO - [SEGURANCA] Modo de segurança: HABILITADO
+2025-10-31 13:46:36,679 - RobotService - INFO - [EXECUTANDO] Movendo para posição home
+2025-10-31 13:46:44,195 - TapatanOrchestrator - INFO - Posição do depósito definida para jogador1
+2025-10-31 13:46:44,195 - TapatanOrchestrator - INFO - Robô inicializado e em posição home
+2025-10-31 13:46:44,195 - TapatanOrchestrator - WARNING - [AVISO] Usando coordenadas temporárias
+2025-10-31 13:46:44,195 - TapatanOrchestrator - INFO - [AVISO] Coordenadas temporárias criadas: 9 posições
+2025-10-31 13:46:44,195 - TapatanOrchestrator - INFO - Orquestrador inicializado com sucesso!
+2025-10-31 13:47:02,300 - TapatanOrchestrator - INFO - Iniciando calibração do sistema...
+2025-10-31 13:47:02,301 - RobotService - INFO - [EXECUTANDO] Movendo para posição home
+2025-10-31 13:47:08,420 - TapatanOrchestrator - ERROR - Falha ao testar posição 0
+2025-10-31 13:47:17,036 - TapatanOrchestrator - INFO - Finalizando orquestrador...
+2025-10-31 13:47:17,037 - RobotService - INFO - [EXECUTANDO] Movendo para posição home
+2025-10-31 13:47:17,037 - RobotService - INFO - [CONEXAO] Robô desconectado
+2025-10-31 13:47:17,038 - TapatanOrchestrator - INFO - Orquestrador finalizado
+2025-10-31 13:50:30,917 - TapatanOrchestrator - INFO - Iniciando orquestrador Tapatan...
+2025-10-31 13:50:30,922 - RobotService - INFO - [CONEXAO] Conectando ao robô em 10.1.7.30...
+2025-10-31 13:50:31,887 - RobotService - INFO - [OK] Robô conectado com sucesso
+2025-10-31 13:50:31,887 - RobotService - INFO - [SEGURANCA] Modo de segurança: HABILITADO
+2025-10-31 13:50:31,887 - RobotService - INFO - [EXECUTANDO] Movendo para posição home
+2025-10-31 13:50:39,811 - TapatanOrchestrator - INFO - [ROBO] Offset robô: X=0.300m, Y=0.000m
+2025-10-31 13:50:39,811 - TapatanOrchestrator - INFO - [CONFIG] Offset do tabuleiro definido: X=0.30m, Y=0.00m
+2025-10-31 13:50:39,811 - TapatanOrchestrator - INFO - Posição do depósito definida para jogador1
+2025-10-31 13:50:39,811 - TapatanOrchestrator - INFO - Robô inicializado e em posição home
+2025-10-31 13:50:39,812 - TapatanOrchestrator - WARNING - [AVISO] Usando coordenadas temporárias
+2025-10-31 13:50:39,812 - TapatanOrchestrator - INFO - [AVISO] Coordenadas temporárias criadas: 9 posições
+2025-10-31 13:50:39,812 - TapatanOrchestrator - INFO - Orquestrador inicializado com sucesso!
+2025-10-31 13:50:56,453 - TapatanOrchestrator - INFO - Iniciando calibração do sistema...
+2025-10-31 13:50:56,454 - RobotService - INFO - [EXECUTANDO] Movendo para posição home
+2025-10-31 13:51:02,570 - TapatanOrchestrator - ERROR - Falha ao testar posição 0
+2025-10-31 13:53:10,292 - TapatanOrchestrator - INFO - Finalizando orquestrador...
+2025-10-31 13:53:10,292 - RobotService - INFO - [EXECUTANDO] Movendo para posição home
+2025-10-31 13:53:10,292 - RobotService - INFO - [CONEXAO] Robô desconectado
+2025-10-31 13:53:10,293 - TapatanOrchestrator - INFO - Orquestrador finalizado
+2025-10-31 13:56:26,549 - TapatanOrchestrator - INFO - Iniciando orquestrador Tapatan...
+2025-10-31 13:56:26,554 - RobotService - INFO - [CONEXAO] Conectando ao robô em 10.1.7.30...
+2025-10-31 13:56:27,205 - RobotService - INFO - [OK] Robô conectado com sucesso
+2025-10-31 13:56:27,205 - RobotService - INFO - [SEGURANCA] Modo de segurança: HABILITADO
+2025-10-31 13:56:27,205 - RobotService - INFO - [EXECUTANDO] Movendo para posição home
+2025-10-31 13:56:35,982 - TapatanOrchestrator - INFO - [ROBO] Offset robô: X=0.300m, Y=0.000m
+2025-10-31 13:56:35,982 - TapatanOrchestrator - INFO - [CONFIG] Offset do tabuleiro definido: X=0.30m, Y=0.00m
+2025-10-31 13:56:35,982 - TapatanOrchestrator - INFO - Posição do depósito definida para jogador1
+2025-10-31 13:56:35,982 - TapatanOrchestrator - INFO - Robô inicializado e em posição home
+2025-10-31 13:56:35,983 - TapatanOrchestrator - WARNING - [AVISO] Usando coordenadas temporárias
+2025-10-31 13:56:35,983 - TapatanOrchestrator - INFO - [AVISO] Coordenadas temporárias criadas: 9 posições
+2025-10-31 13:56:35,983 - TapatanOrchestrator - INFO - Orquestrador inicializado com sucesso!
+2025-10-31 13:56:45,608 - TapatanOrchestrator - INFO - Iniciando calibração do sistema...
+2025-10-31 13:56:45,609 - RobotService - INFO - [EXECUTANDO] Movendo para posição home
+2025-10-31 13:56:45,669 - TapatanOrchestrator - INFO - [CALIBRAÇÃO] Velocidade reduzida para 0.05 m/s (recomendação UR)
+2025-10-31 13:56:45,670 - TapatanOrchestrator - INFO - [CALIBRAÇÃO] Testando 9 posições do tabuleiro...
+2025-10-31 13:56:45,670 - TapatanOrchestrator - INFO - [CALIBRAÇÃO] Testando posição 4 (1/9)...
+2025-10-31 13:56:45,713 - URController - WARNING -   - Pose rejeitada pelos limites de segurança do UR (isPoseWithinSafetyLimits)
+2025-10-31 13:56:45,713 - TapatanOrchestrator - ERROR - Pose inválida para posição 4
+2025-10-31 13:56:45,713 - TapatanOrchestrator - ERROR - [CALIBRAÇÃO] Falha ao testar posição 4
+2025-10-31 14:00:02,961 - TapatanOrchestrator - INFO - Finalizando orquestrador...
+2025-10-31 14:00:02,961 - RobotService - INFO - [EXECUTANDO] Movendo para posição home
+2025-10-31 14:00:03,024 - RobotService - INFO - [CONEXAO] Robô desconectado
+2025-10-31 14:00:03,024 - TapatanOrchestrator - INFO - Orquestrador finalizado

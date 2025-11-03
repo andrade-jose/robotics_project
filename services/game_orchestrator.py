@@ -87,7 +87,7 @@ class TapatanOrchestrator:
             # Carregar coordenadas do tabuleiro
             if not self._carregar_coordenadas_tabuleiro():
                 return False
-                2
+
             # Calibração automática se habilitada
             if self.config_robo.auto_calibrar:
                 if not self.calibrar_sistema():
@@ -116,6 +116,13 @@ class TapatanOrchestrator:
             if not self.robot_service.move_home():
                 self.logger.error("Falha ao mover robô para home")
                 return False
+
+            # Definir offset do tabuleiro em relação à base do robô
+            # Lê da configuração (pode ser ajustado via calibração manual)
+            tabuleiro_offset_x = self.config_robo.tapatan_config.get("tabuleiro_offset_x", 0.30)
+            tabuleiro_offset_y = self.config_robo.tapatan_config.get("tabuleiro_offset_y", 0.00)
+            self.board_coords.set_robot_offset(tabuleiro_offset_x, tabuleiro_offset_y)
+            self.logger.info(f"[CONFIG] Offset do tabuleiro definido: X={tabuleiro_offset_x:.2f}m, Y={tabuleiro_offset_y:.2f}m")
 
             # Criar executor de movimentos físicos
             self.movement_executor = PhysicalMovementExecutor(
@@ -156,14 +163,16 @@ class TapatanOrchestrator:
                     self.logger.info("[OK] Coordenadas dinâmicas carregadas")
                     return True
 
-            # Fallback: coordenadas temporárias
+            # Fallback: coordenadas temporárias com espaçamento adequado
             self.logger.warning("[AVISO] Usando coordenadas temporárias")
-            self.board_coords.generate_temporary_grid()
+            # Gerar grid com espaçamento de 10cm, altura compatível com altura_pegar
+            self.board_coords.generate_temporary_grid(spacing=0.10, z_height=self.config_robo.altura_pegar)
             return True
 
         except Exception as e:
             self.logger.error(f"[ERRO] Erro ao carregar coordenadas: {e}")
-            self.board_coords.generate_temporary_grid()
+            # Usar coordenadas temporárias como fallback do fallback
+            self.board_coords.generate_temporary_grid(spacing=0.10, z_height=self.config_robo.altura_pegar)
             return False
 
     def set_vision_system(self, vision_system):
@@ -366,21 +375,49 @@ class TapatanOrchestrator:
                 self.logger.error("Falha ao mover para home na calibração")
                 return False
 
-            # Testar algumas posições do tabuleiro
-            posicoes_teste = [0, 4, 8]  # Cantos e centro
-            for pos in posicoes_teste:
+            # Guardar velocidade original e usar velocidade mais segura/conservadora
+            # (recomendação da comunidade UR para evitar C204A3)
+            velocidade_original = self.config_robo.velocidade_normal
+            self.config_robo.velocidade_normal = 0.05  # 5cm/s muito seguro
+
+            self.logger.info("[CALIBRAÇÃO] Velocidade reduzida para 0.05 m/s (recomendação UR)")
+
+            # Testar todas as 9 posições do tabuleiro em ordem segura
+            # Ordem: início do centro, depois expansão para cantos
+            posicoes_teste = [4, 0, 2, 6, 8, 1, 3, 5, 7]
+
+            self.logger.info(f"[CALIBRAÇÃO] Testando {len(posicoes_teste)} posições do tabuleiro...")
+
+            for i, pos in enumerate(posicoes_teste):
+                self.logger.info(f"[CALIBRAÇÃO] Testando posição {pos} ({i+1}/{len(posicoes_teste)})...")
+
                 if not self.movement_executor.executar_movimento_simples(pos):
-                    self.logger.error(f"Falha ao testar posição {pos}")
+                    self.logger.error(f"[CALIBRAÇÃO] Falha ao testar posição {pos}")
+                    self.config_robo.velocidade_normal = velocidade_original
                     return False
 
-            # Retornar para home
-            self.robot_service.move_home()
+                # Pausa entre movimentos (recomendado para evitar problemas de desaceleração)
+                time.sleep(0.5)
 
-            self.logger.info("Calibração concluída com sucesso")
+            # Retornar para home
+            self.logger.info("[CALIBRAÇÃO] Retornando para posição home...")
+            self.robot_service.move_home()
+            time.sleep(1.0)
+
+            # Restaurar velocidade original
+            self.config_robo.velocidade_normal = velocidade_original
+
+            self.logger.info("[CALIBRAÇÃO] ✅ Calibração concluída com sucesso!")
+            self.logger.info("[CALIBRAÇÃO] Todas as 9 posições foram testadas com segurança")
             return True
 
         except Exception as e:
-            self.logger.error(f"Erro na calibração: {e}")
+            self.logger.error(f"[CALIBRAÇÃO] Erro durante calibração: {e}")
+            # Tentar restaurar velocidade original
+            try:
+                self.config_robo.velocidade_normal = velocidade_original
+            except:
+                pass
             return False
 
     # ====================== MÉTODOS AUXILIARES ======================
