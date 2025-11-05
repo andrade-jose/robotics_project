@@ -23,6 +23,7 @@ class RobotStatus(Enum):
     CONNECTED = "connected"
     READY = "ready"
     MOVING = "moving"
+    IDLE = "idle"
     ERROR = "error"
     EMERGENCY_STOP = "emergency_stop"
 

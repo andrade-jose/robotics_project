@@ -9,20 +9,8 @@ import math
 
 from logic_control.ur_controller import URController
 from config.config_completa import CONFIG, ConfigRobo
-from utils.tapatan_board import gerar_tabuleiro_tapatan
 from diagnostics.robot_diagnostics import RobotDiagnostics
-from interfaces.robot_interfaces import IGameService, RobotStatus as IRobotStatus
-
-# Usando RobotStatus da interface e adicionando estados específicos
-class RobotStatus(Enum):
-    DISCONNECTED = "disconnected"
-    CONNECTED = "connected"
-    MOVING = "moving"
-    IDLE = "idle"
-    READY = "ready"  # Da interface
-    ERROR = "error"
-    EMERGENCY_STOP = "emergency_stop"
-    VALIDATING = "validating"
+from interfaces.robot_interfaces import IGameService, RobotStatus
 
 class MovementType(Enum):
     LINEAR = "linear"
@@ -105,7 +93,6 @@ class RobotService(IGameService):
         self.controller: Optional[URController] = None
         self.status = RobotStatus.DISCONNECTED
         self.last_error: Optional[str] = None
-        self.poses = gerar_tabuleiro_tapatan
 
         # Converter ConfigRobo para formato dict compatível (temporário)
         self.config = self._convert_config_to_dict()

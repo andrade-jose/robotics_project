@@ -58,55 +58,71 @@ class TapatanInterface:
     - TapatanOrchestrator: Lógica do jogo e controle do robô
     """
 
-    def __init__(self):
-        """Inicializa a interface principal (modo produção)."""
-        # Configurações
+    def __init__(self, test_mode: bool = False):
+        """
+        Inicializa a interface principal.
+
+        Args:
+            test_mode: Se True, usa configurações de teste. Se False, usa produção.
+        """
+        # Configurações (ajustadas para modo teste se necessário)
         self.config_robo = ConfigRobo()
-        self.config_jogo = ConfigJogo()
+        if test_mode:
+            self.config_robo.pausa_entre_jogadas = 1.0
+            self.config_robo.velocidade_padrao = 0.05
+            self.config_robo.auto_calibrar = False
+
+        self.config_jogo = ConfigJogo(profundidade_ia=3 if test_mode else 5, debug_mode=test_mode)
+        self.test_mode = test_mode
 
         # Orquestrador do jogo
         try:
             self.orquestrador = TapatanOrchestrator(self.config_robo, self.config_jogo)
-            print("✅ Orquestrador do jogo inicializado.")
+            modo_str = "TESTE" if test_mode else "PRODUÇÃO"
+            print(f"[OK] Orquestrador do jogo inicializado em MODO {modo_str}.")
         except Exception as e:
-            print(f"❌ Falha ao inicializar o Orquestrador: {e}")
+            print(f"[ERRO] Falha ao inicializar o Orquestrador: {e}")
             self.orquestrador = None
 
         # Componentes da UI e integração
-        self.game_display = GameDisplay(vision_available=VISION_AVAILABLE)
-        self.vision_integration = VisionIntegration() if VISION_AVAILABLE else None
+        # Em modo teste, sempre desativa visão
+        vision_mode = VISION_AVAILABLE and not test_mode
+        self.game_display = GameDisplay(vision_available=vision_mode)
+        self.vision_integration = VisionIntegration() if vision_mode else None
         self.menu_manager = MenuManager(self.orquestrador, self.vision_integration)
 
-        print("\n🎮 TapatanInterface inicializada")
-        if VISION_AVAILABLE:
-            print("📹 Sistema de visão disponível")
+        print("\n[SISTEMA] TapatanInterface inicializada")
+        if test_mode:
+            print("[TESTE] Modo de teste ativado - visão desativada")
+        elif vision_mode:
+            print("[VISAO] Sistema de visão disponível")
         else:
-            print("⚠️ Sistema de visão não disponível - continuará sem visão")
+            print("[AVISO] Sistema de visão não disponível - continuará sem visão")
 
     # ========== INICIALIZAÇÃO E FINALIZAÇÃO ==========
 
     def inicializar_sistema(self) -> bool:
         """Inicializa os componentes principais do sistema."""
-        print("🚀 Inicializando sistema Tapatan...")
+        print("[SISTEMA] Inicializando sistema Tapatan...")
 
         if not self.orquestrador:
-            print("❌ Orquestrador não foi criado. Não é possível inicializar.")
+            print("[ERRO] Orquestrador não foi criado. Não é possível inicializar.")
             return False
 
         try:
             if self.orquestrador.inicializar():
-                print("✅ Sistema robótico inicializado com sucesso!")
+                print("[OK] Sistema robótico inicializado com sucesso!")
                 return True
             else:
-                print("❌ Falha na inicialização do sistema robótico!")
+                print("[ERRO] Falha na inicialização do sistema robótico!")
                 return False
         except Exception as e:
-            print(f"❌ Erro na inicialização: {e}")
+            print(f"[ERRO] Erro na inicialização: {e}")
             return False
 
     def finalizar_sistema(self):
         """Finaliza todos os sistemas de forma segura."""
-        print("\n🔚 Finalizando sistema...")
+        print("\n[SISTEMA] Finalizando sistema...")
 
         if self.vision_integration and self.vision_integration.vision_active:
             self.vision_integration.parar_sistema_visao()
@@ -114,7 +130,7 @@ class TapatanInterface:
         if self.orquestrador:
             self.orquestrador.finalizar()
 
-        print("✅ Sistema finalizado!")
+        print("[OK] Sistema finalizado!")
 
     # ========== EXECUÇÃO DA PARTIDA ==========
 
@@ -129,10 +145,10 @@ class TapatanInterface:
         4. Finalização
         """
         if not self.orquestrador:
-            print("❌ Orquestrador não inicializado! Impossível iniciar.")
+            print("[ERRO] Orquestrador não inicializado! Impossível iniciar.")
             return
 
-        print("\n🎮 Iniciando nova partida...")
+        print("\n[INICIO] Iniciando nova partida...")
 
         # Prepara sistema de visão se disponível
         usar_visao = False
@@ -156,6 +172,11 @@ class TapatanInterface:
             while True:
                 estado_jogo = self.orquestrador.game_service.obter_estado_jogo()
 
+                if usar_visao and self.vision_integration:
+                    if not self.vision_integration.vision_active:
+                        print("[AVISO] Sistema de visão parou - continuando sem visão")
+                        usar_visao = False
+
                 # Mostra tabuleiro (com ou sem visão)
                 if usar_visao:
                     estado_visao = self.vision_integration.obter_estado_visao()
@@ -167,7 +188,7 @@ class TapatanInterface:
 
                 # Verifica fim de jogo
                 if estado_jogo['jogo_terminado']:
-                    print("🎉 Jogo terminado!")
+                    print("[OK] Jogo terminado!")
                     input("   Pressione ENTER para voltar ao menu...")
                     break
 
@@ -185,41 +206,41 @@ class TapatanInterface:
                     resultado = self.orquestrador.processar_jogada_humano(**jogada)
 
                     if not resultado['sucesso']:
-                        print(f"   ❌ Erro: {resultado.get('mensagem', 'Jogada inválida')}")
+                        print(f"   [ERRO] Erro: {resultado.get('mensagem', 'Jogada inválida')}")
                         time.sleep(1)
                         continue
 
-                    print("   ✅ Sua jogada foi processada!")
+                    print("   [OK] Sua jogada foi processada!")
 
                     # Se o robô respondeu imediatamente
                     if 'jogada_robo' in resultado:
                         jr = resultado['jogada_robo']['jogada']
                         if 'posicao' in jr:
-                            print(f"   🤖 Robô respondeu colocando na pos {jr['posicao']}")
+                            print(f"   [ROBO] Robô respondeu colocando na pos {jr['posicao']}")
                         else:
-                            print(f"   🤖 Robô respondeu movendo de {jr['origem']} para {jr['destino']}")
+                            print(f"   [ROBO] Robô respondeu movendo de {jr['origem']} para {jr['destino']}")
                         self.game_display.aguardar_confirmacao_robo()
 
                 # Turno do robô (jogador 1)
                 elif estado_jogo['jogador_atual'] == 1:
-                    input("   🤖 Vez do robô. Pressione ENTER para ele jogar...")
+                    input("   [ROBO] Vez do robô. Pressione ENTER para ele jogar...")
                     resultado = self.orquestrador.executar_jogada_robo()
 
                     if resultado['sucesso']:
                         j = resultado['jogada']
                         if 'posicao' in j:
-                            print(f"   🤖 Robô colocou na posição {j['posicao']}")
+                            print(f"   [ROBO] Robô colocou na posição {j['posicao']}")
                         else:
-                            print(f"   🤖 Robô moveu de {j['origem']} para {j['destino']}")
+                            print(f"   [ROBO] Robô moveu de {j['origem']} para {j['destino']}")
                         self.game_display.aguardar_confirmacao_robo()
                     else:
-                        print(f"❌ Erro na jogada do robô: {resultado['mensagem']}")
+                        print(f"[ERRO] Erro na jogada do robô: {resultado['mensagem']}")
                         break
 
         except KeyboardInterrupt:
-            print("\n\n🛑 Partida interrompida!")
+            print("\n\n[PARADA] Partida interrompida!")
         except Exception as e:
-            print(f"\n❌ Erro fatal durante a partida: {e}")
+            print(f"\n[ERRO] Erro fatal durante a partida: {e}")
             traceback.print_exc()
         finally:
             if usar_visao and self.vision_integration:
@@ -242,141 +263,37 @@ class TapatanInterface:
                         break
                     self.executar_partida()
 
-                print("\n👋 Até logo!")
+                print("\n[OK] Até logo!")
 
             except Exception as e:
-                print(f"❌ Erro inesperado na execução: {e}")
+                print(f"[ERRO] Erro inesperado na execução: {e}")
                 traceback.print_exc()
         else:
-            print("❌ Não foi possível inicializar o sistema!")
-
-        self.finalizar_sistema()
-
-
-class TapatanTestInterface(TapatanInterface):
-    """
-    Interface de teste que herda da principal para reutilizar código
-    e sobrepõe apenas o necessário para o modo de teste.
-    """
-
-    def __init__(self):
-        """Inicializa a interface em modo de teste."""
-        # Configurações específicas de teste
-        self.config_robo = ConfigRobo()
-        self.config_robo.pausa_entre_jogadas = 1.0
-        self.config_robo.velocidade_padrao = 0.05
-        self.config_robo.auto_calibrar = False
-
-        self.config_jogo = ConfigJogo(profundidade_ia=3, debug_mode=True)
-
-        # Orquestrador com configs de teste
-        try:
-            self.orquestrador = TapatanOrchestrator(self.config_robo, self.config_jogo)
-            print("✅ Orquestrador do jogo inicializado em MODO TESTE.")
-        except Exception as e:
-            print(f"❌ Falha ao inicializar o Orquestrador em MODO TESTE: {e}")
-            self.orquestrador = None
-
-        # Componentes da UI (sem visão no modo teste)
-        self.game_display = GameDisplay(vision_available=False)
-        self.vision_integration = None
-        self.menu_manager = MenuManager(self.orquestrador, None)
-
-        print("🧪 TapatanTestInterface inicializada.")
-
-    def mostrar_banner_teste(self):
-        """Mostra o banner específico para o modo de teste."""
-        print("=" * 70)
-        print("       🧪 TAPATAN ROBÓTICO - MODO TESTE 🤖")
-        print("=" * 70)
-        print("  Testando movimentação e lógica do jogo (SEM visão)")
-        print("=" * 70)
-
-    def executar_partida(self):
-        """Executa uma partida simplificada para testes, sem visão."""
-        if not self.orquestrador or not self.orquestrador.iniciar_partida():
-            print("❌ Erro ao iniciar a partida de teste!")
-            return
-
-        print("\n🧪 Iniciando partida de teste (sem visão)...")
-
-        try:
-            while True:
-                estado_jogo = self.orquestrador.game_service.obter_estado_jogo()
-                self.game_display.mostrar_tabuleiro(estado_jogo)
-                self.game_display.mostrar_info_jogo(estado_jogo)
-
-                if estado_jogo['jogo_terminado']:
-                    print("🎉 Jogo de teste terminado!")
-                    input("   Pressione ENTER para voltar ao menu...")
-                    break
-
-                if estado_jogo['jogador_atual'] == 2:
-                    jogada = self.game_display.obter_jogada_humano(estado_jogo)
-                    if jogada is None:
-                        break
-
-                    resultado = self.orquestrador.processar_jogada_humano(**jogada)
-                    if not resultado['sucesso']:
-                        print(f"   ❌ Erro: {resultado.get('mensagem', 'Jogada inválida')}")
-                        continue
-
-                    print("   ✅ Sua jogada foi processada!")
-                    if 'jogada_robo' in resultado:
-                        self.game_display.aguardar_confirmacao_robo()
-
-                elif estado_jogo['jogador_atual'] == 1:
-                    input("   🤖 Vez do robô. Pressione ENTER para ele jogar...")
-                    resultado = self.orquestrador.executar_jogada_robo()
-                    if resultado['sucesso']:
-                        self.game_display.aguardar_confirmacao_robo()
-                    else:
-                        print(f"❌ Erro na jogada do robô: {resultado['mensagem']}")
-                        break
-
-        except KeyboardInterrupt:
-            print("\n\n🛑 Partida de teste interrompida!")
-        except Exception as e:
-            print(f"\n❌ Erro fatal na partida de teste: {e}")
-
-    def executar(self):
-        """Ponto de entrada para o modo de teste."""
-        self.mostrar_banner_teste()
-
-        if self.inicializar_sistema():
-            try:
-                while True:
-                    deve_executar_partida = self.menu_manager.menu_principal()
-                    if not deve_executar_partida:
-                        break
-                    self.executar_partida()
-
-                print("\n👋 Até logo!")
-
-            except Exception as e:
-                print(f"❌ Erro inesperado na execução: {e}")
-                traceback.print_exc()
-        else:
-            print("❌ Não foi possível inicializar o sistema!")
+            print("[ERRO] Não foi possível inicializar o sistema!")
 
         self.finalizar_sistema()
 
 
 def main():
-    """Função principal que decide qual interface instanciar."""
-    if "--test" in sys.argv:
-        print("🧪 Modo TESTE ativado")
-        interface = TapatanTestInterface()
-    else:
-        print("🎮 Modo PRODUÇÃO ativado")
-        interface = TapatanInterface()
+    """
+    Função principal que cria a interface apropriada baseado em argumentos da linha de comando.
+
+    Argumentos:
+        --test: Ativa modo de teste (sem visão, velocidades reduzidas)
+    """
+    test_mode = "--test" in sys.argv
+    modo_str = "TESTE" if test_mode else "PRODUÇÃO"
+    print(f"[SISTEMA] Modo {modo_str} ativado")
+
+    # Factory pattern: criar instância com configuração apropriada
+    interface = TapatanInterface(test_mode=test_mode)
 
     try:
         interface.executar()
     except KeyboardInterrupt:
-        print("\n\n👋 Programa interrompido pelo usuário!")
+        print("\n\n[OK] Programa interrompido pelo usuário!")
     except Exception as e:
-        print(f"❌ Erro fatal e não tratado na execução: {e}")
+        print(f"[ERRO] Erro fatal e não tratado na execução: {e}")
         traceback.print_exc()
 
 
