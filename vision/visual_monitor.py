@@ -163,6 +163,23 @@ class VisualMonitor:
     def _draw_marker_axes(self, frame: np.ndarray, marker_info: MarkerInfo):
         """Desenha eixos 3D do marcador"""
         try:
+            # Verificar se temos dados válidos de pose
+            if not hasattr(marker_info, 'position') or not hasattr(marker_info, 'rotation'):
+                return
+                
+            rvec = marker_info.rotation
+            tvec = marker_info.position
+            
+            # CORREÇÃO: Verificar se os vetores não são None e têm formato correto
+            if rvec is None or tvec is None:
+                return
+                
+            # CORREÇÃO: Garantir que são arrays 3x1
+            if rvec.size == 3:
+                rvec = rvec.reshape(3, 1)
+            if tvec.size == 3:
+                tvec = tvec.reshape(3, 1)
+                
             # Pontos dos eixos no espaço 3D
             axis_points = np.array([
                 [0, 0, 0],  # Origem
@@ -174,14 +191,19 @@ class VisualMonitor:
             # Projetar para imagem
             axis_2d, _ = cv2.projectPoints(
                 axis_points,
-                marker_info.rotation,
-                marker_info.position,
+                rvec,
+                tvec,
                 self.vision_system.camera_matrix,
                 self.vision_system.dist_coeffs
             )
             
             # Converter para inteiros
             axis_2d = axis_2d.reshape(-1, 2).astype(int)
+            
+            # CORREÇÃO: Verificar se temos pontos suficientes
+            if len(axis_2d) < 4:
+                return
+                
             origin = tuple(axis_2d[0])
             
             # Desenhar eixos coloridos
@@ -195,33 +217,45 @@ class VisualMonitor:
     def _draw_text_with_background(self, frame: np.ndarray, text: str, position: Tuple[int, int], color: Tuple[int, int, int]):
         """Desenha texto com fundo para melhor visibilidade"""
         try:
-            # Garantir que posição é tupla de int
-            if isinstance(position, np.ndarray):
-                x, y = int(position.flat[0]), int(position.flat[1])
+            # CORREÇÃO: Converter qualquer array numpy para escalares inteiros
+            if hasattr(position, '__iter__'):
+                # Se for numpy array ou lista, extrair os primeiros dois elementos
+                position_list = list(position)
+                if len(position_list) >= 2:
+                    x = int(float(position_list[0]))
+                    y = int(float(position_list[1]))
+                else:
+                    self.logger.debug(f"Posição inválida: {position}")
+                    return
             else:
-                x, y = int(position[0]), int(position[1])
+                self.logger.debug(f"Posição não iterável: {position}")
+                return
 
             # Calcular tamanho do texto
-            text_size, baseline = cv2.getTextSize(
+            text_size = cv2.getTextSize(
                 text, self.font, self.font_scale, self.font_thickness
             )
-            text_width, text_height = text_size
-
-            # Converter para int para evitar erros de tipo
-            text_width = int(text_width)
-            text_height = int(text_height)
-            baseline = int(baseline)
+            text_width, text_height = text_size[0]
+            baseline = text_size[1]
 
             # Desenhar fundo (retângulo)
-            pt1 = (x - 5, y - text_height - 5)
-            pt2 = (x + text_width + 5, y + baseline + 5)
-            cv2.rectangle(frame, pt1, pt2, self.colors['background'], -1)
+            padding = 5
+            pt1 = (x - padding, y - text_height - padding)
+            pt2 = (x + text_width + padding, y + baseline + padding)
+            
+            # Garantir coordenadas válidas
+            pt1 = (max(0, pt1[0]), max(0, pt1[1]))
+            pt2 = (min(frame.shape[1], pt2[0]), min(frame.shape[0], pt2[1]))
+            
+            # Verificar se as coordenadas são válidas
+            if pt1[0] < pt2[0] and pt1[1] < pt2[1]:
+                cv2.rectangle(frame, pt1, pt2, self.colors['background'], -1)
 
             # Desenhar texto
             cv2.putText(frame, text, (x, y), self.font, self.font_scale, color, self.font_thickness)
 
         except Exception as e:
-            self.logger.debug(f"Erro ao desenhar texto: {e}")
+            self.logger.debug(f"Erro ao desenhar texto '{text}' na posição {position}: {e}")
     
     def _draw_status_panel(self, frame: np.ndarray, detection_result: Dict[str, Any]):
         """Desenha painel de status no canto da tela"""
@@ -419,6 +453,42 @@ class VisualMonitor:
             self.logger.error(f"Erro ao criar resumo: {e}")
             return "Erro no resumo"
     
+    def show_image(self, image: np.ndarray, window_name: str = "Vision System") -> bool:
+        """
+        Mostra imagem na janela com tratamento de erro robusto
+        
+        Returns:
+            bool: True se conseguiu mostrar, False caso contrário
+        """
+        try:
+            # Verificar se a imagem é válida
+            if image is None or image.size == 0:
+                self.logger.debug("Imagem vazia ou inválida")
+                return False
+                
+            # Tentar mostrar a imagem
+            cv2.imshow(window_name, image)
+            
+            # Verificar se a janela foi criada corretamente
+            try:
+                prop = cv2.getWindowProperty(window_name, cv2.WND_PROP_VISIBLE)
+                return prop >= 0  # Retorna True se a janela está visível
+            except:
+                # Se não conseguiu verificar a propriedade, assume que funcionou
+                return True
+                
+        except Exception as e:
+            self.logger.warning(f"Display não disponível: {e}")
+            return False
+
+    def wait_key(self, delay: int = 1) -> int:
+        """Espera por tecla com tratamento de erro robusto"""
+        try:
+            key = cv2.waitKey(delay) & 0xFF
+            return key
+        except Exception as e:
+            self.logger.debug(f"Erro ao esperar tecla: {e}")
+            return 113  # Retorna 'q' para sair
     def toggle_debug_view(self):
         """Alterna visualização de debug"""
         self.show_debug = not self.show_debug

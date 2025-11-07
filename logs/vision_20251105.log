@@ -1,0 +1,42 @@
+2025-11-05 10:16:14 - vision.vision.vision_logger - INFO - _setup_logger:92 - VisionLogger inicializado para 'vision.vision_logger'
+2025-11-05 10:17:37 - vision.vision.vision_logger - INFO - _setup_logger:92 - VisionLogger inicializado para 'vision.vision_logger'
+2025-11-05 10:17:44 - vision.vision.vision_logger - INFO - _setup_logger:92 - VisionLogger inicializado para 'vision.vision_logger'
+2025-11-05 10:20:02 - vision.vision.vision_logger - INFO - _setup_logger:92 - VisionLogger inicializado para 'vision.vision_logger'
+2025-11-05 10:22:31 - vision.vision.aruco_vision - INFO - _setup_logger:92 - VisionLogger inicializado para 'vision.aruco_vision'
+2025-11-05 10:22:31 - vision.vision.camera_manager - INFO - _setup_logger:92 - VisionLogger inicializado para 'vision.camera_manager'
+2025-11-05 10:22:31 - vision.vision.camera_manager - INFO - info:100 - [INFO] CameraManager inicializado com configurações do projeto
+2025-11-05 10:22:31 - vision.vision.visual_monitor - INFO - _setup_logger:92 - VisionLogger inicializado para 'vision.visual_monitor'
+2025-11-05 10:22:31 - vision.vision.visual_monitor - INFO - info:100 - [INFO] VisualMonitor inicializado
+2025-11-05 10:31:58 - vision.vision.vision_logger - INFO - _setup_logger:92 - VisionLogger inicializado para 'vision.vision_logger'
+2025-11-05 10:32:04 - vision.vision.aruco_vision - INFO - _setup_logger:92 - VisionLogger inicializado para 'vision.aruco_vision'
+2025-11-05 10:32:04 - vision.vision.camera_manager - INFO - _setup_logger:92 - VisionLogger inicializado para 'vision.camera_manager'
+2025-11-05 10:32:04 - vision.vision.camera_manager - INFO - info:100 - [INFO] CameraManager inicializado com configurações do projeto
+2025-11-05 10:32:04 - vision.vision.visual_monitor - INFO - _setup_logger:92 - VisionLogger inicializado para 'vision.visual_monitor'
+2025-11-05 10:32:04 - vision.vision.visual_monitor - INFO - info:100 - [INFO] VisualMonitor inicializado
+2025-11-05 10:32:04 - vision.vision.camera_manager - INFO - info:100 - [INFO] Tentando inicializar câmera 1
+2025-11-05 10:32:07 - vision.vision.camera_manager - DEBUG - debug:96 - [DEBUG] Câmera configurada: 640x480
+2025-11-05 10:32:08 - vision.vision.camera_manager - INFO - info:100 - [INFO] Câmera 1 inicializada: 640x480@30fps (DirectShow)
+2025-11-05 10:32:08 - vision.vision.camera_manager - DEBUG - performance:120 - [PERFORMANCE] FPS atual: 18.1
+2025-11-05 10:32:08 - vision.vision.visual_monitor - DEBUG - debug:96 - [DEBUG] Erro ao desenhar texto 'ID:0' na posição (array([239, 417]), array([240, 393]), array([268, 395]), array([266, 421])): only length-1 arrays can be converted to Python scalars
+2025-11-05 10:32:09 - vision.vision.camera_manager - INFO - info:100 - [INFO] Câmera 1 liberada
+2025-11-05 10:44:12 - vision.vision.vision_logger - INFO - _setup_logger:92 - VisionLogger inicializado para 'vision.vision_logger'
+2025-11-05 10:44:21 - vision.vision.aruco_vision - INFO - _setup_logger:92 - VisionLogger inicializado para 'vision.aruco_vision'
+2025-11-05 10:44:21 - vision.vision.camera_manager - INFO - _setup_logger:92 - VisionLogger inicializado para 'vision.camera_manager'
+2025-11-05 10:44:21 - vision.vision.camera_manager - INFO - info:100 - [INFO] CameraManager inicializado com configurações do projeto
+2025-11-05 10:44:21 - vision.vision.visual_monitor - INFO - _setup_logger:92 - VisionLogger inicializado para 'vision.visual_monitor'
+2025-11-05 10:44:21 - vision.vision.visual_monitor - INFO - info:100 - [INFO] VisualMonitor inicializado
+2025-11-05 10:44:21 - vision.vision.camera_manager - INFO - info:100 - [INFO] Tentando inicializar câmera 1
+2025-11-05 10:44:24 - vision.vision.camera_manager - DEBUG - debug:96 - [DEBUG] Câmera configurada: 640x480
+2025-11-05 10:44:25 - vision.vision.camera_manager - INFO - info:100 - [INFO] Câmera 1 inicializada: 640x480@30fps (DirectShow)
+2025-11-05 10:44:25 - vision.vision.camera_manager - DEBUG - performance:120 - [PERFORMANCE] FPS atual: 31.1
+2025-11-05 10:44:25 - vision.vision.visual_monitor - DEBUG - debug:96 - [DEBUG] Erro ao desenhar texto 'ID:0' na posição (array([239, 417]), array([240, 393]), array([268, 395]), array([266, 421])): only length-1 arrays can be converted to Python scalars
+2025-11-05 10:44:26 - vision.vision.camera_manager - INFO - info:100 - [INFO] Câmera 1 liberada
+2025-11-05 10:44:36 - vision.vision.camera_manager - INFO - info:100 - [INFO] CameraManager inicializado com configurações do projeto
+2025-11-05 10:44:36 - vision.vision.visual_monitor - INFO - info:100 - [INFO] VisualMonitor inicializado
+2025-11-05 10:44:36 - vision.vision.camera_manager - INFO - info:100 - [INFO] Tentando inicializar câmera 1
+2025-11-05 10:44:38 - vision.vision.camera_manager - DEBUG - debug:96 - [DEBUG] Câmera configurada: 640x480
+2025-11-05 10:44:39 - vision.vision.camera_manager - INFO - info:100 - [INFO] Câmera 1 inicializada: 640x480@30fps (DirectShow)
+2025-11-05 10:44:39 - vision.vision.camera_manager - DEBUG - performance:120 - [PERFORMANCE] FPS atual: 31.2
+2025-11-05 10:44:39 - vision.vision.visual_monitor - DEBUG - debug:96 - [DEBUG] Erro ao desenhar texto 'ID:0' na posição (array([239, 418]), array([240, 393]), array([268, 395]), array([266, 421])): only length-1 arrays can be converted to Python scalars
+2025-11-05 10:44:39 - vision.vision.visual_monitor - DEBUG - debug:96 - [DEBUG] Erro ao desenhar texto 'ID:7' na posição (array([259,  82]), array([232,  84]), array([230,  58]), array([257,  55])): only length-1 arrays can be converted to Python scalars
+2025-11-05 10:44:40 - vision.vision.camera_manager - INFO - info:100 - [INFO] Câmera 1 liberada

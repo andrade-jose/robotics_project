@@ -77,11 +77,26 @@ class VisionIntegration:
             print("[VISAO] Inicializando sistema de visão...")
             self.vision_system, self.camera_manager, self.visual_monitor = create_vision_system()
 
-            if not self.camera_manager.initialize_camera():
-                print("[AVISO] Câmera não disponível - jogo continuará sem visão")
-                return False
+            # Usar método correto para inicializar câmera
+            if not self.camera_manager.initialize_camera(1):  # Camera ID 1
+                print("[AVISO] Câmera não disponível - tentando câmera 0...")
+                if not self.camera_manager.initialize_camera(0):  # Fallback para câmera 0
+                    print("[AVISO] Nenhuma câmera disponível - jogo continuará sem visão")
+                    return False
 
-            # Inicializar display
+            # CORREÇÃO: Inicializar display de forma robusta
+            self._inicializar_display_visao()
+
+            print("[OK] Sistema de visão inicializado!")
+            return True
+
+        except Exception as e:
+            print(f"[ERRO] Erro ao inicializar visão: {e}")
+            return False
+
+    def _inicializar_display_visao(self):
+        """Inicializa o display de visão com fallbacks"""
+        try:
             if VisionDisplay:
                 self.vision_display = VisionDisplay(
                     window_name="Tapatan Vision System",
@@ -92,13 +107,10 @@ class VisionIntegration:
                 print(f"[VISAO] Display iniciado: {status['mode']}")
                 if status['web_url']:
                     print(f"[VISAO] Acesse o stream em: {status['web_url']}")
-
-            print("[OK] Sistema de visão inicializado!")
-            return True
-
+            else:
+                print("[VISAO] VisionDisplay não disponível, usando OpenCV nativo")
         except Exception as e:
-            print(f"[ERRO] Erro ao inicializar visão: {e}")
-            return False
+            print(f"[VISAO] Erro ao inicializar display: {e}")
 
     def parar_sistema_visao(self):
         """Para a thread de visão e libera a câmera."""
@@ -134,11 +146,73 @@ class VisionIntegration:
         self.vision_thread.start()
         print("[VISAO] Sistema de visão ativo em background")
 
+    def _processar_exibicao_visao(self, frame, detections):
+        """Processa a exibição da visão com tratamento de erro robusto"""
+        if not self.show_vision_window:
+            return
+
+        try:
+            # Desenhar overlay de detecções
+            display_frame = self.visual_monitor.draw_detection_overlay(frame, detections)
+
+            # Tentar exibir usando VisionDisplay se disponível
+            if self.vision_display:
+                key = self.vision_display.show_frame(display_frame, wait_key_time=1)
+                self._processar_teclas_visao(key)
+            else:
+                # Fallback: OpenCV nativo
+                self._mostrar_janela_opencv(display_frame)
+
+        except Exception as e:
+            print(f"[VISAO] Erro na exibição: {e}")
+            # Desativar janela se houver erro persistente
+            self.show_vision_window = False
+
+    def _mostrar_janela_opencv(self, frame):
+        """Mostra janela usando OpenCV nativo com tratamento de erro"""
+        try:
+            cv2.imshow("Sistema de Visão - Tapatan", frame)
+            key = cv2.waitKey(1) & 0xFF
+            self._processar_teclas_visao(key)
+            return True
+        except cv2.error as e:
+            if "window" in str(e).lower():
+                print("[VISAO] Janela fechada ou não suportada")
+                self.show_vision_window = False
+                return False
+            else:
+                print(f"[VISAO] Erro OpenCV: {e}")
+                return False
+        except Exception as e:
+            print(f"[VISAO] Erro ao mostrar janela: {e}")
+            return False
+
+    def _processar_teclas_visao(self, key):
+        """Processa teclas pressionadas na janela de visão"""
+        if key == ord('q') or key == 27:  # 'q' ou ESC
+            print("[VISAO] Tecla de saída detectada")
+            self.vision_active = False
+        elif key == ord('c'):  # Calibrar
+            print("[VISAO] Tentando calibrar...")
+            if self.vision_system and self.current_detections:
+                self.vision_system.calibrate_system(self.current_detections)
+
+    def _fechar_janelas_visao(self):
+        """Fecha todas as janelas de visão"""
+        try:
+            cv2.destroyAllWindows()
+            print("[VISAO] Janelas fechadas")
+        except Exception as e:
+            # Ignora erros em ambientes sem display
+            pass
+
     def _loop_visao(self):
         """Loop principal da visão executado na thread."""
+        print("[VISAO] Iniciando loop de processamento de visão...")
+
         while self.vision_active:
             try:
-                # Captura frame da câmera
+                # Usar método correto para capturar frame
                 frame = self.camera_manager.capture_frame()
                 if frame is None:
                     time.sleep(0.1)
@@ -157,24 +231,8 @@ class VisionIntegration:
                         self.vision_calibrated = True
                         print("\n[EXECUTANDO] Sistema de visão calibrado automaticamente!")
 
-                # Mostra janela de visualização se habilitada
-                if self.show_vision_window and self.vision_display:
-                    display_frame = self.visual_monitor.draw_detection_overlay(frame, detections)
-
-                    # Exibir frame no display (nativo OpenCV ou web stream)
-                    key = self.vision_display.show_frame(display_frame, wait_key_time=1)
-
-                    # Processar entradas do teclado (apenas em modo OpenCV nativo)
-                    if key is not None:
-                        if key == ord('q'):
-                            self.vision_active = False
-                            break
-                        elif key == ord('c'):
-                            self._calibrar_visao_manual(detections)
-                        elif key == ord('s'):
-                            filename = f"tapatan_vision_{int(time.time())}.jpg"
-                            cv2.imwrite(filename, display_frame)
-                            print(f"[INFO] Screenshot salvo como {filename}")
+                # CORREÇÃO: Mostrar janela com tratamento robusto
+                self._processar_exibicao_visao(frame, detections)
 
                 time.sleep(0.03)  # ~30 FPS
 
@@ -182,12 +240,8 @@ class VisionIntegration:
                 print(f"[ERRO] Erro no loop de visão: {e}")
                 time.sleep(1)
 
-        if self.show_vision_window:
-            try:
-                cv2.destroyAllWindows()
-            except Exception as e:
-                # Windows headless ou sem suporte a GUI - apenas log
-                pass
+        # CORREÇÃO: Fechar janelas ao finalizar
+        self._fechar_janelas_visao()
 
     # ========== PROCESSAMENTO DE DETECÇÕES ==========
 

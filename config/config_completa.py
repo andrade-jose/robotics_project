@@ -20,7 +20,7 @@ class ConfigRobo:
     """Configurações completas e consolidadas para o robô UR3e."""
 
     # === CONEXÃO ===
-    ip: str = "10.1.7.30"
+    ip: str = "10.1.5.163"
     porta: int = 30004
 
     # === MODELO UR (Fixo em UR3e) ===

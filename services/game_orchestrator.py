@@ -401,7 +401,7 @@ class TapatanOrchestrator:
             # Restaurar velocidade original
             self.config_robo.velocidade_normal = velocidade_original
 
-            self.logger.info("[CALIBRAÇÃO] ✅ Calibração concluída com sucesso!")
+            self.logger.info("[CALIBRAÇÃO] Calibração concluída com sucesso!")
             self.logger.info("[CALIBRAÇÃO] Todas as 9 posições foram testadas com segurança")
             return True
 

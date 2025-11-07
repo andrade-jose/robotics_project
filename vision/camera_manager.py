@@ -328,43 +328,43 @@ class CameraManager:
 
 # Teste se executado diretamente
 if __name__ == "__main__":
-    print("🧪 Teste do CameraManager")
-    
+    print("[TESTE] Teste do CameraManager")
+
     try:
         # Criar gerenciador
         manager = CameraManager()
-        
+
         # Escanear câmeras
         cameras = manager.scan_available_cameras()
         print(f"Câmeras encontradas: {len(cameras)}")
         for cam in cameras:
-            status = "✅" if cam.is_available else "❌"
+            status = "[OK]" if cam.is_available else "[ERRO]"
             print(f"  {status} Câmera {cam.index}: {cam.resolution[0]}x{cam.resolution[1]}")
-        
+
         # Tentar inicializar
         if manager.initialize_camera():
-            print("✅ Câmera inicializada com sucesso")
-            
+            print("[OK] Câmera inicializada com sucesso")
+
             # Capturar alguns frames de teste
             for i in range(5):
                 frame = manager.capture_frame()
                 if frame is not None:
                     print(f"Frame {i+1}: {frame.shape}")
                 time.sleep(0.1)
-            
+
             # Status final
             status = manager.get_camera_status()
             print(f"Status final: FPS={status.get('fps_actual', 0):.1f}")
-            
+
         else:
-            print("❌ Falha ao inicializar câmera")
-        
+            print("[ERRO] Falha ao inicializar câmera")
+
     except Exception as e:
-        print(f"❌ Erro no teste: {e}")
-    
+        print(f"[ERRO] Erro no teste: {e}")
+
     finally:
         try:
             manager.release()
         except:
             pass
-        print("✅ Teste concluído")
+        print("[OK] Teste concluído")

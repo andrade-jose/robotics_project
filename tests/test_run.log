@@ -1,0 +1,102 @@
+INFO     test_calibration_detector:calibration_marker_detector.py:119 [CALIB] CalibrationMarkerDetector inicializado (distância esperada: 270.0mm)
+INFO     test_calibration_detector:calibration_marker_detector.py:119 [CALIB] CalibrationMarkerDetector inicializado (distância esperada: 270.0mm)
+WARNING  test_calibration_detector:calibration_marker_detector.py:135 [CALIB] Frame é None!
+INFO     test_calibration_detector:calibration_marker_detector.py:119 [CALIB] CalibrationMarkerDetector inicializado (distância esperada: 270.0mm)
+DEBUG    test_calibration_detector:calibration_marker_detector.py:159 [CALIB] Esperava 2 marcadores, encontrou 0
+INFO     test_calibration_detector:calibration_marker_detector.py:119 [CALIB] CalibrationMarkerDetector inicializado (distância esperada: 270.0mm)
+DEBUG    test_calibration_detector:calibration_marker_detector.py:159 [CALIB] Esperava 2 marcadores, encontrou 1
+INFO     test_calibration_detector:calibration_marker_detector.py:119 [CALIB] CalibrationMarkerDetector inicializado (distância esperada: 270.0mm)
+INFO     test_calibration_detector:calibration_marker_detector.py:119 [CALIB] CalibrationMarkerDetector inicializado (distância esperada: 270.0mm)
+INFO     test_calibration_detector:calibration_marker_detector.py:119 [CALIB] CalibrationMarkerDetector inicializado (distância esperada: 270.0mm)
+INFO     test_calibration_detector:calibration_marker_detector.py:119 [CALIB] CalibrationMarkerDetector inicializado (distância esperada: 270.0mm)
+INFO     test_calibration_detector:calibration_marker_detector.py:119 [CALIB] CalibrationMarkerDetector inicializado (distância esperada: 270.0mm)
+WARNING  test_calibration_detector:calibration_marker_detector.py:302 [CALIB] Distância muito pequena: 10.0px < 50px
+INFO     test_calibration_detector:calibration_marker_detector.py:119 [CALIB] CalibrationMarkerDetector inicializado (distância esperada: 270.0mm)
+INFO     test_transform:board_transform_calculator.py:123 [TRANSFORM] Matriz de transformação construída (escala=1.0000 px/mm, confiança=1.00)
+INFO     vision.board_transform_calculator:board_transform_calculator.py:123 [TRANSFORM] Matriz de transformação construída (escala=1.0000 px/mm, confiança=1.00)
+INFO     vision.board_transform_calculator:board_transform_calculator.py:123 [TRANSFORM] Matriz de transformação construída (escala=1.0000 px/mm, confiança=1.00)
+INFO     vision.board_transform_calculator:board_transform_calculator.py:123 [TRANSFORM] Matriz de transformação construída (escala=1.0000 px/mm, confiança=1.00)
+INFO     vision.board_transform_calculator:board_transform_calculator.py:123 [TRANSFORM] Matriz de transformação construída (escala=1.0000 px/mm, confiança=1.00)
+INFO     vision.board_transform_calculator:board_transform_calculator.py:310 [TRANSFORM] Validação de transformação passou
+INFO     vision.board_transform_calculator:board_transform_calculator.py:123 [TRANSFORM] Matriz de transformação construída (escala=1.0000 px/mm, confiança=1.00)
+INFO     test_grid_gen:grid_generator.py:126 [GRID] Gerando grid 3x3 (tamanho célula: 90.00mm)
+DEBUG    test_grid_gen:grid_generator.py:155 [GRID] Posição 0: (45.0, 45.0) mm [OK]
+DEBUG    test_grid_gen:grid_generator.py:155 [GRID] Posição 1: (135.0, 45.0) mm [OK]
+DEBUG    test_grid_gen:grid_generator.py:155 [GRID] Posição 2: (225.0, 45.0) mm [OK]
+DEBUG    test_grid_gen:grid_generator.py:155 [GRID] Posição 3: (45.0, 135.0) mm [OK]
+DEBUG    test_grid_gen:grid_generator.py:155 [GRID] Posição 4: (135.0, 135.0) mm [OK]
+DEBUG    test_grid_gen:grid_generator.py:155 [GRID] Posição 5: (225.0, 135.0) mm [OK]
+DEBUG    test_grid_gen:grid_generator.py:155 [GRID] Posição 6: (45.0, 225.0) mm [OK]
+DEBUG    test_grid_gen:grid_generator.py:155 [GRID] Posição 7: (135.0, 225.0) mm [OK]
+DEBUG    test_grid_gen:grid_generator.py:155 [GRID] Posição 8: (225.0, 225.0) mm [OK]
+INFO     test_grid_gen:grid_generator.py:162 [GRID] Grid gerado com 9 células
+INFO     vision.board_transform_calculator:board_transform_calculator.py:123 [TRANSFORM] Matriz de transformação construída (escala=1.0000 px/mm, confiança=1.00)
+INFO     vision.grid_generator:grid_generator.py:126 [GRID] Gerando grid 3x3 (tamanho célula: 90.00mm)
+INFO     vision.grid_generator:grid_generator.py:162 [GRID] Grid gerado com 9 células
+INFO     vision.board_transform_calculator:board_transform_calculator.py:123 [TRANSFORM] Matriz de transformação construída (escala=1.0000 px/mm, confiança=1.00)
+INFO     vision.grid_generator:grid_generator.py:126 [GRID] Gerando grid 3x3 (tamanho célula: 90.00mm)
+INFO     vision.grid_generator:grid_generator.py:162 [GRID] Grid gerado com 9 células
+INFO     vision.board_transform_calculator:board_transform_calculator.py:123 [TRANSFORM] Matriz de transformação construída (escala=1.0000 px/mm, confiança=1.00)
+INFO     vision.grid_generator:grid_generator.py:126 [GRID] Gerando grid 3x3 (tamanho célula: 90.00mm)
+INFO     vision.grid_generator:grid_generator.py:162 [GRID] Grid gerado com 9 células
+INFO     vision.board_transform_calculator:board_transform_calculator.py:123 [TRANSFORM] Matriz de transformação construída (escala=1.0000 px/mm, confiança=1.00)
+INFO     vision.grid_generator:grid_generator.py:126 [GRID] Gerando grid 3x3 (tamanho célula: 90.00mm)
+INFO     vision.grid_generator:grid_generator.py:162 [GRID] Grid gerado com 9 células
+INFO     vision.board_transform_calculator:board_transform_calculator.py:123 [TRANSFORM] Matriz de transformação construída (escala=1.0000 px/mm, confiança=1.00)
+INFO     vision.grid_generator:grid_generator.py:126 [GRID] Gerando grid 3x3 (tamanho célula: 90.00mm)
+INFO     vision.grid_generator:grid_generator.py:162 [GRID] Grid gerado com 9 células
+INFO     vision.grid_generator:grid_generator.py:322 [GRID] Todas as 9 células estão dentro dos limites
+INFO     vision.board_transform_calculator:board_transform_calculator.py:123 [TRANSFORM] Matriz de transformação construída (escala=1.0000 px/mm, confiança=1.00)
+INFO     vision.grid_generator:grid_generator.py:126 [GRID] Gerando grid 3x3 (tamanho célula: 90.00mm)
+INFO     vision.grid_generator:grid_generator.py:162 [GRID] Grid gerado com 9 células
+INFO     vision.board_transform_calculator:board_transform_calculator.py:123 [TRANSFORM] Matriz de transformação construída (escala=1.0000 px/mm, confiança=1.00)
+INFO     vision.grid_generator:grid_generator.py:126 [GRID] Gerando grid 3x3 (tamanho célula: 90.00mm)
+INFO     vision.grid_generator:grid_generator.py:162 [GRID] Grid gerado com 9 células
+INFO     vision.workspace_validator:workspace_validator.py:125 [WORKSPACE] Restrições construídas X: [-10.0, 280.0] mm, Y: [-10.0, 280.0] mm, Margem de segurança: 10.0 mm
+INFO     vision.board_transform_calculator:board_transform_calculator.py:123 [TRANSFORM] Matriz de transformação construída (escala=1.0000 px/mm, confiança=1.00)
+INFO     vision.grid_generator:grid_generator.py:126 [GRID] Gerando grid 3x3 (tamanho célula: 90.00mm)
+INFO     vision.grid_generator:grid_generator.py:162 [GRID] Grid gerado com 9 células
+INFO     vision.workspace_validator:workspace_validator.py:125 [WORKSPACE] Restrições construídas X: [-10.0, 280.0] mm, Y: [-10.0, 280.0] mm, Margem de segurança: 10.0 mm
+INFO     vision.board_transform_calculator:board_transform_calculator.py:123 [TRANSFORM] Matriz de transformação construída (escala=1.0000 px/mm, confiança=1.00)
+INFO     vision.grid_generator:grid_generator.py:126 [GRID] Gerando grid 3x3 (tamanho célula: 90.00mm)
+INFO     vision.grid_generator:grid_generator.py:162 [GRID] Grid gerado com 9 células
+INFO     vision.workspace_validator:workspace_validator.py:125 [WORKSPACE] Restrições construídas X: [-10.0, 280.0] mm, Y: [-10.0, 280.0] mm, Margem de segurança: 10.0 mm
+WARNING  vision.workspace_validator:workspace_validator.py:157 [WORKSPACE] Posição inválida: -1 (fora de 0-8)
+WARNING  vision.workspace_validator:workspace_validator.py:157 [WORKSPACE] Posição inválida: 9 (fora de 0-8)
+WARNING  vision.workspace_validator:workspace_validator.py:157 [WORKSPACE] Posição inválida: 100 (fora de 0-8)
+INFO     vision.board_transform_calculator:board_transform_calculator.py:123 [TRANSFORM] Matriz de transformação construída (escala=1.0000 px/mm, confiança=1.00)
+INFO     vision.grid_generator:grid_generator.py:126 [GRID] Gerando grid 3x3 (tamanho célula: 90.00mm)
+INFO     vision.grid_generator:grid_generator.py:162 [GRID] Grid gerado com 9 células
+INFO     vision.workspace_validator:workspace_validator.py:125 [WORKSPACE] Restrições construídas X: [-10.0, 280.0] mm, Y: [-10.0, 280.0] mm, Margem de segurança: 10.0 mm
+INFO     vision.board_transform_calculator:board_transform_calculator.py:123 [TRANSFORM] Matriz de transformação construída (escala=1.0000 px/mm, confiança=1.00)
+INFO     vision.grid_generator:grid_generator.py:126 [GRID] Gerando grid 3x3 (tamanho célula: 90.00mm)
+INFO     vision.grid_generator:grid_generator.py:162 [GRID] Grid gerado com 9 células
+INFO     vision.workspace_validator:workspace_validator.py:125 [WORKSPACE] Restrições construídas X: [-10.0, 280.0] mm, Y: [-10.0, 280.0] mm, Margem de segurança: 10.0 mm
+WARNING  vision.workspace_validator:workspace_validator.py:246 [WORKSPACE] Origem e destino são iguais
+INFO     vision.board_transform_calculator:board_transform_calculator.py:123 [TRANSFORM] Matriz de transformação construída (escala=1.0000 px/mm, confiança=1.00)
+INFO     vision.grid_generator:grid_generator.py:126 [GRID] Gerando grid 3x3 (tamanho célula: 90.00mm)
+INFO     vision.grid_generator:grid_generator.py:162 [GRID] Grid gerado com 9 células
+INFO     vision.workspace_validator:workspace_validator.py:125 [WORKSPACE] Restrições construídas X: [-10.0, 280.0] mm, Y: [-10.0, 280.0] mm, Margem de segurança: 10.0 mm
+WARNING  vision.workspace_validator:workspace_validator.py:252 [WORKSPACE] Posição de destino 4 está ocupada
+INFO     vision.board_transform_calculator:board_transform_calculator.py:123 [TRANSFORM] Matriz de transformação construída (escala=1.0000 px/mm, confiança=1.00)
+INFO     vision.grid_generator:grid_generator.py:126 [GRID] Gerando grid 3x3 (tamanho célula: 90.00mm)
+INFO     vision.grid_generator:grid_generator.py:162 [GRID] Grid gerado com 9 células
+INFO     vision.workspace_validator:workspace_validator.py:125 [WORKSPACE] Restrições construídas X: [-10.0, 280.0] mm, Y: [-10.0, 280.0] mm, Margem de segurança: 10.0 mm
+INFO     vision.board_transform_calculator:board_transform_calculator.py:123 [TRANSFORM] Matriz de transformação construída (escala=1.0000 px/mm, confiança=1.00)
+INFO     vision.grid_generator:grid_generator.py:126 [GRID] Gerando grid 3x3 (tamanho célula: 90.00mm)
+INFO     vision.grid_generator:grid_generator.py:162 [GRID] Grid gerado com 9 células
+INFO     vision.workspace_validator:workspace_validator.py:125 [WORKSPACE] Restrições construídas X: [-10.0, 280.0] mm, Y: [-10.0, 280.0] mm, Margem de segurança: 10.0 mm
+WARNING  vision.workspace_validator:workspace_validator.py:252 [WORKSPACE] Posição de destino 0 está ocupada
+WARNING  vision.workspace_validator:workspace_validator.py:246 [WORKSPACE] Origem e destino são iguais
+WARNING  vision.workspace_validator:workspace_validator.py:252 [WORKSPACE] Posição de destino 8 está ocupada
+INFO     vision.board_transform_calculator:board_transform_calculator.py:123 [TRANSFORM] Matriz de transformação construída (escala=1.0000 px/mm, confiança=1.00)
+INFO     vision.grid_generator:grid_generator.py:126 [GRID] Gerando grid 3x3 (tamanho célula: 90.00mm)
+INFO     vision.grid_generator:grid_generator.py:162 [GRID] Grid gerado com 9 células
+INFO     vision.workspace_validator:workspace_validator.py:125 [WORKSPACE] Restrições construídas X: [-10.0, 280.0] mm, Y: [-10.0, 280.0] mm, Margem de segurança: 10.0 mm
+INFO     vision.workspace_validator:workspace_validator.py:337 [WORKSPACE] Todas as 9 posições estão dentro dos limites
+INFO     test_orchestrator:calibration_orchestrator.py:116 [CALIB] CalibrationOrchestrator inicializado (distância=270.0mm, smoothing=3)
+INFO     test_orchestrator:calibration_orchestrator.py:116 [CALIB] CalibrationOrchestrator inicializado (distância=270.0mm, smoothing=3)
+INFO     test_orchestrator:calibration_orchestrator.py:116 [CALIB] CalibrationOrchestrator inicializado (distância=270.0mm, smoothing=3)
+WARNING  test_orchestrator:calibration_orchestrator.py:323 [CALIB] Sistema não calibrado
+INFO     test_orchestrator:calibration_orchestrator.py:116 [CALIB] CalibrationOrchestrator inicializado (distância=270.0mm, smoothing=3)
+WARNING  test_orchestrator:calibration_orchestrator.py:347 [CALIB] Sistema não calibrado

@@ -285,3 +285,829 @@
 2025-10-31 14:00:02,961 - RobotService - INFO - [EXECUTANDO] Movendo para posição home
 2025-10-31 14:00:03,024 - RobotService - INFO - [CONEXAO] Robô desconectado
 2025-10-31 14:00:03,024 - TapatanOrchestrator - INFO - Orquestrador finalizado
+2025-11-03 10:50:15,842 - TapatanOrchestrator - INFO - Iniciando orquestrador Tapatan...
+2025-11-03 10:50:15,845 - RobotService - INFO - [CONEXAO] Conectando ao robô em 10.1.7.30...
+2025-11-03 10:50:17,664 - RobotService - INFO - [OK] Robô conectado com sucesso
+2025-11-03 10:50:17,664 - RobotService - INFO - [SEGURANCA] Modo de segurança: HABILITADO
+2025-11-03 10:50:17,664 - RobotService - INFO - [EXECUTANDO] Movendo para posição home
+2025-11-03 10:50:17,777 - TapatanOrchestrator - INFO - Robô inicializado e em posição home
+2025-11-03 10:50:17,777 - TapatanOrchestrator - WARNING - [AVISO] Usando coordenadas temporárias
+2025-11-03 10:50:17,777 - TapatanOrchestrator - INFO - [GRID] Tabuleiro gerado centrado em HOME (-0.200, -0.267): 9 posições (10cm espaçamento)
+2025-11-03 10:50:17,778 - TapatanOrchestrator - INFO - Orquestrador inicializado com sucesso!
+2025-11-03 10:50:24,427 - vision.vision.aruco_vision - INFO - VisionLogger inicializado para 'vision.aruco_vision'
+2025-11-03 10:50:24,428 - vision.vision.camera_manager - INFO - VisionLogger inicializado para 'vision.camera_manager'
+2025-11-03 10:50:24,428 - vision.vision.camera_manager - INFO - [INFO] CameraManager inicializado com configurações do projeto
+2025-11-03 10:50:24,432 - vision.vision.visual_monitor - INFO - VisionLogger inicializado para 'vision.visual_monitor'
+2025-11-03 10:50:24,436 - vision.vision.visual_monitor - INFO - [INFO] VisualMonitor inicializado
+2025-11-03 10:50:24,437 - vision.vision.camera_manager - INFO - [INFO] Tentando inicializar câmera 1
+2025-11-03 10:50:26,400 - vision.vision.camera_manager - DEBUG - [DEBUG] Câmera configurada: 640x480
+2025-11-03 10:50:27,318 - vision.vision.camera_manager - INFO - [INFO] Câmera 1 inicializada: 640x480@30fps (DirectShow)
+2025-11-03 10:50:27,354 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 26.9
+2025-11-03 10:50:28,364 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.9
+2025-11-03 10:50:29,369 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.5
+2025-11-03 10:50:30,375 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.3
+2025-11-03 10:50:31,379 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.2
+2025-11-03 10:50:32,384 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.2
+2025-11-03 10:50:33,390 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.2
+2025-11-03 10:50:34,396 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.1
+2025-11-03 10:50:35,403 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.1
+2025-11-03 10:50:36,407 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.1
+2025-11-03 10:50:37,413 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.1
+2025-11-03 10:50:38,418 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.1
+2025-11-03 10:50:39,424 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.1
+2025-11-03 10:50:40,431 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.1
+2025-11-03 10:50:41,440 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.1
+2025-11-03 10:50:42,447 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.1
+2025-11-03 10:50:43,453 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.1
+2025-11-03 10:50:44,459 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.1
+2025-11-03 10:50:45,466 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:50:46,472 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:50:47,477 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:50:48,482 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:50:49,496 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:50:50,501 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:50:51,507 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:50:52,513 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:50:53,519 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:50:54,523 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:50:55,531 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:50:56,536 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:50:57,542 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:50:58,549 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:50:59,555 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:51:00,560 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:51:01,568 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:51:02,577 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:51:03,583 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:51:04,588 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:51:05,594 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:51:06,600 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:51:07,605 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:51:08,611 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:51:09,616 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:51:10,622 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:51:11,628 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:51:12,633 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:51:13,638 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:51:14,643 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:51:15,650 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:51:16,657 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:51:17,663 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:51:18,670 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:51:19,676 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:51:20,682 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:51:21,692 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:51:22,698 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:51:23,703 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:51:24,709 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:51:25,716 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:51:26,721 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:51:27,727 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:51:28,733 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:51:29,737 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:51:30,742 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:51:31,749 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:51:32,754 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:51:33,760 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:51:34,767 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:51:35,773 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:51:36,779 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:51:37,784 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:51:38,790 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:51:39,796 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:51:40,802 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:51:41,807 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:51:42,831 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:51:43,838 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:51:44,845 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:51:45,852 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:51:46,858 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:51:47,869 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:51:48,876 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:51:49,882 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:51:50,888 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:51:51,894 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:51:52,900 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:51:53,912 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:51:54,918 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:51:55,923 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:51:56,928 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:51:57,935 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:51:58,941 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:51:59,946 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:52:00,956 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:52:01,962 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:52:02,969 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:52:03,974 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:52:04,980 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:52:06,007 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:52:07,015 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:52:08,020 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:52:09,026 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:52:10,032 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:52:11,038 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:52:12,044 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:52:13,051 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:52:14,056 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:52:15,063 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:52:16,068 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:52:17,075 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:52:18,080 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:52:19,087 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:52:20,093 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:52:21,098 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:52:22,103 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:52:23,109 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:52:24,115 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:52:25,121 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:52:26,127 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:52:27,134 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:52:28,142 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:52:29,147 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:52:30,154 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:52:31,163 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:52:32,169 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:52:33,174 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:52:34,179 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:52:35,186 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:52:36,192 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:52:37,198 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:52:38,203 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:52:39,209 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:52:40,214 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:52:41,218 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:52:42,223 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:52:43,229 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:52:44,234 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:52:45,241 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:52:46,246 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:52:47,251 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:52:48,258 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:52:49,264 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:52:50,269 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:52:51,275 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:52:52,283 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:52:53,289 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:52:54,296 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:52:55,302 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:52:56,311 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:52:57,317 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:52:58,325 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:52:59,330 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:53:00,336 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:53:01,344 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:53:02,354 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:53:03,359 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:53:04,366 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:53:05,373 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:53:06,380 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:53:07,386 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:53:08,393 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:53:09,400 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:53:10,406 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:53:11,411 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:53:12,418 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:53:13,423 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:53:14,430 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:53:15,435 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:53:16,441 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:53:17,447 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:53:18,452 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:53:19,457 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:53:20,462 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:53:21,468 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:53:22,474 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:53:23,479 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:53:24,483 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:53:25,489 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:53:26,494 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:53:27,499 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:53:28,505 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:53:29,510 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:53:30,517 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:53:31,521 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:53:32,526 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:53:33,531 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:53:34,549 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:53:35,554 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:53:36,559 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:53:37,564 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:53:38,571 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:53:39,577 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:53:40,585 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:53:41,592 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:53:42,598 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:53:43,607 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:53:44,613 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:53:45,618 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:53:46,623 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:53:47,630 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:53:48,636 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:53:49,640 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:53:50,647 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:53:51,653 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:53:52,659 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:53:53,665 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:53:54,671 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:53:55,678 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:53:56,684 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:53:57,689 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:53:58,695 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:53:59,700 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:54:00,705 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:54:01,712 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:54:02,717 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:54:03,722 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:54:04,733 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:54:05,740 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:54:06,745 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:54:07,756 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:54:08,761 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:54:09,766 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:54:10,774 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:54:11,780 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:54:12,788 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:54:13,794 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:54:14,800 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:54:15,805 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:54:16,810 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:54:17,815 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:54:18,821 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:54:19,825 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:54:20,830 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:54:21,835 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:54:22,840 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:54:23,847 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:54:24,853 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:54:25,859 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:54:26,864 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:54:27,869 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:54:28,876 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:54:29,881 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:54:30,887 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:54:31,892 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:54:32,897 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:54:33,902 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:54:34,909 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:54:35,914 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:54:36,919 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:54:37,925 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:54:38,930 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:54:39,934 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:54:40,939 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:54:41,944 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:54:42,950 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:54:43,957 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:54:44,961 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:54:45,966 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:54:46,971 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:54:47,976 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:54:48,983 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:54:49,987 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:54:50,992 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:54:51,998 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:54:53,004 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:54:54,009 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:54:55,016 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:54:56,020 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:54:57,025 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:54:58,031 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:54:59,036 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:55:00,042 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:55:01,048 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:55:02,054 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:55:03,059 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:55:04,065 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:55:05,073 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:55:06,084 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:55:07,092 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:55:08,099 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:55:09,104 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:55:10,110 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:55:11,118 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:55:12,134 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:55:13,142 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:55:14,148 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:55:15,154 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:55:16,160 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:55:17,170 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:55:18,176 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:55:19,184 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:55:20,189 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:55:21,194 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:55:22,202 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:55:23,208 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:55:24,213 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:55:25,217 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:55:26,224 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:55:27,232 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:55:28,240 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:55:29,247 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:55:30,252 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:55:31,261 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:55:32,268 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:55:33,276 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:55:34,282 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:55:35,287 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:55:36,294 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:55:37,301 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:55:38,306 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:55:39,313 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:55:40,318 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:55:41,325 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:55:42,336 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:55:43,341 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:55:44,346 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:55:45,353 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:55:46,359 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:55:47,366 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:55:48,370 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:55:49,376 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:55:50,383 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:55:51,389 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:55:52,394 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:55:53,401 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:55:54,406 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:55:55,414 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:55:56,420 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:55:57,425 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:55:58,431 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:55:59,435 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:56:00,440 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:56:01,449 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:56:02,454 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:56:03,461 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:56:04,467 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:56:05,472 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:56:06,478 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:56:07,486 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:56:08,491 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:56:09,497 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:56:10,502 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:56:11,507 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:56:12,513 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:56:13,518 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:56:14,523 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:56:15,529 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:56:16,534 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:56:17,539 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:56:18,545 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:56:19,550 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:56:20,556 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:56:21,561 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:56:22,565 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:56:23,570 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:56:24,575 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:56:25,582 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:56:26,587 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:56:27,594 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:56:28,599 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:56:29,605 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:56:30,611 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:56:31,618 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:56:32,632 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:56:33,640 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:56:34,646 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:56:35,652 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:56:36,657 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:56:37,662 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:56:38,671 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:56:39,677 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:56:40,681 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:56:41,686 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:56:42,692 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:56:43,702 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:56:44,707 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:56:45,712 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:56:46,717 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:56:47,722 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:56:48,727 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:56:49,734 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:56:50,740 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:56:51,746 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:56:52,752 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:56:53,756 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:56:54,762 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:56:55,767 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:56:56,771 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:56:57,777 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:56:58,782 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:56:59,788 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:57:00,794 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:57:01,800 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:57:02,807 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:57:03,812 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:57:04,819 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:57:05,826 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:57:06,831 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:57:07,838 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:57:08,845 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:57:09,851 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:57:10,856 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:57:11,860 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:57:12,867 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:57:13,874 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:57:14,879 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:57:15,884 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:57:16,891 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:57:17,896 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:57:18,901 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:57:19,906 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:57:20,910 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:57:21,916 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:57:22,920 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:57:23,927 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:57:24,933 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:57:25,938 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:57:26,944 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:57:27,948 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:57:28,953 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:57:29,958 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:57:30,963 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:57:31,969 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:57:32,977 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:57:33,983 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:57:34,988 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:57:35,993 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:57:36,998 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:57:38,003 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:57:39,007 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:57:40,012 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:57:41,017 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:57:42,021 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:57:43,026 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:57:44,031 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:57:45,037 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:57:46,042 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:57:47,317 - vision.vision.camera_manager - INFO - [INFO] Câmera 1 liberada
+2025-11-03 10:58:17,945 - TapatanOrchestrator - INFO - Iniciando orquestrador Tapatan...
+2025-11-03 10:58:17,948 - RobotService - INFO - [CONEXAO] Conectando ao robô em 10.1.7.30...
+2025-11-03 10:58:19,905 - RobotService - INFO - [OK] Robô conectado com sucesso
+2025-11-03 10:58:19,906 - RobotService - INFO - [SEGURANCA] Modo de segurança: HABILITADO
+2025-11-03 10:58:19,906 - RobotService - INFO - [EXECUTANDO] Movendo para posição home
+2025-11-03 10:58:20,020 - TapatanOrchestrator - INFO - Robô inicializado e em posição home
+2025-11-03 10:58:20,020 - TapatanOrchestrator - WARNING - [AVISO] Usando coordenadas temporárias
+2025-11-03 10:58:20,020 - TapatanOrchestrator - INFO - [GRID] Tabuleiro gerado centrado em HOME (-0.200, -0.267): 9 posições (10cm espaçamento)
+2025-11-03 10:58:20,020 - TapatanOrchestrator - INFO - Orquestrador inicializado com sucesso!
+2025-11-03 10:58:26,023 - vision.vision.aruco_vision - INFO - VisionLogger inicializado para 'vision.aruco_vision'
+2025-11-03 10:58:26,024 - vision.vision.camera_manager - INFO - VisionLogger inicializado para 'vision.camera_manager'
+2025-11-03 10:58:26,025 - vision.vision.camera_manager - INFO - [INFO] CameraManager inicializado com configurações do projeto
+2025-11-03 10:58:26,025 - vision.vision.visual_monitor - INFO - VisionLogger inicializado para 'vision.visual_monitor'
+2025-11-03 10:58:26,025 - vision.vision.visual_monitor - INFO - [INFO] VisualMonitor inicializado
+2025-11-03 10:58:26,025 - vision.vision.camera_manager - INFO - [INFO] Tentando inicializar câmera 1
+2025-11-03 10:58:27,614 - vision.vision.camera_manager - DEBUG - [DEBUG] Câmera configurada: 640x480
+2025-11-03 10:58:28,501 - vision.vision.camera_manager - INFO - [INFO] Câmera 1 inicializada: 640x480@30fps (DirectShow)
+2025-11-03 10:58:28,530 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 33.7
+2025-11-03 10:58:29,541 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.9
+2025-11-03 10:58:30,546 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.5
+2025-11-03 10:58:31,554 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.3
+2025-11-03 10:58:32,559 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.2
+2025-11-03 10:58:33,567 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.2
+2025-11-03 10:58:34,576 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.2
+2025-11-03 10:58:35,582 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.1
+2025-11-03 10:58:36,588 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.1
+2025-11-03 10:58:37,595 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.1
+2025-11-03 10:58:38,600 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.1
+2025-11-03 10:58:39,609 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.1
+2025-11-03 10:58:40,613 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.1
+2025-11-03 10:58:41,618 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.1
+2025-11-03 10:58:42,624 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.1
+2025-11-03 10:58:43,631 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.1
+2025-11-03 10:58:43,745 - TapatanOrchestrator - INFO - Iniciando nova partida de Tapatan...
+2025-11-03 10:58:43,746 - RobotService - INFO - [EXECUTANDO] Movendo para posição home
+2025-11-03 10:58:44,279 - TapatanOrchestrator - INFO - Partida iniciada! Aguardando primeiro movimento...
+2025-11-03 10:58:44,636 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.1
+2025-11-03 10:58:45,642 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.1
+2025-11-03 10:58:46,647 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:58:47,653 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:58:48,660 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:58:49,027 - TapatanOrchestrator - INFO - Executando jogada do robô...
+2025-11-03 10:58:49,029 - RobotService - INFO - [INFO] Origem: Pose(x=-0.300, y=-0.367, z=0.050, rx=-0.001, ry=3.116, rz=0.039)
+2025-11-03 10:58:49,029 - RobotService - INFO - [INFO] Destino: Pose(x=-0.200, y=-0.267, z=0.050, rx=-0.001, ry=3.116, rz=0.039)
+2025-11-03 10:58:49,667 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:58:50,673 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:58:51,685 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:58:52,690 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:58:53,696 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:58:54,705 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:58:55,711 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:58:56,717 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 1.0
+2025-11-03 10:58:57,156 - RobotService - ERROR - [ERRO] Falha no pick and place
+2025-11-03 10:58:57,156 - TapatanOrchestrator - ERROR - [ERRO] Falha ao mover peça de 0 para 4
+2025-11-03 10:58:58,012 - vision.vision.camera_manager - INFO - [INFO] Câmera 1 liberada
+2025-11-03 11:23:05,916 - TapatanOrchestrator - INFO - Finalizando orquestrador...
+2025-11-03 11:23:05,916 - TapatanOrchestrator - INFO - Jogo parado
+2025-11-03 11:23:05,916 - RobotService - INFO - [EXECUTANDO] Movendo para posição home
+2025-11-03 11:23:13,916 - RobotService - INFO - [CONEXAO] Robô desconectado
+2025-11-03 11:23:13,916 - TapatanOrchestrator - INFO - Orquestrador finalizado
+2025-11-03 11:23:22,372 - TapatanOrchestrator - INFO - Iniciando orquestrador Tapatan...
+2025-11-03 11:23:22,375 - RobotService - INFO - [CONEXAO] Conectando ao robô em 10.1.7.30...
+2025-11-03 11:23:23,489 - RobotService - INFO - [OK] Robô conectado com sucesso
+2025-11-03 11:23:23,489 - RobotService - INFO - [SEGURANCA] Modo de segurança: HABILITADO
+2025-11-03 11:23:23,489 - RobotService - INFO - [EXECUTANDO] Movendo para posição home
+2025-11-03 11:23:23,544 - TapatanOrchestrator - INFO - Robô inicializado e em posição home
+2025-11-03 11:23:23,544 - TapatanOrchestrator - WARNING - [AVISO] Usando coordenadas temporárias
+2025-11-03 11:23:23,544 - TapatanOrchestrator - INFO - [GRID] Tabuleiro gerado centrado em HOME (-0.200, -0.267): 9 posições (10cm espaçamento)
+2025-11-03 11:23:23,544 - TapatanOrchestrator - INFO - Orquestrador inicializado com sucesso!
+2025-11-03 11:23:52,023 - TapatanOrchestrator - INFO - Iniciando calibração do sistema...
+2025-11-03 11:23:52,025 - RobotService - INFO - [EXECUTANDO] Movendo para posição home
+2025-11-03 11:23:52,081 - TapatanOrchestrator - INFO - [CALIBRAÇÃO] Velocidade reduzida para 0.05 m/s (recomendação UR)
+2025-11-03 11:23:52,081 - TapatanOrchestrator - INFO - [CALIBRAÇÃO] Testando 9 posições do tabuleiro...
+2025-11-03 11:23:52,081 - TapatanOrchestrator - INFO - [CALIBRAÇÃO] Testando posição 4 (1/9)...
+2025-11-03 11:23:56,867 - TapatanOrchestrator - INFO - [CALIBRAÇÃO] Testando posição 0 (2/9)...
+2025-11-03 11:24:04,247 - TapatanOrchestrator - INFO - [CALIBRAÇÃO] Testando posição 2 (3/9)...
+2025-11-03 11:24:13,021 - TapatanOrchestrator - INFO - [CALIBRAÇÃO] Testando posição 6 (4/9)...
+2025-11-03 11:24:24,108 - TapatanOrchestrator - INFO - [CALIBRAÇÃO] Testando posição 8 (5/9)...
+2025-11-03 11:24:32,905 - TapatanOrchestrator - INFO - [CALIBRAÇÃO] Testando posição 1 (6/9)...
+2025-11-03 11:24:42,305 - TapatanOrchestrator - INFO - [CALIBRAÇÃO] Testando posição 3 (7/9)...
+2025-11-03 11:24:49,796 - TapatanOrchestrator - INFO - [CALIBRAÇÃO] Testando posição 5 (8/9)...
+2025-11-03 11:24:58,612 - TapatanOrchestrator - INFO - [CALIBRAÇÃO] Testando posição 7 (9/9)...
+2025-11-03 11:25:06,028 - TapatanOrchestrator - INFO - [CALIBRAÇÃO] Retornando para posição home...
+2025-11-03 11:25:06,028 - RobotService - INFO - [EXECUTANDO] Movendo para posição home
+2025-11-03 11:25:13,160 - TapatanOrchestrator - INFO - [CALIBRAÇÃO] Todas as 9 posições foram testadas com segurança
+2025-11-03 11:25:18,363 - vision.vision.aruco_vision - INFO - VisionLogger inicializado para 'vision.aruco_vision'
+2025-11-03 11:25:18,367 - vision.vision.camera_manager - INFO - VisionLogger inicializado para 'vision.camera_manager'
+2025-11-03 11:25:18,367 - vision.vision.camera_manager - INFO - [INFO] CameraManager inicializado com configurações do projeto
+2025-11-03 11:25:18,369 - vision.vision.visual_monitor - INFO - VisionLogger inicializado para 'vision.visual_monitor'
+2025-11-03 11:25:18,370 - vision.vision.visual_monitor - INFO - [INFO] VisualMonitor inicializado
+2025-11-03 11:25:18,370 - vision.vision.camera_manager - INFO - [INFO] Tentando inicializar câmera 1
+2025-11-03 11:25:20,995 - vision.vision.camera_manager - DEBUG - [DEBUG] Câmera configurada: 640x480
+2025-11-03 11:25:21,881 - vision.vision.camera_manager - INFO - [INFO] Câmera 1 inicializada: 640x480@30fps (DirectShow)
+2025-11-03 11:25:21,913 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 31.6
+2025-11-03 11:25:21,922 - vision.vision.visual_monitor - DEBUG - [DEBUG] Erro ao desenhar texto: too many values to unpack (expected 2)
+2025-11-03 11:25:23,940 - vision.vision.visual_monitor - DEBUG - [DEBUG] Erro ao desenhar texto: OpenCV(4.12.0) :-1: error: (-5:Bad argument) in function 'rectangle'
+> Overload resolution failed:
+>  - Can't parse 'pt1'. Sequence item with index 0 has a wrong type
+>  - Can't parse 'rec'. Expected sequence length 4, got 2
+>  - Can't parse 'pt1'. Sequence item with index 0 has a wrong type
+>  - Can't parse 'rec'. Expected sequence length 4, got 2
+
+2025-11-03 11:25:23,940 - vision.vision.visual_monitor - DEBUG - [DEBUG] Erro ao desenhar texto: too many values to unpack (expected 2)
+2025-11-03 11:25:23,941 - vision.vision.visual_monitor - DEBUG - [DEBUG] Erro ao desenhar texto: OpenCV(4.12.0) :-1: error: (-5:Bad argument) in function 'rectangle'
+> Overload resolution failed:
+>  - Can't parse 'pt1'. Sequence item with index 0 has a wrong type
+>  - Can't parse 'rec'. Expected sequence length 4, got 2
+>  - Can't parse 'pt1'. Sequence item with index 0 has a wrong type
+>  - Can't parse 'rec'. Expected sequence length 4, got 2
+
+2025-11-03 11:25:23,941 - vision.vision.visual_monitor - DEBUG - [DEBUG] Erro ao desenhar texto: too many values to unpack (expected 2)
+2025-11-03 11:25:23,942 - vision.vision.visual_monitor - DEBUG - [DEBUG] Erro ao desenhar texto: OpenCV(4.12.0) :-1: error: (-5:Bad argument) in function 'rectangle'
+> Overload resolution failed:
+>  - Can't parse 'pt1'. Sequence item with index 0 has a wrong type
+>  - Can't parse 'rec'. Expected sequence length 4, got 2
+>  - Can't parse 'pt1'. Sequence item with index 0 has a wrong type
+>  - Can't parse 'rec'. Expected sequence length 4, got 2
+
+2025-11-03 11:25:23,942 - vision.vision.visual_monitor - DEBUG - [DEBUG] Erro ao desenhar info de calibração: 'ArUcoVisionSystem' object has no attribute 'calibration_transform'
+2025-11-03 11:25:23,943 - vision.vision.visual_monitor - DEBUG - [DEBUG] Erro ao desenhar coordenadas: 'MarkerInfo' object has no attribute 'player_group'
+2025-11-03 11:25:24,260 - vision.vision.camera_manager - INFO - [INFO] Câmera 1 liberada
+2025-11-03 11:28:10,040 - TapatanOrchestrator - INFO - Finalizando orquestrador...
+2025-11-03 11:28:10,041 - RobotService - INFO - [EXECUTANDO] Movendo para posição home
+2025-11-03 11:28:10,101 - RobotService - INFO - [CONEXAO] Robô desconectado
+2025-11-03 11:28:10,101 - TapatanOrchestrator - INFO - Orquestrador finalizado
+2025-11-03 11:31:59,731 - TapatanOrchestrator - INFO - Iniciando orquestrador Tapatan...
+2025-11-03 11:31:59,734 - RobotService - INFO - [CONEXAO] Conectando ao robô em 10.1.7.30...
+2025-11-03 11:32:01,359 - RobotService - INFO - [OK] Robô conectado com sucesso
+2025-11-03 11:32:01,359 - RobotService - INFO - [SEGURANCA] Modo de segurança: HABILITADO
+2025-11-03 11:32:01,359 - RobotService - INFO - [EXECUTANDO] Movendo para posição home
+2025-11-03 11:32:01,502 - TapatanOrchestrator - INFO - Robô inicializado e em posição home
+2025-11-03 11:32:01,502 - TapatanOrchestrator - WARNING - [AVISO] Usando coordenadas temporárias
+2025-11-03 11:32:01,502 - TapatanOrchestrator - INFO - [GRID] Tabuleiro gerado centrado em HOME (-0.200, -0.267): 9 posições (10cm espaçamento)
+2025-11-03 11:32:01,503 - TapatanOrchestrator - INFO - Orquestrador inicializado com sucesso!
+2025-11-03 11:32:10,098 - vision.vision.aruco_vision - INFO - VisionLogger inicializado para 'vision.aruco_vision'
+2025-11-03 11:32:10,102 - vision.vision.camera_manager - INFO - VisionLogger inicializado para 'vision.camera_manager'
+2025-11-03 11:32:10,102 - vision.vision.camera_manager - INFO - [INFO] CameraManager inicializado com configurações do projeto
+2025-11-03 11:32:10,105 - vision.vision.visual_monitor - INFO - VisionLogger inicializado para 'vision.visual_monitor'
+2025-11-03 11:32:10,105 - vision.vision.visual_monitor - INFO - [INFO] VisualMonitor inicializado
+2025-11-03 11:32:10,105 - vision.vision.camera_manager - INFO - [INFO] Tentando inicializar câmera 1
+2025-11-03 11:32:12,262 - vision.vision.camera_manager - DEBUG - [DEBUG] Câmera configurada: 640x480
+2025-11-03 11:32:13,148 - vision.vision.camera_manager - INFO - [INFO] Câmera 1 inicializada: 640x480@30fps (DirectShow)
+2025-11-03 11:32:13,178 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 31.4
+2025-11-03 11:32:13,189 - vision.vision.visual_monitor - DEBUG - [DEBUG] Erro ao desenhar texto: only length-1 arrays can be converted to Python scalars
+2025-11-03 11:32:13,190 - vision.vision.visual_monitor - DEBUG - [DEBUG] Erro ao desenhar texto: only length-1 arrays can be converted to Python scalars
+2025-11-03 11:32:13,190 - vision.vision.visual_monitor - DEBUG - [DEBUG] Erro ao desenhar texto: only length-1 arrays can be converted to Python scalars
+2025-11-03 11:32:13,190 - vision.vision.visual_monitor - DEBUG - [DEBUG] Erro ao desenhar texto: only length-1 arrays can be converted to Python scalars
+2025-11-03 11:32:13,190 - vision.vision.visual_monitor - DEBUG - [DEBUG] Erro ao desenhar texto: only length-1 arrays can be converted to Python scalars
+2025-11-03 11:32:13,190 - vision.vision.visual_monitor - DEBUG - [DEBUG] Erro ao desenhar texto: only length-1 arrays can be converted to Python scalars
+2025-11-03 11:32:13,925 - vision.vision.camera_manager - INFO - [INFO] Câmera 1 liberada
+2025-11-03 11:34:41,619 - TapatanOrchestrator - INFO - Finalizando orquestrador...
+2025-11-03 11:34:41,620 - RobotService - INFO - [EXECUTANDO] Movendo para posição home
+2025-11-03 11:34:41,710 - RobotService - INFO - [CONEXAO] Robô desconectado
+2025-11-03 11:34:41,710 - TapatanOrchestrator - INFO - Orquestrador finalizado
+2025-11-03 11:34:44,166 - TapatanOrchestrator - INFO - Iniciando orquestrador Tapatan...
+2025-11-03 11:34:44,170 - RobotService - INFO - [CONEXAO] Conectando ao robô em 10.1.7.30...
+2025-11-03 11:34:45,240 - RobotService - INFO - [OK] Robô conectado com sucesso
+2025-11-03 11:34:45,240 - RobotService - INFO - [SEGURANCA] Modo de segurança: HABILITADO
+2025-11-03 11:34:45,240 - RobotService - INFO - [EXECUTANDO] Movendo para posição home
+2025-11-03 11:34:45,286 - TapatanOrchestrator - INFO - Robô inicializado e em posição home
+2025-11-03 11:34:45,286 - TapatanOrchestrator - WARNING - [AVISO] Usando coordenadas temporárias
+2025-11-03 11:34:45,286 - TapatanOrchestrator - INFO - [GRID] Tabuleiro gerado centrado em HOME (-0.200, -0.267): 9 posições (10cm espaçamento)
+2025-11-03 11:34:45,286 - TapatanOrchestrator - INFO - Orquestrador inicializado com sucesso!
+2025-11-03 11:34:47,616 - vision.vision.aruco_vision - INFO - VisionLogger inicializado para 'vision.aruco_vision'
+2025-11-03 11:34:47,619 - vision.vision.camera_manager - INFO - VisionLogger inicializado para 'vision.camera_manager'
+2025-11-03 11:34:47,619 - vision.vision.camera_manager - INFO - [INFO] CameraManager inicializado com configurações do projeto
+2025-11-03 11:34:47,621 - vision.vision.visual_monitor - INFO - VisionLogger inicializado para 'vision.visual_monitor'
+2025-11-03 11:34:47,621 - vision.vision.visual_monitor - INFO - [INFO] VisualMonitor inicializado
+2025-11-03 11:34:47,622 - vision.vision.camera_manager - INFO - [INFO] Tentando inicializar câmera 1
+2025-11-03 11:34:49,657 - vision.vision.camera_manager - DEBUG - [DEBUG] Câmera configurada: 640x480
+2025-11-03 11:34:50,542 - vision.vision.camera_manager - INFO - [INFO] Câmera 1 inicializada: 640x480@30fps (DirectShow)
+2025-11-03 11:34:50,574 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 31.2
+2025-11-03 11:34:50,583 - vision.vision.visual_monitor - DEBUG - [DEBUG] Erro ao desenhar texto: only length-1 arrays can be converted to Python scalars
+2025-11-03 11:34:50,583 - vision.vision.visual_monitor - DEBUG - [DEBUG] Erro ao desenhar texto: only length-1 arrays can be converted to Python scalars
+2025-11-03 11:34:50,583 - vision.vision.visual_monitor - DEBUG - [DEBUG] Erro ao desenhar texto: only length-1 arrays can be converted to Python scalars
+2025-11-03 11:34:50,583 - vision.vision.visual_monitor - DEBUG - [DEBUG] Erro ao desenhar texto: only length-1 arrays can be converted to Python scalars
+2025-11-03 11:34:51,349 - vision.vision.camera_manager - INFO - [INFO] Câmera 1 liberada
+2025-11-03 11:35:06,366 - TapatanOrchestrator - INFO - Iniciando calibração do sistema...
+2025-11-03 11:35:06,367 - RobotService - INFO - [EXECUTANDO] Movendo para posição home
+2025-11-03 11:35:06,418 - TapatanOrchestrator - INFO - [CALIBRAÇÃO] Velocidade reduzida para 0.05 m/s (recomendação UR)
+2025-11-03 11:35:06,418 - TapatanOrchestrator - INFO - [CALIBRAÇÃO] Testando 9 posições do tabuleiro...
+2025-11-03 11:35:06,418 - TapatanOrchestrator - INFO - [CALIBRAÇÃO] Testando posição 4 (1/9)...
+2025-11-03 11:35:11,113 - TapatanOrchestrator - INFO - [CALIBRAÇÃO] Testando posição 0 (2/9)...
+2025-11-03 11:35:18,781 - TapatanOrchestrator - INFO - [CALIBRAÇÃO] Testando posição 2 (3/9)...
+2025-11-03 11:35:28,353 - TapatanOrchestrator - INFO - [CALIBRAÇÃO] Testando posição 6 (4/9)...
+2025-11-03 11:35:40,427 - TapatanOrchestrator - INFO - [CALIBRAÇÃO] Testando posição 8 (5/9)...
+2025-11-03 11:35:49,469 - TapatanOrchestrator - INFO - [CALIBRAÇÃO] Testando posição 1 (6/9)...
+2025-11-03 11:35:59,299 - TapatanOrchestrator - INFO - [CALIBRAÇÃO] Testando posição 3 (7/9)...
+2025-11-03 11:36:07,204 - TapatanOrchestrator - INFO - [CALIBRAÇÃO] Testando posição 5 (8/9)...
+2025-11-03 11:36:16,411 - TapatanOrchestrator - INFO - [CALIBRAÇÃO] Testando posição 7 (9/9)...
+2025-11-03 11:36:24,442 - TapatanOrchestrator - INFO - [CALIBRAÇÃO] Retornando para posição home...
+2025-11-03 11:36:24,443 - RobotService - INFO - [EXECUTANDO] Movendo para posição home
+2025-11-03 11:36:31,908 - TapatanOrchestrator - INFO - [CALIBRAÇÃO] Todas as 9 posições foram testadas com segurança
+2025-11-03 11:41:48,703 - TapatanOrchestrator - INFO - Iniciando orquestrador Tapatan...
+2025-11-03 11:41:48,706 - RobotService - INFO - [CONEXAO] Conectando ao robô em 10.1.7.30...
+2025-11-03 11:41:49,733 - RobotService - INFO - [OK] Robô conectado com sucesso
+2025-11-03 11:41:49,733 - RobotService - INFO - [SEGURANCA] Modo de segurança: HABILITADO
+2025-11-03 11:41:49,733 - RobotService - INFO - [EXECUTANDO] Movendo para posição home
+2025-11-03 11:41:49,855 - TapatanOrchestrator - INFO - Robô inicializado e em posição home
+2025-11-03 11:41:49,856 - TapatanOrchestrator - WARNING - [AVISO] Usando coordenadas temporárias
+2025-11-03 11:41:49,856 - TapatanOrchestrator - INFO - [GRID] Tabuleiro gerado centrado em HOME (-0.200, -0.267): 9 posições (10cm espaçamento)
+2025-11-03 11:41:49,856 - TapatanOrchestrator - INFO - Orquestrador inicializado com sucesso!
+2025-11-03 11:41:54,035 - vision.vision.aruco_vision - INFO - VisionLogger inicializado para 'vision.aruco_vision'
+2025-11-03 11:41:54,039 - vision.vision.camera_manager - INFO - VisionLogger inicializado para 'vision.camera_manager'
+2025-11-03 11:41:54,039 - vision.vision.camera_manager - INFO - [INFO] CameraManager inicializado com configurações do projeto
+2025-11-03 11:41:54,043 - vision.vision.visual_monitor - INFO - VisionLogger inicializado para 'vision.visual_monitor'
+2025-11-03 11:41:54,043 - vision.vision.visual_monitor - INFO - [INFO] VisualMonitor inicializado
+2025-11-03 11:41:54,043 - vision.vision.camera_manager - INFO - [INFO] Tentando inicializar câmera 1
+2025-11-03 11:41:56,228 - vision.vision.camera_manager - DEBUG - [DEBUG] Câmera configurada: 640x480
+2025-11-03 11:41:57,084 - vision.vision.camera_manager - INFO - [INFO] Câmera 1 inicializada: 640x480@30fps (DirectShow)
+2025-11-03 11:41:57,114 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 33.1
+2025-11-03 11:41:57,127 - vision.vision.visual_monitor - DEBUG - [DEBUG] Erro ao desenhar texto: only length-1 arrays can be converted to Python scalars
+2025-11-03 11:41:57,129 - vision.vision.visual_monitor - DEBUG - [DEBUG] Erro ao desenhar texto: only length-1 arrays can be converted to Python scalars
+2025-11-03 11:41:57,129 - vision.vision.visual_monitor - DEBUG - [DEBUG] Erro ao desenhar texto: only length-1 arrays can be converted to Python scalars
+2025-11-03 11:41:57,129 - vision.vision.visual_monitor - DEBUG - [DEBUG] Erro ao desenhar texto: only length-1 arrays can be converted to Python scalars
+2025-11-03 11:41:57,130 - vision.vision.visual_monitor - DEBUG - [DEBUG] Erro ao desenhar texto: only length-1 arrays can be converted to Python scalars
+2025-11-03 11:41:57,130 - vision.vision.visual_monitor - DEBUG - [DEBUG] Erro ao desenhar texto: only length-1 arrays can be converted to Python scalars
+2025-11-03 11:41:57,882 - vision.vision.camera_manager - INFO - [INFO] Câmera 1 liberada
+2025-11-03 11:44:14,215 - TapatanOrchestrator - INFO - Finalizando orquestrador...
+2025-11-03 11:44:14,215 - RobotService - INFO - [EXECUTANDO] Movendo para posição home
+2025-11-03 11:44:14,756 - RobotService - INFO - [CONEXAO] Robô desconectado
+2025-11-03 11:44:14,756 - TapatanOrchestrator - INFO - Orquestrador finalizado
+2025-11-03 11:44:19,236 - TapatanOrchestrator - INFO - Iniciando orquestrador Tapatan...
+2025-11-03 11:44:19,238 - RobotService - INFO - [CONEXAO] Conectando ao robô em 10.1.7.30...
+2025-11-03 11:44:21,025 - RobotService - INFO - [OK] Robô conectado com sucesso
+2025-11-03 11:44:21,025 - RobotService - INFO - [SEGURANCA] Modo de segurança: HABILITADO
+2025-11-03 11:44:21,026 - RobotService - INFO - [EXECUTANDO] Movendo para posição home
+2025-11-03 11:44:21,353 - TapatanOrchestrator - INFO - Robô inicializado e em posição home
+2025-11-03 11:44:21,353 - TapatanOrchestrator - WARNING - [AVISO] Usando coordenadas temporárias
+2025-11-03 11:44:21,353 - TapatanOrchestrator - INFO - [GRID] Tabuleiro gerado centrado em HOME (-0.200, -0.267): 9 posições (10cm espaçamento)
+2025-11-03 11:44:21,353 - TapatanOrchestrator - INFO - Orquestrador inicializado com sucesso!
+2025-11-03 11:44:23,121 - vision.vision.aruco_vision - INFO - VisionLogger inicializado para 'vision.aruco_vision'
+2025-11-03 11:44:23,126 - vision.vision.camera_manager - INFO - VisionLogger inicializado para 'vision.camera_manager'
+2025-11-03 11:44:23,126 - vision.vision.camera_manager - INFO - [INFO] CameraManager inicializado com configurações do projeto
+2025-11-03 11:44:23,131 - vision.vision.visual_monitor - INFO - VisionLogger inicializado para 'vision.visual_monitor'
+2025-11-03 11:44:23,132 - vision.vision.visual_monitor - INFO - [INFO] VisualMonitor inicializado
+2025-11-03 11:44:23,132 - vision.vision.camera_manager - INFO - [INFO] Tentando inicializar câmera 1
+2025-11-03 11:44:25,169 - vision.vision.camera_manager - DEBUG - [DEBUG] Câmera configurada: 640x480
+2025-11-03 11:44:26,070 - vision.vision.camera_manager - INFO - [INFO] Câmera 1 inicializada: 640x480@30fps (DirectShow)
+2025-11-03 11:44:26,102 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 31.2
+2025-11-03 11:44:26,113 - vision.vision.visual_monitor - DEBUG - [DEBUG] Erro ao desenhar texto 'ID:0' na posição (array([368, 461]), array([342, 458]), array([345, 434]), array([372, 438])): only length-1 arrays can be converted to Python scalars
+2025-11-03 11:44:26,114 - vision.vision.visual_monitor - DEBUG - [DEBUG] Erro ao desenhar texto 'ID:5' na posição (array([345, 126]), array([350, 102]), array([376, 107]), array([371, 132])): only length-1 arrays can be converted to Python scalars
+2025-11-03 11:44:26,114 - vision.vision.visual_monitor - DEBUG - [DEBUG] Erro ao desenhar texto 'ID:7' na posição (array([201, 128]), array([205, 103]), array([230, 107]), array([226, 132])): only length-1 arrays can be converted to Python scalars
+2025-11-03 11:44:26,875 - vision.vision.camera_manager - INFO - [INFO] Câmera 1 liberada
+2025-11-03 11:59:02,950 - TapatanOrchestrator - INFO - Finalizando orquestrador...
+2025-11-03 11:59:02,950 - RobotService - INFO - [EXECUTANDO] Movendo para posição home
+2025-11-03 11:59:03,299 - RobotService - INFO - [CONEXAO] Robô desconectado
+2025-11-03 11:59:03,299 - TapatanOrchestrator - INFO - Orquestrador finalizado
+2025-11-03 11:59:07,426 - TapatanOrchestrator - INFO - Iniciando orquestrador Tapatan...
+2025-11-03 11:59:07,435 - RobotService - INFO - [CONEXAO] Conectando ao robô em 10.1.7.30...
+2025-11-03 11:59:13,567 - RobotService - ERROR - [ERRO] Erro ao conectar: ur_rtde: Failed to start control script, before timeout of 5 seconds
+2025-11-03 11:59:13,568 - TapatanOrchestrator - ERROR - Falha ao conectar com o robô
+2025-11-03 11:59:13,568 - TapatanOrchestrator - INFO - Finalizando orquestrador...
+2025-11-03 11:59:13,569 - RobotService - INFO - [EXECUTANDO] Movendo para posição home
+2025-11-03 11:59:13,569 - RobotService - ERROR - [ERRO] Robô não está conectado
+2025-11-03 11:59:13,569 - RobotService - INFO - [CONEXAO] Robô desconectado
+2025-11-03 11:59:13,569 - TapatanOrchestrator - INFO - Orquestrador finalizado
+2025-11-05 10:16:15,021 - TapatanOrchestrator - INFO - Iniciando orquestrador Tapatan...
+2025-11-05 10:16:15,033 - RobotService - INFO - [CONEXAO] Conectando ao robô em 10.1.7.30...
+2025-11-05 10:16:17,047 - RobotService - ERROR - [ERRO] Erro ao conectar: Timeout connecting to UR dashboard server.
+2025-11-05 10:16:17,048 - TapatanOrchestrator - ERROR - Falha ao conectar com o robô
+2025-11-05 10:16:17,048 - TapatanOrchestrator - INFO - Finalizando orquestrador...
+2025-11-05 10:16:17,049 - RobotService - INFO - [EXECUTANDO] Movendo para posição home
+2025-11-05 10:16:17,049 - RobotService - ERROR - [ERRO] Robô não está conectado
+2025-11-05 10:16:17,049 - RobotService - INFO - [CONEXAO] Robô desconectado
+2025-11-05 10:16:17,049 - TapatanOrchestrator - INFO - Orquestrador finalizado
+2025-11-05 10:17:37,222 - TapatanOrchestrator - INFO - Iniciando orquestrador Tapatan...
+2025-11-05 10:17:37,225 - RobotService - INFO - [CONEXAO] Conectando ao robô em 10.1.7.30...
+2025-11-05 10:17:39,230 - RobotService - ERROR - [ERRO] Erro ao conectar: Timeout connecting to UR dashboard server.
+2025-11-05 10:17:39,231 - TapatanOrchestrator - ERROR - Falha ao conectar com o robô
+2025-11-05 10:17:39,231 - TapatanOrchestrator - INFO - Finalizando orquestrador...
+2025-11-05 10:17:39,231 - RobotService - INFO - [EXECUTANDO] Movendo para posição home
+2025-11-05 10:17:39,231 - RobotService - ERROR - [ERRO] Robô não está conectado
+2025-11-05 10:17:39,231 - RobotService - INFO - [CONEXAO] Robô desconectado
+2025-11-05 10:17:39,231 - TapatanOrchestrator - INFO - Orquestrador finalizado
+2025-11-05 10:17:44,981 - TapatanOrchestrator - INFO - Iniciando orquestrador Tapatan...
+2025-11-05 10:17:44,986 - RobotService - INFO - [CONEXAO] Conectando ao robô em 10.1.7.30...
+2025-11-05 10:17:46,992 - RobotService - ERROR - [ERRO] Erro ao conectar: Timeout connecting to UR dashboard server.
+2025-11-05 10:17:46,992 - TapatanOrchestrator - ERROR - Falha ao conectar com o robô
+2025-11-05 10:17:46,993 - TapatanOrchestrator - INFO - Finalizando orquestrador...
+2025-11-05 10:17:46,993 - RobotService - INFO - [EXECUTANDO] Movendo para posição home
+2025-11-05 10:17:46,993 - RobotService - ERROR - [ERRO] Robô não está conectado
+2025-11-05 10:17:46,993 - RobotService - INFO - [CONEXAO] Robô desconectado
+2025-11-05 10:17:46,993 - TapatanOrchestrator - INFO - Orquestrador finalizado
+2025-11-05 10:20:02,263 - TapatanOrchestrator - INFO - Iniciando orquestrador Tapatan...
+2025-11-05 10:20:02,267 - RobotService - INFO - [CONEXAO] Conectando ao robô em 10.1.5.163...
+2025-11-05 10:20:02,965 - RobotService - INFO - [OK] Robô conectado com sucesso
+2025-11-05 10:20:02,965 - RobotService - INFO - [SEGURANCA] Modo de segurança: HABILITADO
+2025-11-05 10:20:02,965 - RobotService - INFO - [EXECUTANDO] Movendo para posição home
+2025-11-05 10:20:08,008 - TapatanOrchestrator - INFO - Robô inicializado e em posição home
+2025-11-05 10:20:08,008 - TapatanOrchestrator - WARNING - [AVISO] Usando coordenadas temporárias
+2025-11-05 10:20:08,009 - TapatanOrchestrator - INFO - [GRID] Tabuleiro gerado centrado em HOME (-0.200, -0.267): 9 posições (10cm espaçamento)
+2025-11-05 10:20:08,009 - TapatanOrchestrator - INFO - Orquestrador inicializado com sucesso!
+2025-11-05 10:20:23,745 - TapatanOrchestrator - INFO - Iniciando calibração do sistema...
+2025-11-05 10:20:23,746 - RobotService - INFO - [EXECUTANDO] Movendo para posição home
+2025-11-05 10:20:23,810 - TapatanOrchestrator - INFO - [CALIBRAÇÃO] Velocidade reduzida para 0.05 m/s (recomendação UR)
+2025-11-05 10:20:23,810 - TapatanOrchestrator - INFO - [CALIBRAÇÃO] Testando 9 posições do tabuleiro...
+2025-11-05 10:20:23,810 - TapatanOrchestrator - INFO - [CALIBRAÇÃO] Testando posição 4 (1/9)...
+2025-11-05 10:20:28,852 - TapatanOrchestrator - INFO - [CALIBRAÇÃO] Testando posição 0 (2/9)...
+2025-11-05 10:20:36,675 - TapatanOrchestrator - INFO - [CALIBRAÇÃO] Testando posição 2 (3/9)...
+2025-11-05 10:20:45,956 - TapatanOrchestrator - INFO - [CALIBRAÇÃO] Testando posição 6 (4/9)...
+2025-11-05 10:20:57,069 - TapatanOrchestrator - INFO - [CALIBRAÇÃO] Testando posição 8 (5/9)...
+2025-11-05 10:21:06,324 - TapatanOrchestrator - INFO - [CALIBRAÇÃO] Testando posição 1 (6/9)...
+2025-11-05 10:21:16,083 - TapatanOrchestrator - INFO - [CALIBRAÇÃO] Testando posição 3 (7/9)...
+2025-11-05 10:21:23,560 - TapatanOrchestrator - INFO - [CALIBRAÇÃO] Testando posição 5 (8/9)...
+2025-11-05 10:21:32,567 - TapatanOrchestrator - INFO - [CALIBRAÇÃO] Testando posição 7 (9/9)...
+2025-11-05 10:21:40,065 - TapatanOrchestrator - INFO - [CALIBRAÇÃO] Retornando para posição home...
+2025-11-05 10:21:40,065 - RobotService - INFO - [EXECUTANDO] Movendo para posição home
+2025-11-05 10:21:47,456 - TapatanOrchestrator - INFO - [CALIBRAÇÃO] Todas as 9 posições foram testadas com segurança
+2025-11-05 10:22:31,831 - vision.vision.aruco_vision - INFO - VisionLogger inicializado para 'vision.aruco_vision'
+2025-11-05 10:22:31,857 - vision.vision.camera_manager - INFO - VisionLogger inicializado para 'vision.camera_manager'
+2025-11-05 10:22:31,857 - vision.vision.camera_manager - INFO - [INFO] CameraManager inicializado com configurações do projeto
+2025-11-05 10:22:31,861 - vision.vision.visual_monitor - INFO - VisionLogger inicializado para 'vision.visual_monitor'
+2025-11-05 10:22:31,861 - vision.vision.visual_monitor - INFO - [INFO] VisualMonitor inicializado
+2025-11-05 10:31:49,319 - TapatanOrchestrator - INFO - Finalizando orquestrador...
+2025-11-05 10:31:49,319 - RobotService - INFO - [EXECUTANDO] Movendo para posição home
+2025-11-05 10:31:49,492 - RobotService - INFO - [CONEXAO] Robô desconectado
+2025-11-05 10:31:49,492 - TapatanOrchestrator - INFO - Orquestrador finalizado
+2025-11-05 10:31:58,689 - TapatanOrchestrator - INFO - Iniciando orquestrador Tapatan...
+2025-11-05 10:31:58,692 - RobotService - INFO - [CONEXAO] Conectando ao robô em 10.1.5.163...
+2025-11-05 10:31:59,370 - RobotService - INFO - [OK] Robô conectado com sucesso
+2025-11-05 10:31:59,370 - RobotService - INFO - [SEGURANCA] Modo de segurança: HABILITADO
+2025-11-05 10:31:59,370 - RobotService - INFO - [EXECUTANDO] Movendo para posição home
+2025-11-05 10:31:59,449 - TapatanOrchestrator - INFO - Robô inicializado e em posição home
+2025-11-05 10:31:59,449 - TapatanOrchestrator - WARNING - [AVISO] Usando coordenadas temporárias
+2025-11-05 10:31:59,450 - TapatanOrchestrator - INFO - [GRID] Tabuleiro gerado centrado em HOME (-0.200, -0.267): 9 posições (10cm espaçamento)
+2025-11-05 10:31:59,450 - TapatanOrchestrator - INFO - Orquestrador inicializado com sucesso!
+2025-11-05 10:32:04,844 - vision.vision.aruco_vision - INFO - VisionLogger inicializado para 'vision.aruco_vision'
+2025-11-05 10:32:04,847 - vision.vision.camera_manager - INFO - VisionLogger inicializado para 'vision.camera_manager'
+2025-11-05 10:32:04,848 - vision.vision.camera_manager - INFO - [INFO] CameraManager inicializado com configurações do projeto
+2025-11-05 10:32:04,851 - vision.vision.visual_monitor - INFO - VisionLogger inicializado para 'vision.visual_monitor'
+2025-11-05 10:32:04,851 - vision.vision.visual_monitor - INFO - [INFO] VisualMonitor inicializado
+2025-11-05 10:32:04,852 - vision.vision.camera_manager - INFO - [INFO] Tentando inicializar câmera 1
+2025-11-05 10:32:07,883 - vision.vision.camera_manager - DEBUG - [DEBUG] Câmera configurada: 640x480
+2025-11-05 10:32:08,766 - vision.vision.camera_manager - INFO - [INFO] Câmera 1 inicializada: 640x480@30fps (DirectShow)
+2025-11-05 10:32:08,822 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 18.1
+2025-11-05 10:32:08,923 - vision.vision.visual_monitor - DEBUG - [DEBUG] Erro ao desenhar texto 'ID:0' na posição (array([239, 417]), array([240, 393]), array([268, 395]), array([266, 421])): only length-1 arrays can be converted to Python scalars
+2025-11-05 10:32:09,614 - vision.vision.camera_manager - INFO - [INFO] Câmera 1 liberada
+2025-11-05 10:44:05,063 - TapatanOrchestrator - INFO - Finalizando orquestrador...
+2025-11-05 10:44:05,063 - RobotService - INFO - [EXECUTANDO] Movendo para posição home
+2025-11-05 10:44:05,142 - RobotService - INFO - [CONEXAO] Robô desconectado
+2025-11-05 10:44:05,142 - TapatanOrchestrator - INFO - Orquestrador finalizado
+2025-11-05 10:44:13,059 - TapatanOrchestrator - INFO - Iniciando orquestrador Tapatan...
+2025-11-05 10:44:13,059 - RobotService - INFO - [CONEXAO] Conectando ao robô em 10.1.5.163...
+2025-11-05 10:44:13,722 - RobotService - INFO - [OK] Robô conectado com sucesso
+2025-11-05 10:44:13,722 - RobotService - INFO - [SEGURANCA] Modo de segurança: HABILITADO
+2025-11-05 10:44:13,722 - RobotService - INFO - [EXECUTANDO] Movendo para posição home
+2025-11-05 10:44:13,772 - TapatanOrchestrator - INFO - Robô inicializado e em posição home
+2025-11-05 10:44:13,772 - TapatanOrchestrator - WARNING - [AVISO] Usando coordenadas temporárias
+2025-11-05 10:44:13,772 - TapatanOrchestrator - INFO - [GRID] Tabuleiro gerado centrado em HOME (-0.200, -0.267): 9 posições (10cm espaçamento)
+2025-11-05 10:44:13,773 - TapatanOrchestrator - INFO - Orquestrador inicializado com sucesso!
+2025-11-05 10:44:21,869 - vision.vision.aruco_vision - INFO - VisionLogger inicializado para 'vision.aruco_vision'
+2025-11-05 10:44:21,870 - vision.vision.camera_manager - INFO - VisionLogger inicializado para 'vision.camera_manager'
+2025-11-05 10:44:21,871 - vision.vision.camera_manager - INFO - [INFO] CameraManager inicializado com configurações do projeto
+2025-11-05 10:44:21,872 - vision.vision.visual_monitor - INFO - VisionLogger inicializado para 'vision.visual_monitor'
+2025-11-05 10:44:21,872 - vision.vision.visual_monitor - INFO - [INFO] VisualMonitor inicializado
+2025-11-05 10:44:21,873 - vision.vision.camera_manager - INFO - [INFO] Tentando inicializar câmera 1
+2025-11-05 10:44:24,556 - vision.vision.camera_manager - DEBUG - [DEBUG] Câmera configurada: 640x480
+2025-11-05 10:44:25,426 - vision.vision.camera_manager - INFO - [INFO] Câmera 1 inicializada: 640x480@30fps (DirectShow)
+2025-11-05 10:44:25,457 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 31.1
+2025-11-05 10:44:25,467 - vision.vision.visual_monitor - DEBUG - [DEBUG] Erro ao desenhar texto 'ID:0' na posição (array([239, 417]), array([240, 393]), array([268, 395]), array([266, 421])): only length-1 arrays can be converted to Python scalars
+2025-11-05 10:44:26,205 - vision.vision.camera_manager - INFO - [INFO] Câmera 1 liberada
+2025-11-05 10:44:36,889 - vision.vision.camera_manager - INFO - [INFO] CameraManager inicializado com configurações do projeto
+2025-11-05 10:44:36,891 - vision.vision.visual_monitor - INFO - [INFO] VisualMonitor inicializado
+2025-11-05 10:44:36,891 - vision.vision.camera_manager - INFO - [INFO] Tentando inicializar câmera 1
+2025-11-05 10:44:38,323 - vision.vision.camera_manager - DEBUG - [DEBUG] Câmera configurada: 640x480
+2025-11-05 10:44:39,240 - vision.vision.camera_manager - INFO - [INFO] Câmera 1 inicializada: 640x480@30fps (DirectShow)
+2025-11-05 10:44:39,272 - vision.vision.camera_manager - DEBUG - [PERFORMANCE] FPS atual: 31.2
+2025-11-05 10:44:39,277 - vision.vision.visual_monitor - DEBUG - [DEBUG] Erro ao desenhar texto 'ID:0' na posição (array([239, 418]), array([240, 393]), array([268, 395]), array([266, 421])): only length-1 arrays can be converted to Python scalars
+2025-11-05 10:44:39,277 - vision.vision.visual_monitor - DEBUG - [DEBUG] Erro ao desenhar texto 'ID:7' na posição (array([259,  82]), array([232,  84]), array([230,  58]), array([257,  55])): only length-1 arrays can be converted to Python scalars
+2025-11-05 10:44:40,015 - vision.vision.camera_manager - INFO - [INFO] Câmera 1 liberada
