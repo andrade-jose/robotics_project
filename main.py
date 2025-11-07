@@ -280,10 +280,21 @@ def main():
 
     Argumentos:
         --test: Ativa modo de teste (sem visão, velocidades reduzidas)
+        --v2:   Usa versão 2 (parallel development) ao invés de v1
     """
     test_mode = "--test" in sys.argv
+    use_v2 = "--v2" in sys.argv
     modo_str = "TESTE" if test_mode else "PRODUÇÃO"
-    print(f"[SISTEMA] Modo {modo_str} ativado")
+
+    if use_v2:
+        print(f"[V2] Iniciando versão 2 em MODO {modo_str}")
+        print("[V2] Status: Phase 2 (Setup) - Visão será implementada em Phase 3")
+        # Importar e usar v2
+        from v2.main_v2 import main_v2
+        main_v2()
+        return
+
+    print(f"[SISTEMA] Versão 1 em MODO {modo_str}")
 
     # Factory pattern: criar instância com configuração apropriada
     interface = TapatanInterface(test_mode=test_mode)
