@@ -1,6 +1,0 @@
-2025-10-30 12:00:37 - vision.vision.vision_logger - INFO - _setup_logger:92 - VisionLogger inicializado para 'vision.vision_logger'
-2025-10-30 12:01:14 - vision.vision.vision_logger - INFO - _setup_logger:92 - VisionLogger inicializado para 'vision.vision_logger'
-2025-10-30 12:04:30 - vision.vision.vision_logger - INFO - _setup_logger:92 - VisionLogger inicializado para 'vision.vision_logger'
-2025-10-30 12:05:45 - vision.vision.aruco_vision - INFO - _setup_logger:92 - VisionLogger inicializado para 'vision.aruco_vision'
-2025-10-30 12:05:45 - vision.vision.aruco_vision - ERROR - error:108 - ❌ Erro ao configurar detector ArUco: 'ArUcoVisionSystem' object has no attribute 'config_visao'
-2025-10-30 12:05:56 - vision.vision.aruco_vision - ERROR - error:108 - ❌ Erro ao configurar detector ArUco: 'ArUcoVisionSystem' object has no attribute 'config_visao'
