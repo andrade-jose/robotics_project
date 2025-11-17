@@ -1,192 +1,256 @@
 """
-V2 Entry Point - Parallel Development Version
+Main V2 - Entrada Principal para Sistema Tapatan V2
 
-This is the entry point for v2 (new clean implementation).
-v1 is frozen and serves as a fallback.
+Pipeline Completo:
+1. Inicializar câmera e robô
+2. Aguardar calibração (2 marcadores ArUco)
+3. Loop de jogo:
+   - Ler posição das peças
+   - Validar movimentos
+   - Executar no jogo
+   - Enviar ao robô
 
-Usage:
-    python main.py --v2          # Start v2 (when ready)
+Uso:
+    python main_v2.py              # Modo interativo
+    python main_v2.py --test       # Modo teste (simulado)
+    python main_v2.py --debug      # Com logging detalhado
 
-Current status: Phase 2 (Setup) - Vision not yet implemented
-Next phase: Phase 3 (Vision rebuild from zero)
+Status: Phase 5 - GameOrchestrator Integration
+Próxima: Phase 6 - Testes com robô real
 """
 
 import sys
-import os
-import traceback
-import time
+import logging
+import argparse
+from typing import Optional
 
-# Add v2 to path for imports
-sys.path.insert(0, os.path.dirname(__file__))
-
-from config.config_completa import ConfigRobo, ConfigJogo
-from services.game_orchestrator import TapatanOrchestrator
-from ui.game_display import GameDisplay
-from ui.menu_manager import MenuManager
-
-# TODO: Vision will be imported here in Phase 3
-# from integration.vision_integration_v2 import VisionIntegration
+try:
+    from v2.vision.calibration_orchestrator import CalibrationOrchestrator
+    from v2.integration.game_orchestrator_v2 import GameOrchestratorV2, GameState
+    from v2.services.board_coordinate_system_v2 import BoardCoordinateSystemV2
+except ImportError:
+    from vision.calibration_orchestrator import CalibrationOrchestrator
+    from integration.game_orchestrator_v2 import GameOrchestratorV2, GameState
+    from services.board_coordinate_system_v2 import BoardCoordinateSystemV2
 
 
-class TapatanInterfaceV2:
-    """
-    V2 Interface - New parallel development.
+class MainV2:
+    """Classe principal para gerenciar o jogo Tapatan V2."""
 
-    Currently identical to v1 but prepared for:
-    - New vision system integration
-    - Potential improvements to BoardCoordinateSystem
-    - Better testing structure
-    """
+    def __init__(self, test_mode: bool = False, debug: bool = False):
+        """
+        Inicializa sistema V2.
 
-    def __init__(self, test_mode: bool = False):
-        """Initialize v2 interface."""
-        self.config_robo = ConfigRobo()
-        if test_mode:
-            self.config_robo.pausa_entre_jogadas = 1.0
-            self.config_robo.velocidade_padrao = 0.05
-            self.config_robo.auto_calibrar = False
-
-        self.config_jogo = ConfigJogo(profundidade_ia=3 if test_mode else 5, debug_mode=test_mode)
+        Args:
+            test_mode: Se True, usa câmera simulada
+            debug: Se True, ativa logging detalhado
+        """
         self.test_mode = test_mode
+        self.debug = debug
+
+        # Configurar logging
+        level = logging.DEBUG if debug else logging.INFO
+        logging.basicConfig(
+            level=level,
+            format='[%(name)s] %(levelname)s: %(message)s',
+        )
+        self.logger = logging.getLogger("MainV2")
+
+        # Componentes
+        self.calibrator: Optional[CalibrationOrchestrator] = None
+        self.game_orch: Optional[GameOrchestratorV2] = None
+        self.camera = None
+        self.robot_service = None
+
+        self.logger.info("[MAIN_V2] Inicializando sistema Tapatan V2...")
+
+    def setup(self) -> bool:
+        """
+        Configura todos os componentes.
+
+        Returns:
+            True se sucesso, False caso contrário
+        """
+        self.logger.info("[MAIN_V2] Configurando componentes...")
 
         try:
-            self.orquestrador = TapatanOrchestrator(self.config_robo, self.config_jogo)
-            modo_str = "TESTE" if test_mode else "PRODUÇÃO"
-            print(f"[OK] Orquestrador v2 inicializado em MODO {modo_str}.")
+            # 1. Inicializar calibrador
+            self.logger.info("[MAIN_V2] Criando CalibrationOrchestrator...")
+            self.calibrator = CalibrationOrchestrator(distance_mm=270.0)
+
+            # 2. Inicializar serviço de jogo
+            self.logger.info("[MAIN_V2] Criando GameOrchestratorV2...")
+            self.game_orch = GameOrchestratorV2(
+                calibration_orchestrator=self.calibrator,
+                robot_service=self.robot_service,  # Será None em teste
+            )
+
+            # 3. Inicializar câmera (se disponível)
+            if not self.test_mode:
+                self.logger.info("[MAIN_V2] Inicializando câmera...")
+                try:
+                    # from v2.vision.camera_simple import CameraSimple
+                    # self.camera = CameraSimple()
+                    self.logger.warning("[MAIN_V2] Câmera não disponível em dev environment")
+                except Exception as e:
+                    self.logger.warning(f"[MAIN_V2] Erro ao inicializar câmera: {e}")
+                    self.test_mode = True
+
+            # 4. Inicializar robô (se disponível)
+            if not self.test_mode:
+                self.logger.info("[MAIN_V2] Inicializando robô...")
+                try:
+                    # from services.robot_service import RobotService
+                    # self.robot_service = RobotService()
+                    self.logger.warning("[MAIN_V2] Robô não disponível em dev environment")
+                except Exception as e:
+                    self.logger.warning(f"[MAIN_V2] Erro ao inicializar robô: {e}")
+
+            self.logger.info("[MAIN_V2] ✅ Componentes configurados com sucesso")
+            return True
+
         except Exception as e:
-            print(f"[ERRO] Falha ao inicializar Orquestrador v2: {e}")
-            self.orquestrador = None
-
-        # TODO: Vision integration v2 when ready
-        vision_available = False  # Será True quando fase 3 completar
-        self.game_display = GameDisplay(vision_available=vision_available)
-        self.vision_integration = None  # TODO: Será VisionIntegrationV2()
-        self.menu_manager = MenuManager(self.orquestrador, self.vision_integration)
-
-        print("\n[SISTEMA] TapatanInterface V2 inicializada")
-        print("[V2] Sistema em fase de desenvolvimento paralelo")
-        if test_mode:
-            print("[TESTE] Modo teste - visão desativada")
-
-    def inicializar_sistema(self) -> bool:
-        """Initialize system components."""
-        print("[SISTEMA] Inicializando sistema Tapatan V2...")
-
-        if not self.orquestrador:
-            print("[ERRO] Orquestrador não foi criado.")
+            self.logger.error(f"[MAIN_V2] ❌ Erro ao configurar componentes: {e}")
             return False
 
-        try:
-            if self.orquestrador.inicializar():
-                print("[OK] Sistema robótico V2 inicializado!")
-                return True
-            else:
-                print("[ERRO] Falha na inicialização!")
-                return False
-        except Exception as e:
-            print(f"[ERRO] Erro na inicialização: {e}")
-            return False
+    def calibrate(self) -> bool:
+        """
+        Aguarda calibração do sistema.
 
-    def finalizar_sistema(self):
-        """Finalize system safely."""
-        print("\n[SISTEMA] Finalizando sistema V2...")
+        Returns:
+            True se calibrado, False caso contrário
+        """
+        if self.test_mode:
+            self.logger.warning("[MAIN_V2] Modo teste: simulando calibração")
+            # Simular calibração bem-sucedida
+            import numpy as np
+            frame = np.zeros((480, 640, 3), dtype=np.uint8)
+            # Em modo teste, simular calibração
+            return self.game_orch.calibrate_from_frame(frame) if self.game_orch else False
 
-        if self.vision_integration:
-            pass  # TODO: Para visão quando implementada
+        self.logger.info("[MAIN_V2] Aguardando calibração...")
+        self.logger.info("[MAIN_V2] Posicione 2 marcadores ArUco e pressione qualquer tecla...")
 
-        if self.orquestrador:
-            self.orquestrador.finalizar()
+        # Em produção, usar câmera real
+        # TODO: Implementar loop de câmera real quando disponível
+        return False
 
-        print("[OK] Sistema V2 finalizado!")
-
-    def executar_partida(self):
-        """Execute game match."""
-        if not self.orquestrador or not self.orquestrador.iniciar_partida():
-            print("[ERRO] Erro ao iniciar partida!")
+    def play_game(self):
+        """Loop principal do jogo."""
+        if self.game_orch is None:
+            self.logger.error("[MAIN_V2] GameOrchestrator não inicializado")
             return
 
-        print("\n[V2] Iniciando partida V2...")
+        if not self.game_orch.is_calibrated():
+            self.logger.error("[MAIN_V2] Sistema não está calibrado")
+            return
 
+        self.logger.info("[MAIN_V2] ✅ Sistema pronto para jogo!")
+        self.logger.info("[MAIN_V2] ========================================")
+
+        # Estado do jogo
+        game_state = self.game_orch.get_game_state()
+        self.logger.info(f"[MAIN_V2] Estado inicial:")
+        self.logger.info(f"  - Calibrado: {game_state['is_calibrated']}")
+        self.logger.info(f"  - Jogador: {game_state['current_player']}")
+
+        # Loop de teste: executar alguns movimentos exemplo
+        example_moves = [
+            (0, 4),  # Colocar peça no centro
+            (8, 7),  # Mover peça
+        ]
+
+        for from_pos, to_pos in example_moves:
+            self.logger.info(f"[MAIN_V2] Testando movimento: {from_pos} → {to_pos}")
+
+            result = self.game_orch.execute_move(from_pos, to_pos)
+
+            if result.success:
+                self.logger.info(
+                    f"[MAIN_V2] ✅ Movimento bem-sucedido "
+                    f"(robot={result.executed_by_robot})"
+                )
+            else:
+                self.logger.warning(f"[MAIN_V2] ❌ Movimento falhado: {result.reason}")
+
+        # Exibir estado final
+        final_state = self.game_orch.get_game_state()
+        self.logger.info(f"[MAIN_V2] Estado final:")
+        self.logger.info(f"  - Movimentos: {len(final_state['move_history'])}")
+        self.logger.info(f"  - Histórico: {final_state['move_history']}")
+
+    def print_info(self):
+        """Imprime informações detalhadas do sistema."""
+        if self.game_orch is None:
+            self.logger.warning("[MAIN_V2] GameOrchestrator não inicializado")
+            return
+
+        info = self.game_orch.get_detailed_info()
+
+        self.logger.info("[MAIN_V2] ========================================")
+        self.logger.info("[MAIN_V2] INFORMAÇÕES DO SISTEMA")
+        self.logger.info("[MAIN_V2] ========================================")
+        self.logger.info(f"Estado: {info['state']}")
+        self.logger.info(f"Calibrado: {info['is_calibrated']}")
+        self.logger.info(f"Tentativas calibração: {info['calibration_status']['calibration_attempts']}")
+        self.logger.info(f"Calibrações bem-sucedidas: {info['calibration_status']['successful_calibrations']}")
+
+        if info['board_positions']:
+            self.logger.info("Posições do tabuleiro (mm):")
+            for pos, coords in sorted(info['board_positions'].items()):
+                self.logger.info(f"  Posição {pos}: ({coords[0]:.1f}, {coords[1]:.1f})")
+
+    def run(self):
+        """Executa sistema completo."""
         try:
-            while True:
-                estado_jogo = self.orquestrador.game_service.obter_estado_jogo()
-                self.game_display.mostrar_tabuleiro(estado_jogo)
-                self.game_display.mostrar_info_jogo(estado_jogo)
+            # Setup
+            if not self.setup():
+                self.logger.error("[MAIN_V2] Falha no setup")
+                return False
 
-                if estado_jogo['jogo_terminado']:
-                    print("[OK] Jogo terminado!")
-                    input("   Pressione ENTER para voltar ao menu...")
-                    break
+            # Calibração
+            if not self.calibrate():
+                self.logger.error("[MAIN_V2] Falha na calibração")
+                return False
 
-                if estado_jogo['jogador_atual'] == 2:
-                    jogada = self.game_display.obter_jogada_humano(estado_jogo)
-                    if jogada is None:
-                        break
+            # Exibir informações
+            self.print_info()
 
-                    resultado = self.orquestrador.processar_jogada_humano(**jogada)
-                    if not resultado['sucesso']:
-                        print(f"   [ERRO] {resultado.get('mensagem', 'Inválida')}")
-                        continue
+            # Executar jogo
+            self.play_game()
 
-                    print("   [OK] Jogada processada!")
-                    if 'jogada_robo' in resultado:
-                        self.game_display.aguardar_confirmacao_robo()
+            self.logger.info("[MAIN_V2] ✅ Sistema executado com sucesso!")
+            return True
 
-                elif estado_jogo['jogador_atual'] == 1:
-                    input("   [ROBO] Pressione ENTER para o robô jogar...")
-                    resultado = self.orquestrador.executar_jogada_robo()
-                    if resultado['sucesso']:
-                        self.game_display.aguardar_confirmacao_robo()
-                    else:
-                        print(f"[ERRO] {resultado['mensagem']}")
-                        break
-
-        except KeyboardInterrupt:
-            print("\n\n[PARADA] Partida interrompida!")
         except Exception as e:
-            print(f"\n[ERRO] Erro na partida: {e}")
-
-    def executar(self):
-        """Main entry point."""
-        self.game_display.mostrar_banner()
-
-        if self.inicializar_sistema():
-            try:
-                while True:
-                    deve_executar_partida = self.menu_manager.menu_principal()
-                    if not deve_executar_partida:
-                        break
-                    self.executar_partida()
-
-                print("\n[OK] Até logo!")
-
-            except Exception as e:
-                print(f"[ERRO] Erro inesperado: {e}")
-                traceback.print_exc()
-        else:
-            print("[ERRO] Não foi possível inicializar!")
-
-        self.finalizar_sistema()
+            self.logger.error(f"[MAIN_V2] ❌ Erro durante execução: {e}", exc_info=True)
+            return False
 
 
-def main_v2():
-    """Main function for v2."""
-    test_mode = "--test" in sys.argv
-    modo_str = "TESTE" if test_mode else "PRODUÇÃO"
-    print(f"[V2] Iniciando em MODO {modo_str}")
-    print("[V2] Status: Phase 2 (Setup) - Visão a implementar em Phase 3")
-    print("")
+def main():
+    """Função principal."""
+    parser = argparse.ArgumentParser(
+        description="Sistema Tapatan V2 com calibração e controle robótico"
+    )
+    parser.add_argument(
+        "--test",
+        action="store_true",
+        help="Modo teste (simula câmera e robô)",
+    )
+    parser.add_argument(
+        "--debug",
+        action="store_true",
+        help="Ativa logging detalhado",
+    )
 
-    interface = TapatanInterfaceV2(test_mode=test_mode)
+    args = parser.parse_args()
 
-    try:
-        interface.executar()
-    except KeyboardInterrupt:
-        print("\n\n[OK] Programa interrompido!")
-    except Exception as e:
-        print(f"[ERRO] Erro não tratado: {e}")
-        traceback.print_exc()
+    # Criar e executar
+    main_v2 = MainV2(test_mode=args.test, debug=args.debug)
+    success = main_v2.run()
+
+    sys.exit(0 if success else 1)
 
 
 if __name__ == "__main__":
-    main_v2()
+    main()

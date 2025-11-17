@@ -14,7 +14,8 @@
       "Bash(git reset:*)",
       "Bash(git rm:*)",
       "Bash(git commit -m \"$(cat <<''EOF''\nPhase 1: v1 cleanup - remove legacy code and consolidate\n\n- Remove dead import: utils.tapatan_board (deprecated file deleted)\n- Remove unused alias: IRobotStatus import\n- Remove unused variable: self.poses assignment \n- Consolidate RobotStatus enum: moved to interfaces/robot_interfaces.py\n- Add IDLE state to RobotStatus enum (needed by robot_service)\n- Refactor TapatanTestInterface to factory pattern using --test flag\n- Simplify main.py: single TapatanInterface with test_mode parameter\n\nBenefits:\n- Eliminates ~110 lines of duplicate test code\n- Single source of truth for RobotStatus enum\n- Cleaner separation between test and production modes\n- Reduces technical debt in v1 before v2 parallel development\n\nThis is Phase 1 of the parallel v1+v2 strategy.\nAfter this cleanup, v1 is frozen as fallback while v2 is developed independently.\n\n🤖 Generated with Claude Code\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
-      "Bash(git tag:*)"
+      "Bash(git tag:*)",
+      "Bash(python:*)"
     ],
     "deny": [],
     "ask": []
